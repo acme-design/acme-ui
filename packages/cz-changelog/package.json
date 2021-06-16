@@ -1,0 +1,38 @@
+{
+  "name": "@acme-ui/cz-changelog",
+  "version": "0.0.1-alpha.2",
+  "private": true,
+  "description": "Commititizen adapters for the Lerna project",
+  "author": "Acme Design Team",
+  "homepage": "https://github.com/acme-design/acme-ui#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acme-design/acme-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/acme-design/acme-ui/issues"
+  },
+  "dependencies": {
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "chalk": "^4.1.1",
+    "cosmiconfig": "^7.0.0",
+    "inquirer": "^8.1.0",
+    "inquirer-autocomplete-prompt": "^1.3.0",
+    "shelljs": "^0.8.4",
+    "word-wrap": "^1.2.3"
+  },
+  "peerDependencies": {
+    "lerna": ">=3.0.0"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "version": "0.0.1-alpha.2",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "*.md",
+        "**/__tests/**"
+      ],
+      "registry": "https://registry.npmjs.org/"
+    },
+    "version": {
+      "message": "chore: [Release] publish %s",
+      "conventionalCommits": true,
+      "ignoreChanges": [
+        "*.md"
+      ],
+      "changelogPreset": {
+        "name": "@acme-ui/conventional-changelog",
+        "scopeSequence": [
+          {
+            "scope": "@acme-ui/core"
+          },
+          {
+            "scope": "@acme-ui/icons"
+          },
+          {
+            "scope": "@acme-ui/documents",
+            "alias": "📖 Documentation",
+            "mixin": true
+          }
+        ]
+      }
+    }
+  }
+}
