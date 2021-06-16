@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ForwardedRef, useContext, useEffect, useState } from 'react';
+import * as React from 'react';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import isFunction from 'lodash/isFunction';
@@ -41,7 +41,7 @@ export interface CheckboxProps {
   /**
    * checkbox 状态改变
    */
-  onChange?: (e: ChangeEvent) => void;
+  onChange?: (e: React.ChangeEvent) => void;
   /**
    * label内容
    */
@@ -72,7 +72,7 @@ export const classes = {
 };
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  (props: CheckboxProps, ref: ForwardedRef<HTMLInputElement>) => {
+  (props: CheckboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const {
       className,
       disabled,
@@ -85,11 +85,11 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       ...labelProps
     } = props;
 
-    const checkboxGroup = useContext(CheckGroupContext);
+    const checkboxGroup = React.useContext(CheckGroupContext);
 
-    const [currChecked, setCurrChecked] = useState(defaultChecked);
+    const [currChecked, setCurrChecked] = React.useState(defaultChecked);
 
-    useEffect(() => {
+    React.useEffect(() => {
       setCurrChecked(checked);
     }, [checked]);
 
@@ -108,7 +108,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
     const groupChange = get(checkboxGroup, 'onChange');
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = get(e, 'target.checked');
       if (checked === undefined) {
         setCurrChecked(isChecked);

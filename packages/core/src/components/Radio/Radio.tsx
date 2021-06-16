@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import * as React from 'react';
 import isFunction from 'lodash/isFunction';
 import get from 'lodash/get';
 import FormLabel, { FormLabelProps } from '../FormLabel/index';
@@ -18,7 +18,7 @@ export const classes = {
   disabled: `${classNamePrefix}-disabled`,
 };
 
-export interface IRadioProps {
+export interface RadioProps {
   /**
    * 自定义类名
    */
@@ -68,7 +68,7 @@ export interface IRadioProps {
   [key: string]: any;
 }
 
-const Radio = React.forwardRef((props: IRadioProps, ref: React.ForwardedRef<HTMLInputElement>) => {
+const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLInputElement>) => {
   const {
     className,
     checked,
@@ -83,15 +83,15 @@ const Radio = React.forwardRef((props: IRadioProps, ref: React.ForwardedRef<HTML
     ...otherProps
   } = props;
 
-  const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  useEffect(() => {
+  const [internalChecked, setInternalChecked] = React.useState(defaultChecked);
+  React.useEffect(() => {
     setInternalChecked(checked);
   }, [checked]);
 
   let currentChecked = internalChecked;
-  let radioGroupChange: IRadioProps['onChange'] | null = null;
+  let radioGroupChange: RadioProps['onChange'] | null = null;
   let internalName = name;
-  const radioGroup = useContext(RadioGroupContext);
+  const radioGroup = React.useContext(RadioGroupContext);
 
   if (radioGroup) {
     const radioGroupValue = get(radioGroup, 'value');
@@ -145,7 +145,7 @@ const Radio = React.forwardRef((props: IRadioProps, ref: React.ForwardedRef<HTML
       {label}
     </FormLabel>
   );
-}) as React.ForwardRefExoticComponent<IRadioProps & React.RefAttributes<HTMLInputElement>> & {
+}) as React.ForwardRefExoticComponent<RadioProps & React.RefAttributes<HTMLInputElement>> & {
   Group: typeof RadioGroup;
   Button: typeof RadioButton;
 };

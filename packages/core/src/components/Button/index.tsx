@@ -1,9 +1,9 @@
 import Button from './Button';
 import ButtonGroup from './ButtonGroup';
 
-export type { IButtonProps } from './Button';
+export type { ButtonProps } from './Button';
 
-export type { IButtonGroupProps } from './ButtonGroup';
+export type { ButtonGroupProps } from './ButtonGroup';
 
 Button.Group = ButtonGroup;
 

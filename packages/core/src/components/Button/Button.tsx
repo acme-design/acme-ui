@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import omit from 'lodash/omit';
 import { uniteClassNames } from '../../utils/tools';
 import ButtonGroup from './ButtonGroup';
@@ -10,7 +10,7 @@ type ButtonModeType = `${ButtonMode}`;
 type ButtonColorType = `${ButtonColor}`;
 type ButtonSizeType = `${ButtonSize}`;
 
-export interface IButtonProps {
+export interface ButtonProps {
   className?: string;
   children: React.ReactNode;
   /**
@@ -69,17 +69,17 @@ export const classNamePrefix = 'acme-btn';
 
 export const classes = {
   base: classNamePrefix,
-  appearance: (mode: IButtonProps['mode'], color: IButtonProps['color']): string =>
+  appearance: (mode: ButtonProps['mode'], color: ButtonProps['color']): string =>
     `${classNamePrefix}-${mode}-${color}`,
-  size: (size: IButtonProps['size']): string => `${classNamePrefix}-${size}`,
-  ghost: (mode: IButtonProps['mode']): string => `${classNamePrefix}-${mode}-ghost`,
+  size: (size: ButtonProps['size']): string => `${classNamePrefix}-${size}`,
+  ghost: (mode: ButtonProps['mode']): string => `${classNamePrefix}-${mode}-ghost`,
   loading: `${classNamePrefix}-loading`,
   disabled: `${classNamePrefix}-disabled`,
   full: `${classNamePrefix}-full`,
 };
 
 const Button = React.forwardRef(
-  (props: IButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
+  (props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
     const {
       children,
       startElement,
@@ -136,7 +136,7 @@ const Button = React.forwardRef(
       </button>
     );
   },
-) as React.ForwardRefExoticComponent<IButtonProps & React.RefAttributes<HTMLButtonElement>> & {
+) as React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>> & {
   Group: typeof ButtonGroup;
 };
 

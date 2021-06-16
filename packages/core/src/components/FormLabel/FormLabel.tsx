@@ -1,4 +1,4 @@
-import React, { ForwardedRef } from 'react';
+import * as React from 'react';
 import get from 'lodash/get';
 import { uniteClassNames } from '../../utils/tools';
 import './style/formLabel.less';
@@ -55,7 +55,7 @@ export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelEleme
 }
 
 const FormLabel = React.forwardRef<HTMLLabelElement, FormLabelProps>(
-  (props: FormLabelProps, ref: ForwardedRef<HTMLLabelElement>) => {
+  (props: FormLabelProps, ref: React.ForwardedRef<HTMLLabelElement>) => {
     const { className, children, control, required, error, labelPlacement, ...otherProps } =
       props || {};
     const controlProps = {

@@ -1,4 +1,4 @@
-import React, { ForwardRefExoticComponent, RefAttributes, useContext } from 'react';
+import * as React from 'react';
 import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
 import { uniteClassNames } from '../../utils/tools';
@@ -8,7 +8,7 @@ import './style/RadioButton.less';
 
 type RadioSizeType = `${RadioSize}`;
 
-export interface IRadioButtonProps {
+export interface RadioButtonProps {
   /**
    * 样式类名
    */
@@ -39,58 +39,59 @@ export const classNamePrefix = 'acme-radio-button';
 
 const classes = {
   root: classNamePrefix,
-  size: (size: IRadioButtonProps['size']) => `${classNamePrefix}-${size}`,
+  size: (size: RadioButtonProps['size']) => `${classNamePrefix}-${size}`,
   checked: `${classNamePrefix}-checked`,
 };
 
-const RadioButton: ForwardRefExoticComponent<IRadioButtonProps & RefAttributes<HTMLButtonElement>> =
-  React.forwardRef((props: IRadioButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
-    const { className, label, checked, size, value, ...otherProps } = props;
+const RadioButton: React.ForwardRefExoticComponent<
+  RadioButtonProps & React.RefAttributes<HTMLButtonElement>
+> = React.forwardRef((props: RadioButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
+  const { className, label, checked, size, value, ...otherProps } = props;
 
-    let internalSize = size;
-    let internalChecked = checked;
-    let radioGroupChange: IRadioButtonProps['onChange'];
-    let internalName = '';
-    const radioGroup = useContext(RadioGroupContext);
+  let internalSize = size;
+  let internalChecked = checked;
+  let radioGroupChange: RadioButtonProps['onChange'];
+  let internalName = '';
+  const radioGroup = React.useContext(RadioGroupContext);
 
-    if (radioGroup) {
-      const radioGroupValue = get(radioGroup, 'value');
-      const radioGroupName = get(radioGroup, 'name');
-      const radioGroupSize = get(radioGroup, 'size');
-      const radioGroupChangeFunc = get(radioGroup, 'onChange');
-      if (!('checked' in props) && radioGroupValue) {
-        internalChecked = radioGroupValue === value;
-      }
-      if (isFunction(radioGroupChangeFunc)) {
-        radioGroupChange = radioGroupChangeFunc;
-      }
-      if (!('name' in props) && radioGroupName) {
-        internalName = radioGroupName;
-      }
-      if (radioGroupSize) {
-        internalSize = radioGroupSize;
-      }
+  if (radioGroup) {
+    const radioGroupValue = get(radioGroup, 'value');
+    const radioGroupName = get(radioGroup, 'name');
+    const radioGroupSize = get(radioGroup, 'size');
+    const radioGroupChangeFunc = get(radioGroup, 'onChange');
+    if (!('checked' in props) && radioGroupValue) {
+      internalChecked = radioGroupValue === value;
     }
+    if (isFunction(radioGroupChangeFunc)) {
+      radioGroupChange = radioGroupChangeFunc;
+    }
+    if (!('name' in props) && radioGroupName) {
+      internalName = radioGroupName;
+    }
+    if (radioGroupSize) {
+      internalSize = radioGroupSize;
+    }
+  }
 
-    return (
-      <button
-        className={uniteClassNames(
-          classes.root,
-          classes.size(internalSize),
-          internalChecked ? classes.checked : '',
-          className,
-        )}
-        value={value}
-        name={internalName}
-        onClick={radioGroupChange}
-        ref={ref}
-        {...otherProps}
-        type="button"
-      >
-        {label}
-      </button>
-    );
-  });
+  return (
+    <button
+      className={uniteClassNames(
+        classes.root,
+        classes.size(internalSize),
+        internalChecked ? classes.checked : '',
+        className,
+      )}
+      value={value}
+      name={internalName}
+      onClick={radioGroupChange}
+      ref={ref}
+      {...otherProps}
+      type="button"
+    >
+      {label}
+    </button>
+  );
+});
 
 RadioButton.defaultProps = {
   size: 'default',

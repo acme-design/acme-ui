@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import isFunction from 'lodash/isFunction';
 import FormGroup, { FormGroupProps } from '../FormGroup';
 import Radio from './Radio';
@@ -9,7 +9,7 @@ import './style/RadioGroup.less';
 
 type RadioSizeType = `${RadioSize}`;
 
-export interface IRadioGroupProps {
+export interface RadioGroupProps {
   /**
    * 样式类名
    */
@@ -47,8 +47,8 @@ export const classes = {
 };
 
 const RadioGroup: React.ForwardRefExoticComponent<
-  IRadioGroupProps & React.RefAttributes<HTMLDivElement>
-> = React.forwardRef((props: IRadioGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+  RadioGroupProps & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef((props: RadioGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const { className, children, value, layout, name, size, onChange, ...otherProps } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
