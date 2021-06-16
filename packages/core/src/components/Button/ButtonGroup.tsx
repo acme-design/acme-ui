@@ -1,18 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 import Button, { classNamePrefix } from './Button';
 import { ButtonSize } from './types';
 import './style/ButtonGroup.less';
 
 type ButtonSizeType = `${ButtonSize}`;
-export interface IButtonGroupProps {
+export interface ButtonGroupProps {
   className?: string;
   children: typeof Button | typeof Button[];
   size?: ButtonSizeType;
 }
 
 const ButtonGroup: React.ForwardRefExoticComponent<
-  IButtonGroupProps & React.RefAttributes<HTMLDivElement>
-> = React.forwardRef((props: IButtonGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+  ButtonGroupProps & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef((props: ButtonGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const { children, className = '', size, ...otherProps } = props;
   return (
     <div className={`${classNamePrefix}-group ${className}`} ref={ref} {...otherProps}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import get from 'lodash/get';
 import isString from 'lodash/isString';
 import isFunction from 'lodash/isFunction';
@@ -15,7 +15,7 @@ type InputSizeType = `${InputSize}`;
 
 /** TODO 数字类型的input 待设计给出详细设计和样式 */
 
-export interface IInputProps {
+export interface InputProps {
   /**
    * 样式类名
    */
@@ -108,7 +108,7 @@ export const classes = {
   root: `${classNamePrefix}-root`,
   input: `${classNamePrefix}`,
   active: `${classNamePrefix}-active`,
-  size: (size: IInputProps['size']) => `${classNamePrefix}-${size}`,
+  size: (size: InputProps['size']) => `${classNamePrefix}-${size}`,
   error: `${classNamePrefix}-error`,
   success: `${classNamePrefix}-success`,
   disabled: `${classNamePrefix}-disabled`,
@@ -119,8 +119,8 @@ export const classes = {
   clear: `${classNamePrefix}-clear-icon`,
 };
 
-const Input: React.ForwardRefExoticComponent<IInputProps & React.RefAttributes<HTMLInputElement>> =
-  React.forwardRef((props: IInputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
+const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>> =
+  React.forwardRef((props: InputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const {
       className,
       placeholder,
