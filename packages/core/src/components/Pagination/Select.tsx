@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
-import React from 'react';
+import * as React from 'react';
 
 type SelectValue = React.SelectHTMLAttributes<HTMLSelectElement>['value'];
 

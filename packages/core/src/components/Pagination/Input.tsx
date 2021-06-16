@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
-import React, { ForwardedRef } from 'react';
+import * as React from 'react';
 import './style/input.less';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -10,7 +10,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const classNamePrefix = 'acme-pagination-input';
 
 const Input: React.FC<InputProps> = React.forwardRef(
-  (props: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
+  (props: InputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const { className, ...resetProps } = props;
 
     const onChange: React.ChangeEventHandler<HTMLInputElement> = (

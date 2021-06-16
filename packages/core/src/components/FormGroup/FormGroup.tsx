@@ -1,4 +1,4 @@
-import React, { ForwardedRef } from 'react';
+import * as React from 'react';
 import { uniteClassNames } from '../../utils/tools';
 import './style/formGroup.less';
 
@@ -33,7 +33,7 @@ export interface FormGroupProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const FormGroup = React.forwardRef<HTMLDivElement, FormGroupProps>(
-  (props: FormGroupProps, ref: ForwardedRef<HTMLDivElement>) => {
+  (props: FormGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => {
     const { className, children, layout, ...otherProps } = props || {};
     return (
       <div

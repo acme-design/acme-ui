@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
 import isNumber from 'lodash/isNumber';

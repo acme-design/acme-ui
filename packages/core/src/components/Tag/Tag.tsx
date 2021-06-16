@@ -1,8 +1,8 @@
-import React, { ForwardedRef, useState } from 'react';
+import * as React from 'react';
 import isFunction from 'lodash/isFunction';
 import { TagMode } from './types';
 
-import './sytle/tag.less';
+import './style/tag.less';
 import { uniteClassNames } from '../../utils/tools';
 import DeleteSvg from '../Icon/Delete';
 
@@ -45,11 +45,11 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
-  (props: TagProps, ref: ForwardedRef<HTMLSpanElement>) => {
+  (props: TagProps, ref: React.ForwardedRef<HTMLSpanElement>) => {
     const { color, backgroundColor, mode, closable, style, children, className, ...resetProps } =
       props;
 
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
 
     const onCloseClick = (e: React.MouseEvent) => {
       const { onClose } = props;

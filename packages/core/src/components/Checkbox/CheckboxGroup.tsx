@@ -1,4 +1,4 @@
-import React, { ForwardedRef, useEffect } from 'react';
+import * as React from 'react';
 import indexOf from 'lodash/indexOf';
 import isFunction from 'lodash/isFunction';
 import FormGroup from '../FormGroup';
@@ -47,12 +47,12 @@ export interface CheckboxGroupContext {
 export const CheckGroupContext = React.createContext<CheckboxGroupContext | null>(null);
 
 const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
-  (props: CheckboxGroupProps, ref: ForwardedRef<HTMLDivElement>) => {
+  (props: CheckboxGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => {
     const { className, name, children, disabled, onChange, values, defaultValues, ...otherProps } =
       props;
     const [currValues, setCurrValues] = React.useState(defaultValues || []);
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (values) setCurrValues(values);
     }, [values]);
 
