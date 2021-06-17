@@ -101,6 +101,7 @@ export interface InputProps {
    */
   style?: React.HtmlHTMLAttributes<HTMLDivElement>['style'];
 
+  // TODO 暂时使用 key， 需要后面统一规定是否使用 extends 来继承原生属性
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
