@@ -6,7 +6,7 @@ import omit from 'lodash/omit';
 import { getPages, IPageItem, PageItemType } from './util/Pagination';
 import Arrow from './Arrow';
 import DoubleArrow from './DoubleArrow';
-import Input from './Input';
+import Input from '../Input';
 import Select from './Select';
 import './style/pagination.less';
 
@@ -256,7 +256,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     this.pageChange(page);
   };
 
-  private jumpInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private jumpInputChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
     const value = get(e, 'target.value');
     this.setState({
       jumpPage: value,
@@ -333,6 +333,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
             onKeyDown={this.quickJumpKeyDown}
             className={classes.jumpInput}
             onChange={this.jumpInputChange}
+            size="small"
           />
           页
         </div>

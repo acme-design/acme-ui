@@ -100,6 +100,9 @@ export interface InputProps {
    * 输入框最外层样式
    */
   style?: React.HtmlHTMLAttributes<HTMLDivElement>['style'];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 
 const classNamePrefix = 'acme-input';
