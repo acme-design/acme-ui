@@ -9,6 +9,7 @@ import DoubleArrow from './DoubleArrow';
 import Input from '../Input';
 import Select from './Select';
 import './style/pagination.less';
+import { uniteClassNames } from '../../utils/tools';
 
 const classNamePrefix = 'acme-pagination';
 
@@ -18,10 +19,11 @@ export const classes = {
   pageContent: `${classNamePrefix}-content`,
   pageItem: `${classNamePrefix}-item`,
   dotGroup: `${classNamePrefix}-dot-group`,
-  doubleArrow: `${classNamePrefix}-doubleArrow`,
-  leftDoubleArrow: `${classNamePrefix}-left-doubleArrow`,
-  rightDoubleArrow: `${classNamePrefix}-right-doubleArrow`,
-  jumpInput: `${classNamePrefix}-jumpInput`,
+  doubleArrow: `${classNamePrefix}-double-arrow`,
+  leftDoubleArrow: `${classNamePrefix}-left-double-arrow`,
+  rightDoubleArrow: `${classNamePrefix}-right-double-arrow`,
+  jumpBase: `${classNamePrefix}-jump-base-input`,
+  jumpInput: (type: PaginationProps['type']) => `${classNamePrefix}-jump-${type}-input`,
   default: {
     item: `${classNamePrefix}-default-item`,
     active: `${classNamePrefix}-default-item-active`,
@@ -323,6 +325,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
 
   private renderJumpBtn = (): React.ReactNode => {
     const { jumpPage } = this.state;
+    const { type } = this.props;
     return (
       <li className={classes.pageItem}>
         <div>
@@ -331,9 +334,8 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
             value={jumpPage}
             onBlur={this.quickJumpPage}
             onKeyDown={this.quickJumpKeyDown}
-            className={classes.jumpInput}
+            className={uniteClassNames(classes.jumpBase, classes.jumpInput(type))}
             onChange={this.jumpInputChange}
-            size="small"
           />
           页
         </div>

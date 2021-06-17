@@ -29,7 +29,7 @@
       .@{paginationPrefix}-dot-group {
         opacity: 0;
       }
-      .@{paginationPrefix}-doubleArrow {
+      .@{paginationPrefix}-double-arrow {
         opacity: 1;
       }
     }
@@ -163,7 +163,7 @@
   transition: opacity ease-in-out 0.5s;
 }
 
-.@{paginationPrefix}-doubleArrow {
+.@{paginationPrefix}-double-arrow {
   position: absolute;
   fill: @font-color-link;
   left: 0;
@@ -173,7 +173,7 @@
   line-height: inherit;
   transition: opacity ease-in-out 0.5s;
 
-  .@{paginationPrefix}-left-doubleArrow {
+  .@{paginationPrefix}-left-double-arrow {
     transform: rotate(180deg);
   }
 }
@@ -205,10 +205,19 @@
   fill: @font-color-disabled;
 }
 
-.@{paginationPrefix}-jumpInput {
+.@{paginationPrefix}-jump-base-input {
   display: inline-block;
-  width: @spacing-xl;
   padding-left: @spacing-normal;
   margin: 0 @spacing-sm;
   vertical-align: middle;
+}
+
+.@{paginationPrefix}-jump-default-input {
+  width: @spacing-xxl;
+  height: @spacing-xl;
+}
+
+.@{paginationPrefix}-jump-mini-input {
+  width: @spacing-xl;
+  height: @spacing-lg;
 }
