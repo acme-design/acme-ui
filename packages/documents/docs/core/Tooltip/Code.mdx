@@ -1,0 +1,115 @@
+import {Playground, Props} from "../../../src/controls";
+import {Tooltip, Button, Input} from "@acme-ui/core";
+
+## 基本用法
+最简单的用法。
+
+<Playground>
+    <Tooltip content="这是一个气泡，hH哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈hhhhhhhhhhhhhhhhhhh" trigger="click">
+        当鼠标经过这段文字时，会显示一个气泡框
+    </Tooltip>
+</Playground>
+
+## 触发方式
+3种触发方式：鼠标移入，点击，获得输入焦点
+
+<Playground>
+    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '100px'}}>
+        <Tooltip content="提示文字" trigger="hover">
+            <Button>鼠标移入</Button>
+        </Tooltip>
+        <Tooltip content="提示文字" trigger="click">
+            <Button>点击</Button>
+        </Tooltip>
+        <Tooltip content="这里是提示文字" trigger="focus">
+            <Input placeholder="请输入内容" />
+        </Tooltip>
+    </div>
+</Playground>
+
+## 可变的宽度
+为了保证可阅读星，默认将较长的文字折行
+
+<Playground>
+    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <Tooltip content="这里是重复的提示文字，这里是重复的提示文字这里是重复的提示文字这里是重复的提示">
+            默认宽度/300px
+        </Tooltip>
+        <Tooltip content="这里是重复的提示文字，这里是重复的提示文字这里是重复的提示文字这里是重复的提示" width={500}>
+            自定义宽度/500px
+        </Tooltip>
+        <Tooltip content="这里是重复的提示文字，这里是重复的提示文字这里是重复的提示文字这里是重复的提示" overlayStyle={{maxWidth: 'unset'}}>
+            不限宽
+        </Tooltip>
+    </div>
+</Playground>
+
+## 位置
+位置有12个方向
+
+<Playground>
+    <div>
+        <div style={{display: 'flex', justifyContent: 'center', marginBottom: '8px'}}>
+            <Tooltip content="这里是提示文字" placement="top-start">
+                <Button mode="outlined" style={{marginRight: '10px'}}>上左</Button>
+            </Tooltip>
+            <Tooltip content="这里是提示文字" placement="top">
+                <Button mode="outlined" style={{marginRight: '10px'}}>上边</Button>
+            </Tooltip>
+            <Tooltip content="这里是提示文字" placement="top-end">
+                <Button mode="outlined">上右</Button>
+            </Tooltip>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'center', marginBottom: '8px'}}>
+            <Tooltip content="这里是提示文字" placement="left-start">
+                <Button mode="outlined">左上</Button>
+            </Tooltip>
+            <div style={{width: '260px'}} />
+            <Tooltip content="这里是提示文字" placement="right-start">
+                <Button mode="outlined">右上</Button>
+            </Tooltip>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'center', marginBottom: '8px'}}>
+            <Tooltip content="这里是提示文字" placement="left">
+                <Button mode="outlined">左边</Button>
+            </Tooltip>
+            <div style={{width: '260px'}} />
+            <Tooltip content="这里是提示文字" placement="right">
+                <Button mode="outlined">右边</Button>
+            </Tooltip>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'center', marginBottom: '8px'}}>
+            <Tooltip content="这里是提示文字" placement="left-end">
+                <Button mode="outlined">左下</Button>
+            </Tooltip>
+            <div style={{width: '260px'}} />
+            <Tooltip content="这里是提示文字" placement="right-end">
+                <Button mode="outlined">右下</Button>
+            </Tooltip>
+        </div>
+        <div style={{marginBottom: '100px', display: 'flex', justifyContent: 'center'}}>
+            <Tooltip content="这里是提示文字" placement="bottom-start">
+                <Button mode="outlined" style={{marginRight: '10px'}}>下左</Button>
+            </Tooltip>
+            <Tooltip content="这里是提示文字" placement="bottom">
+                <Button mode="outlined" style={{marginRight: '10px'}}>下边</Button>
+            </Tooltip>
+            <Tooltip content="这里是提示文字" placement="bottom-end">
+                <Button mode="outlined">下右</Button>
+            </Tooltip>
+        </div>
+    </div>
+</Playground>
+
+## 延时
+延时显示文字提示，单位毫秒or秒？
+
+<Playground>
+    <Tooltip content="这里的提示问题延时1秒显示" delay={1} placement="bottom-end">
+        <Button>延时1秒显示</Button>
+    </Tooltip>
+</Playground>
+
+## API
+
+<Props of={Tooltip} />

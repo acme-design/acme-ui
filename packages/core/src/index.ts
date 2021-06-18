@@ -33,3 +33,6 @@ export type { FormDescriptionProps } from './components/FormDescription';
 
 export { default as Tag } from './components/Tag';
 export type { TagProps } from './components/Tag';
+
+export { default as Tooltip } from './components/Tooltip';
+export type { TooltipProps } from './components/Tooltip';
