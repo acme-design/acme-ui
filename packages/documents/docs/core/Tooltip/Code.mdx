@@ -14,7 +14,7 @@ import {Tooltip, Button, Input} from "@acme-ui/core";
 3种触发方式：鼠标移入，点击，获得输入焦点
 
 <Playground>
-    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '100px'}}>
+    <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <Tooltip content="提示文字" trigger="hover">
             <Button>鼠标移入</Button>
         </Tooltip>
@@ -87,7 +87,7 @@ import {Tooltip, Button, Input} from "@acme-ui/core";
                 <Button mode="outlined">右下</Button>
             </Tooltip>
         </div>
-        <div style={{marginBottom: '100px', display: 'flex', justifyContent: 'center'}}>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
             <Tooltip content="这里是提示文字" placement="bottom-start">
                 <Button mode="outlined" style={{marginRight: '10px'}}>下左</Button>
             </Tooltip>
@@ -107,6 +107,15 @@ import {Tooltip, Button, Input} from "@acme-ui/core";
 <Playground>
     <Tooltip content="这里的提示问题延时1秒显示" delay={1} placement="bottom-end">
         <Button>延时1秒显示</Button>
+    </Tooltip>
+</Playground>
+
+## 禁用状态
+触发被禁用的元素是，激活工具提示
+
+<Playground>
+    <Tooltip content="这里是提示文字" placement="top">
+        <Button disabled>禁用状态</Button>
     </Tooltip>
 </Playground>
 

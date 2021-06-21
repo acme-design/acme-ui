@@ -10,7 +10,7 @@
   display: inline-flex;
 }
 
-.@{acmeTooltipPrefix}-content {
+.@{acmeTooltipPrefix}-popper {
   z-index: 1000; // TODO 暂定
   max-width: 300px;
   color: @color-white;
@@ -36,19 +36,19 @@
   }
 }
 
-.@{acmeTooltipPrefix}-content[data-popper-placement^='top'] > .@{acmeTooltipPrefix}-arrow {
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='top'] > .@{acmeTooltipPrefix}-arrow {
   bottom: -4px;
 }
 
-.@{acmeTooltipPrefix}-content[data-popper-placement^='bottom'] > .@{acmeTooltipPrefix}-arrow {
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='bottom'] > .@{acmeTooltipPrefix}-arrow {
   top: -4px;
 }
 
-.@{acmeTooltipPrefix}-content[data-popper-placement^='left'] > .@{acmeTooltipPrefix}-arrow {
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='left'] > .@{acmeTooltipPrefix}-arrow {
   right: -4px;
 }
 
-.@{acmeTooltipPrefix}-content[data-popper-placement^='right'] > .@{acmeTooltipPrefix}-arrow {
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='right'] > .@{acmeTooltipPrefix}-arrow {
   left: -4px;
 }
 

@@ -47,7 +47,7 @@ const classNamePrefix = `acme-tooltip`;
 
 export const classes = {
   root: `${classNamePrefix}-root`,
-  content: `${classNamePrefix}-content`,
+  popper: `${classNamePrefix}-popper`,
   reference: `${classNamePrefix}-reference`,
   arrow: `${classNamePrefix}-arrow`,
   hidden: `${classNamePrefix}-hidden`,
@@ -153,26 +153,37 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       }
 
       return () => {
-        // TODO 把所有监听的事件移除
         if (showTimeout) clearTimeout(showTimeout);
         if (hideTimeout) clearTimeout(hideTimeout);
+        // 把所有监听的事件移除
+        if (childrenDom) {
+          childrenDom.removeEventListener('click', (e: Event) => {
+            if (e) e.stopPropagation();
+            show();
+          });
+          document.removeEventListener('click', hide);
+          childrenDom.removeEventListener('mouseenter', show);
+          childrenDom.removeEventListener('mouseout', hide);
+          childrenDom.removeEventListener('focusin', show);
+          childrenDom.removeEventListener('focusout', hide);
+        }
       };
     }, [content]);
 
     return (
       <div className={classes.root} ref={ref} {...otherProps}>
-        <div id={classes.reference} ref={referenceRef} className={classes.reference}>
+        <div ref={referenceRef} className={classes.reference}>
           {children}
         </div>
         <div
-          id={classes.content}
           ref={popperRef}
           className={uniteClassNames(
-            classes.content,
+            classes.popper,
             overlayClassName,
             isShowPopper ? '' : classes.hidden,
           )}
           style={{ maxWidth: width, ...overlayStyle }}
+          data-testid="acme-popper"
         >
           <div id={classes.arrow} data-popper-arrow className={classes.arrow} />
           <div className={classes.tooltip}>{content}</div>
