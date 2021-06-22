@@ -5,7 +5,7 @@
 import React from 'react';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Language, Prism, PrismTheme } from 'prism-react-renderer';
-import CodeLess from '../Code/Code.less';
+import PlaygroundLess from './playground.module.less';
 import { theme as defaultTheme, toHundreds } from '../Code';
 
 interface Props {
@@ -61,8 +61,8 @@ class CodeEditor extends React.Component<Props, State> {
               const lineProps = getLineProps({ line, key: i });
               return (
                 // eslint-disable-next-line react/no-array-index-key
-                <div {...lineProps} className={`${CodeLess.line} ${lineProps.className}`}>
-                  <span className={CodeLess.nov}>{toHundreds(i + 1)}</span>
+                <div {...lineProps} className={`${PlaygroundLess.line} ${lineProps.className}`}>
+                  <span className={PlaygroundLess.nov}>{toHundreds(i + 1)}</span>
                   {line.map((token, key) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <span key={key} {...getTokenProps({ token, key })} />

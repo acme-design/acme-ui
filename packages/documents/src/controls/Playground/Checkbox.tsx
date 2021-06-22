@@ -5,7 +5,7 @@
 import React from 'react';
 import isBoolean from 'lodash/isBoolean';
 import { ResetComProps, ComProps } from './CustomPreview';
-import PlaygroundLess from './Playground.less';
+import PlaygroundLess from './playground.module.less';
 
 interface Props {
   currentProps: ComProps;

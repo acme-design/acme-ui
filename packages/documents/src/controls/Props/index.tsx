@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import isObject from 'lodash/isObject';
 import PropItem from './PropItem';
 import { DocProp } from './utils';
-import PropsLess from './Props.less';
+import PropsLess from './props.module.less';
 
 export type ComponentWithDocGenInfo = ComponentType & {
   __docgenInfo: {

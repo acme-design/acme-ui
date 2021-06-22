@@ -3,8 +3,8 @@
  * */
 import React from 'react';
 import get from 'lodash/get';
-import Anchor from '../../compositions/Anchor';
-import WrapperLess from './Wrapper.less';
+import Anchor from '../../pages-views/compositions/Anchor';
+import WrapperLess from './wrapper.module.less';
 
 interface WrapperProps {
   children: React.ReactChildren;

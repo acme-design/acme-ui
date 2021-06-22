@@ -2,7 +2,7 @@
  * MDX h1 ~ h6
  * */
 import React from 'react';
-import HeadingsLess from './Headings.less';
+import HeadingsLess from './headings.module.less';
 
 type Tags = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
