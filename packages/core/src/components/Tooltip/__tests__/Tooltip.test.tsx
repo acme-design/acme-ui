@@ -44,7 +44,7 @@ describe('Tooltip', () => {
   describe('test trigger event', () => {
     test('click', () => {
       const { getByTestId } = render(
-        <Tooltip content="这里是提示" trigger="click">
+        <Tooltip content="这里是提示" trigger="click" openDelay={0}>
           <div data-testid="acme-tooltip-reference">提示工具</div>
         </Tooltip>,
       );
@@ -65,7 +65,9 @@ describe('Tooltip', () => {
       const reference = getByTestId('acme-tooltip-reference');
 
       userEvent.hover(reference);
-      expect(popperContent).toBeVisible();
+      setTimeout(() => {
+        expect(popperContent).toBeVisible();
+      }, 100);
       userEvent.unhover(reference);
       expect(popperContent).not.toBeVisible();
     });
@@ -79,7 +81,9 @@ describe('Tooltip', () => {
       const popperContent = getByTestId('acme-popper');
       const reference = getByTestId('acme-tooltip-reference');
       fireEvent.focusIn(reference);
-      expect(popperContent).toBeVisible();
+      setTimeout(() => {
+        expect(popperContent).toBeVisible();
+      }, 100);
     });
   });
 

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createPopper, Instance } from '@popperjs/core';
 import includes from 'lodash/includes';
 import get from 'lodash/get';
+import { isFunction } from 'lodash';
 import { uniteClassNames } from '../../utils/tools';
 import { TooltipPlacement } from './types';
 import './style/Tooltip.less';
@@ -26,9 +27,13 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   trigger?: string | string[];
   /**
-   * 提示框出现的延时时间，单位：秒？还是毫秒？（TODO 目前暂时用了秒）
+   * 提示框出现的延时时间，单位：毫秒
    */
-  delay?: number;
+  openDelay?: number;
+  /**
+   * 提示框关闭的延时时间，单位：毫秒
+   */
+  closeDelay?: number;
   /**
    * 提示框位置
    */
@@ -41,6 +46,18 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
    * 提示框样式
    */
   overlayStyle?: React.HTMLAttributes<HTMLDivElement>['style'];
+  /**
+   * 关闭弹层的回调函数
+   */
+  onClose?: (e: Event) => void;
+  /**
+   * 控制popper是否展开
+   */
+  isOpen?: boolean;
+  /**
+   * 始终不显示提示框
+   */
+  disabled?: boolean;
   /**
    * 提示框翻转边界 默认为document
    */
@@ -65,11 +82,15 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       content,
       width,
       trigger,
-      delay,
+      openDelay,
+      closeDelay,
       placement,
       overlayClassName,
       overlayStyle,
       boundary,
+      onClose,
+      isOpen,
+      disabled,
       ...otherProps
     } = props;
 
@@ -82,24 +103,27 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
     const [isShowPopper, setIsShowPopper] = React.useState(false);
 
     const show = () => {
-      if (delay) {
+      if (openDelay) {
         showTimeout = setTimeout(() => {
           setIsShowPopper(true);
           popper.update();
-        }, delay * 1000);
+        }, openDelay);
       } else {
         setIsShowPopper(true);
         popper.update();
       }
     };
 
-    const hide = () => {
-      if (delay) {
+    const hide = (e: Event) => {
+      if (closeDelay) {
         hideTimeout = setTimeout(() => {
           setIsShowPopper(false);
-        }, delay * 1000);
+        }, closeDelay);
       } else {
         setIsShowPopper(false);
+      }
+      if (isFunction(onClose)) {
+        onClose(e);
       }
     };
 
@@ -133,6 +157,9 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
     React.useEffect(() => {
       const childrenDom = get(referenceRef, 'current');
       const popperDom = get(popperRef, 'current');
+      if (disabled) {
+        return () => {};
+      }
       if (childrenDom && popperDom) {
         popper = createPopper(childrenDom, popperDom, {
           placement,
@@ -194,6 +221,13 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       };
     }, [content]);
 
+    if ('isOpen' in props) {
+      // TODO 如果传了isOpen，那是否还能通过trigger控制提示框的显隐？
+      React.useEffect(() => {
+        setIsShowPopper(!!isOpen);
+      }, [isOpen]);
+    }
+
     return (
       <div className={classes.root} ref={ref} {...otherProps}>
         <div ref={referenceRef} className={classes.reference}>
@@ -217,6 +251,7 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
   });
 
 Tooltip.defaultProps = {
+  openDelay: 100,
   trigger: 'hover',
   placement: 'auto',
 };
