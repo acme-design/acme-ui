@@ -22,7 +22,7 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   width?: string | number;
   /**
-   * 提示框的触发方式
+   * 提示框的触发方式, 目前只支持hover/click/focus
    */
   trigger?: string | string[];
   /**
@@ -41,6 +41,10 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
    * 提示框样式
    */
   overlayStyle?: React.HTMLAttributes<HTMLDivElement>['style'];
+  /**
+   * 提示框翻转边界 默认为document
+   */
+  boundary?: React.ReactElement;
 }
 
 const classNamePrefix = `acme-tooltip`;
@@ -65,6 +69,7 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       placement,
       overlayClassName,
       overlayStyle,
+      boundary,
       ...otherProps
     } = props;
 
@@ -135,7 +140,26 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
             {
               name: 'offset',
               options: {
-                offset: [0, 8],
+                offset: [0, 10],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                padding: {
+                  top: 2,
+                  bottom: 2,
+                  left: 5,
+                  right: 5,
+                },
+              },
+            },
+            {
+              name: 'flip',
+              options: {
+                padding: 5,
+                fallbackPlacement: ['left', 'right', 'top', 'bottom'],
+                boundary,
               },
             },
           ],

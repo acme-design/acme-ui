@@ -16,6 +16,12 @@
   color: @color-white;
   background-color: @color-black; // TODO 背景色需要再次确认一下 需不需要透明度之类的
   border-radius: @border-radius-normal;
+  animation: fadeIn 0.2s linear;
+}
+
+.@{acmeTooltipPrefix}-popper[data-popper-reference-hidden] {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .@{acmeTooltipPrefix}-tooltip {
@@ -54,4 +60,17 @@
 
 .@{acmeTooltipPrefix}-hidden {
   display: none;
+}
+
+// 提示框淡入动画 （TODO 临时的，已经反馈给设计，待给出动画
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
