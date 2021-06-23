@@ -336,6 +336,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
             onKeyDown={this.quickJumpKeyDown}
             className={uniteClassNames(classes.jumpBase, classes.jumpInput(type))}
             onChange={this.jumpInputChange}
+            size={type === PaginationType.DEFAULT ? 'default' : 'small'}
           />
           页
         </div>
