@@ -33,3 +33,6 @@ export type { FormDescriptionProps } from './components/FormDescription';
 
 export { default as Tag } from './components/Tag';
 export type { TagProps } from './components/Tag';
+
+export { default as FormHint } from './components/FormHint';
+export type { FormHintProps } from './components/FormHint';

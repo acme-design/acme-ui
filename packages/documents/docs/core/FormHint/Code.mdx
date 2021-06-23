@@ -1,0 +1,38 @@
+import { Playground, Props } from '~controls';
+import { Input, FormLabel, FormHint } from '@acme-ui/core';
+
+## 基础用法
+
+该演示使您可以预览不同类型的不同状态
+
+<Playground>
+  <FormLabel style={{ marginBottom: 8 }}>邮箱</FormLabel>
+  <Input />
+  <FormHint style={{ marginTop: 4 }}>我们绝不会分享您的邮箱地址</FormHint>
+  <FormLabel style={{ marginBottom: 8, marginTop: 24 }}>错误的邮箱</FormLabel>
+  <Input error defaultValue="test" />
+  <FormHint style={{ marginTop: 4 }} status="error">
+    邮箱地址输入不正确
+  </FormHint>
+  <FormLabel style={{ marginBottom: 8, marginTop: 24 }}>成功的邮箱</FormLabel>
+  <Input success />
+  <FormHint style={{ marginTop: 4 }} status="success">
+    邮箱地址输入正确
+  </FormHint>
+  <FormLabel style={{ marginBottom: 8, marginTop: 24 }}>警告的邮箱</FormLabel>
+  <Input />
+  <FormHint style={{ marginTop: 4 }} status="warning">
+    ⚠️ 邮箱地址
+  </FormHint>
+  <FormLabel style={{ marginBottom: 8, marginTop: 24 }}>禁用的邮箱</FormLabel>
+  <Input disabled />
+  <FormHint style={{ marginTop: 4 }} disabled>
+    该邮箱禁止填写
+  </FormHint>
+</Playground>
+
+## API
+
+通过设置不同的属性展示不同状态
+
+<Props of={FormHint} />

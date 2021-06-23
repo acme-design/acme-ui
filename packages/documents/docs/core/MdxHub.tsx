@@ -23,6 +23,8 @@ import FormDescriptionCode from './FormDescription/Code.mdx';
 import FormDescriptionDesign from './FormDescription/Design.mdx';
 import TagCode from './Tag/Code.mdx';
 import TagDesign from './Tag/Design.mdx';
+import FormHintCode from './FormHint/Code.mdx';
+import FormHintDesign from './FormHint/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -111,6 +113,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '标签用于进行标记和分类。',
     designMdx: TagDesign,
     codeMdx: TagCode,
+  },
+  {
+    tagName: 'Form Hint',
+    name: '表单提示',
+    description: '',
+    designMdx: FormHintDesign,
+    codeMdx: FormHintCode,
   },
 ];
 
