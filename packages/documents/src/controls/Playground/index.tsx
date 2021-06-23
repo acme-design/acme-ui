@@ -11,12 +11,12 @@ import { mdx } from '@mdx-js/react';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import isEqual from 'lodash/isEqual';
-import copy from 'copy-text-to-clipboard';
+import copy from '../../lib/copyToClipboard';
 import CustomLiveEditor from './CustomLiveEditor';
 import CustomPreview, { ResetComProps, ComProps } from './CustomPreview';
 import { theme } from '../Code';
 import { resetCodePlaceholder } from './utils';
-import PlaygroundLess from './Playground.less';
+import PlaygroundLess from './playground.module.less';
 import { renderChecker } from './Checker';
 import { renderCheckbox } from './Checkbox';
 

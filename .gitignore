@@ -36,8 +36,8 @@ jspm_packages/
 .idea/
 .vscode/
 
-# docz files
-.docz/
+# docs files
+.next/
 
 # dist
 dist/

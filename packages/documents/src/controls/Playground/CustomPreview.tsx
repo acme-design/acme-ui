@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { LivePreview } from 'react-live';
-import PlaygroundLess from './Playground.less';
+import PlaygroundLess from './playground.module.less';
 
 export type ResetComProps = (newComProps: { [key: string]: any }) => void;
 

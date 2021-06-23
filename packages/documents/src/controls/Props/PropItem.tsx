@@ -2,7 +2,7 @@
  * 单个 prop 的渲染
  * */
 import React from 'react';
-import PropsLess from './Props.less';
+import PropsLess from './props.module.less';
 import { getDefaultValue, DocProp, getTypeStrWithoutUndefined } from './utils';
 
 type PropItemProps = DocProp & {

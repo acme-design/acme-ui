@@ -3,7 +3,7 @@
  * */
 import React from 'react';
 import { LiveContext, ContextProps } from 'react-live';
-import PlaygroundLess from './Playground.less';
+import PlaygroundLess from './playground.module.less';
 import CustomCodeEditor from './CustomCodeEditor';
 
 const CustomLiveEditor: React.FC<any> = (props: any) => {

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { ResetComProps, ComProps } from './CustomPreview';
-import PlaygroundLess from './Playground.less';
+import PlaygroundLess from './playground.module.less';
 
 interface Props {
   currentProps: ComProps;
