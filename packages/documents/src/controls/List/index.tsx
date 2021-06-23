@@ -2,7 +2,7 @@
  * MDX ul、ol 有序或者无序列表
  * */
 import React from 'react';
-import ListLess from './List.less';
+import ListLess from './list.module.less';
 
 type ULProps = React.ComponentProps<'ul'>;
 export const UL: React.FC<ULProps> = (props: ULProps) => {
