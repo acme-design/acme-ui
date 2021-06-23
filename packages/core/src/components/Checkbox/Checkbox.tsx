@@ -148,12 +148,4 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   Group: typeof CheckboxGroup;
 };
 
-Checkbox.defaultProps = {
-  className: '',
-  value: '',
-  disabled: false,
-  defaultChecked: false,
-  indeterminate: false,
-};
-
 export default Checkbox;
