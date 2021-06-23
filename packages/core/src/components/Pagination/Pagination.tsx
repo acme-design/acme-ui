@@ -6,9 +6,10 @@ import omit from 'lodash/omit';
 import { getPages, IPageItem, PageItemType } from './util/Pagination';
 import Arrow from './Arrow';
 import DoubleArrow from './DoubleArrow';
-import Input from './Input';
+import Input from '../Input';
 import Select from './Select';
 import './style/pagination.less';
+import { uniteClassNames } from '../../utils/tools';
 
 const classNamePrefix = 'acme-pagination';
 
@@ -18,10 +19,11 @@ export const classes = {
   pageContent: `${classNamePrefix}-content`,
   pageItem: `${classNamePrefix}-item`,
   dotGroup: `${classNamePrefix}-dot-group`,
-  doubleArrow: `${classNamePrefix}-doubleArrow`,
-  leftDoubleArrow: `${classNamePrefix}-left-doubleArrow`,
-  rightDoubleArrow: `${classNamePrefix}-right-doubleArrow`,
-  jumpInput: `${classNamePrefix}-jumpInput`,
+  doubleArrow: `${classNamePrefix}-double-arrow`,
+  leftDoubleArrow: `${classNamePrefix}-left-double-arrow`,
+  rightDoubleArrow: `${classNamePrefix}-right-double-arrow`,
+  jumpBase: `${classNamePrefix}-jump-base-input`,
+  jumpInput: (type: PaginationProps['type']) => `${classNamePrefix}-jump-${type}-input`,
   default: {
     item: `${classNamePrefix}-default-item`,
     active: `${classNamePrefix}-default-item-active`,
@@ -84,7 +86,7 @@ export interface PaginationProps {
    * 是否展示 总数
    * @default false
    * */
-  showTotal: boolean;
+  showTotal?: boolean;
   /**
    * 当前页
    * */
@@ -114,14 +116,14 @@ export interface PaginationProps {
    * 是否展示 pageSize 选择器
    * @default false
    * */
-  showPageSize: boolean;
+  showPageSize?: boolean;
   /** 切换 pageSize */
   onPageSizeChange?: (pageSize: number) => void;
   /**
    * 是否展示快速跳转
    * @default false
    * */
-  showJump: boolean;
+  showJump?: boolean;
   /** 最外层容器的 className */
   className?: string;
 }
@@ -140,10 +142,6 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     pageSizeOptions: [10, 20, 50, 100],
     defaultCurrent: 1,
     defaultPageSize: 10,
-    showPageSize: false,
-    showTotal: false,
-    showJump: false,
-    className: '',
   };
 
   constructor(props: PaginationProps) {
@@ -256,7 +254,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     this.pageChange(page);
   };
 
-  private jumpInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private jumpInputChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
     const value = get(e, 'target.value');
     this.setState({
       jumpPage: value,
@@ -323,6 +321,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
 
   private renderJumpBtn = (): React.ReactNode => {
     const { jumpPage } = this.state;
+    const { type } = this.props;
     return (
       <li className={classes.pageItem}>
         <div>
@@ -331,8 +330,9 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
             value={jumpPage}
             onBlur={this.quickJumpPage}
             onKeyDown={this.quickJumpKeyDown}
-            className={classes.jumpInput}
+            className={uniteClassNames(classes.jumpBase, classes.jumpInput(type))}
             onChange={this.jumpInputChange}
+            size={type === PaginationType.DEFAULT ? 'default' : 'small'}
           />
           页
         </div>

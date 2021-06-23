@@ -15,7 +15,7 @@ type InputSizeType = `${InputSize}`;
 
 /** TODO 数字类型的input 待设计给出详细设计和样式 */
 
-export interface InputProps {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /**
    * 样式类名
    */
