@@ -67,7 +67,7 @@ describe('Tooltip', () => {
       userEvent.hover(reference);
       setTimeout(() => {
         expect(popperContent).toBeVisible();
-      }, 100);
+      }, 1000);
       userEvent.unhover(reference);
       expect(popperContent).not.toBeVisible();
     });
@@ -83,7 +83,7 @@ describe('Tooltip', () => {
       fireEvent.focusIn(reference);
       setTimeout(() => {
         expect(popperContent).toBeVisible();
-      }, 100);
+      }, 1000);
     });
   });
 
