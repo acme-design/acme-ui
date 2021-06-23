@@ -17,16 +17,25 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~controls": ["./src/controls/index.tsx"],
-      "~docs/*": ["./docs/*"],
-      "@acme-ui/core": ["../core/src/index.ts"],
-      "@acme-ui/icons": ["../icons/src/index.ts"]
+      "~controls": [
+        "./src/controls/index.tsx"
+      ],
+      "~docs/*": [
+        "./docs/*"
+      ],
+      "@acme-ui/core": [
+        "../core/src/index.ts"
+      ],
+      "@acme-ui/icons": [
+        "../icons/src/index.ts"
+      ]
     }
   },
   "include": [
+    "next-env.d.ts",
     "src",
     "docs",
     "typings",
@@ -34,6 +43,7 @@
     "../icons/src"
   ],
   "exclude": [
+    "node_modules",
     "jest/**/*",
     "../core/src/**/__tests__/**/*",
     "../icons/src/**/__tests__/**/*"

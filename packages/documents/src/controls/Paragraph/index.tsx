@@ -2,7 +2,7 @@
  * MDX p 段落
  * */
 import React from 'react';
-import ParagraphLess from './Paragraph.less';
+import ParagraphLess from './paragraph.module.less';
 
 type Props = React.ComponentProps<'p'>;
 

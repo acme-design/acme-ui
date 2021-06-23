@@ -2,6 +2,7 @@
  * 组件 MDX 文件路由及 Title 配置
  * */
 import React from 'react';
+import camelCase from 'lodash/camelCase';
 import ButtonCode from './Button/Code.mdx';
 import ButtonDesign from './Button/Design.mdx';
 import PaginationCode from './Pagination/Code.mdx';
@@ -33,14 +34,16 @@ export type TMDXHub = {
   /** 描述 */
   description: React.ReactNode;
   /** 路由地址，默认 /components/{tagName.toLowerCase()} */
-  path?: string;
+  path: string;
   /** 设计相关的 mdx import */
   designMdx?: null | ((props: any) => JSX.Element);
   /** 代码相关的 mdx import */
   codeMdx?: null | ((props: any) => JSX.Element);
 };
 
-const MdxHub: TMDXHub[] = [
+type PickRequired<T, K extends keyof T> = Omit<T, K> & { [P in K]?: T[P] };
+
+const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
   {
     tagName: 'Button',
     name: '按钮',
@@ -120,4 +123,12 @@ const MdxHub: TMDXHub[] = [
   },
 ];
 
-export default MdxHub;
+const injectPath = (mdxHub: PickRequired<TMDXHub, 'path'>[]): TMDXHub[] => {
+  return mdxHub.map((hub) => {
+    const { tagName, path: hubPath } = hub;
+    const path = hubPath || `/components/${camelCase(tagName)}`;
+    return { ...hub, path };
+  });
+};
+
+export default injectPath(MdxHub);
