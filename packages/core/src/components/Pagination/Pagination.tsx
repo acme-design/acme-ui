@@ -86,7 +86,7 @@ export interface PaginationProps {
    * 是否展示 总数
    * @default false
    * */
-  showTotal: boolean;
+  showTotal?: boolean;
   /**
    * 当前页
    * */
@@ -116,14 +116,14 @@ export interface PaginationProps {
    * 是否展示 pageSize 选择器
    * @default false
    * */
-  showPageSize: boolean;
+  showPageSize?: boolean;
   /** 切换 pageSize */
   onPageSizeChange?: (pageSize: number) => void;
   /**
    * 是否展示快速跳转
    * @default false
    * */
-  showJump: boolean;
+  showJump?: boolean;
   /** 最外层容器的 className */
   className?: string;
 }
@@ -142,10 +142,6 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     pageSizeOptions: [10, 20, 50, 100],
     defaultCurrent: 1,
     defaultPageSize: 10,
-    showPageSize: false,
-    showTotal: false,
-    showJump: false,
-    className: '',
   };
 
   constructor(props: PaginationProps) {

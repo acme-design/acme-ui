@@ -15,7 +15,7 @@ type InputSizeType = `${InputSize}`;
 
 /** TODO 数字类型的input 待设计给出详细设计和样式 */
 
-export interface InputProps {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /**
    * 样式类名
    */
@@ -100,10 +100,6 @@ export interface InputProps {
    * 输入框最外层样式
    */
   style?: React.HtmlHTMLAttributes<HTMLDivElement>['style'];
-
-  // TODO 暂时使用 key， 需要后面统一规定是否使用 extends 来继承原生属性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
 }
 
 const classNamePrefix = 'acme-input';
