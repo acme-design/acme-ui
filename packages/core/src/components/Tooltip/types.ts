@@ -15,3 +15,9 @@ export enum TooltipPlacement {
   LEFTSTART = 'left-start',
   LEFTEND = 'left-end',
 }
+
+export enum TooltipTrigger {
+  HOVER = 'hover',
+  CLICK = 'click',
+  FOCUS = 'focus',
+}
