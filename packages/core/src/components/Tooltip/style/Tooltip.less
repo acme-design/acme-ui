@@ -1,0 +1,76 @@
+@import '../../../styles/index.less';
+
+@acmeTooltipPrefix: ~'@{acme-prefix}-tooltip';
+
+.@{acmeTooltipPrefix}-root {
+  display: inline-flex;
+}
+
+.@{acmeTooltipPrefix}-reference {
+  display: inline-flex;
+}
+
+.@{acmeTooltipPrefix}-popper {
+  z-index: 1000; // TODO 暂定
+  max-width: 300px;
+  color: @color-white;
+  background-color: @color-black; // TODO 背景色需要再次确认一下 需不需要透明度之类的
+  border-radius: @border-radius-normal;
+  animation: fadeIn 0.2s linear;
+}
+
+.@{acmeTooltipPrefix}-popper[data-popper-reference-hidden] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.@{acmeTooltipPrefix}-content {
+  padding: @spacing-normal @spacing-normal + @spacing-xs;
+  border-radius: @border-radius-normal;
+}
+
+.@{acmeTooltipPrefix}-arrow {
+  width: 10px;
+  height: 10px;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: @color-black;
+    transform: rotate(45deg);
+  }
+}
+
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='top'] > .@{acmeTooltipPrefix}-arrow {
+  bottom: -4px;
+}
+
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='bottom'] > .@{acmeTooltipPrefix}-arrow {
+  top: -4px;
+}
+
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='left'] > .@{acmeTooltipPrefix}-arrow {
+  right: -4px;
+}
+
+.@{acmeTooltipPrefix}-popper[data-popper-placement^='right'] > .@{acmeTooltipPrefix}-arrow {
+  left: -4px;
+}
+
+.@{acmeTooltipPrefix}-hidden {
+  display: none;
+}
+
+// 提示框淡入动画 （TODO 临时的，已经反馈给设计，待给出动画
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

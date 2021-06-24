@@ -10,7 +10,7 @@ import replace from '@rollup/plugin-replace';
 import image from '@rollup/plugin-image';
 import eslint from '@rollup/plugin-eslint';
 import postcss from 'rollup-plugin-postcss';
-import {terser} from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser';
 import autoprefixer from 'autoprefixer';
 import comments from 'postcss-discard-comments';
 import url from 'postcss-url';
@@ -18,10 +18,10 @@ import url from 'postcss-url';
 const entryFile = 'src/index.ts';
 const BABEL_ENV = process.env.BABEL_ENV || 'umd';
 const extensions = ['.js', '.ts', '.tsx'];
-const globals = {react: 'React', 'react-dom': 'ReactDOM'};
+const globals = { react: 'React', 'react-dom': 'ReactDOM' };
 const externalPkg = ['react', 'react-dom'];
-BABEL_ENV !== 'umd' && externalPkg.push('@babel/runtime', 'lodash');
-const external = id => externalPkg.some(e => id.indexOf(e) === 0);
+BABEL_ENV !== 'umd' && externalPkg.push('@babel/runtime', 'lodash', '@popperjs/core');
+const external = (id) => externalPkg.some((e) => id.indexOf(e) === 0);
 const componentDir = 'src/components';
 const componentEntryFiles = [];
 try {
@@ -43,13 +43,13 @@ try {
 // 通用配置
 const commonPlugins = [
   image(),
-  eslint({fix: true, exclude: ['*.less', '*.png', '*.svg']}),
+  eslint({ fix: true }),
   resolve({ extensions }),
   babel({
     exclude: 'node_modules/**', // 只编译源代码
     babelHelpers: 'runtime',
     extensions,
-    skipPreflightCheck: true
+    skipPreflightCheck: true,
   }),
   // 全局变量替换
   replace({
@@ -63,20 +63,20 @@ const commonPlugins = [
 
 const postcssConfig = {
   plugins: [
-    autoprefixer({env: BABEL_ENV}),
+    autoprefixer({ env: BABEL_ENV }),
     url({ url: 'inline' }),
-    comments({removeAll: true})
+    comments({ removeAll: true }),
   ],
   extract: true,
   extensions: ['.less', '.css'],
-  use: {'less': {javascriptEnabled: true}}
+  use: { less: { javascriptEnabled: true } },
 };
 
 const umdOutput = {
   format: 'umd',
   name: 'acme',
   globals,
-  assetFileNames: '[name].[ext]'
+  assetFileNames: '[name].[ext]',
 };
 
 const esOutput = {
@@ -85,35 +85,38 @@ const esOutput = {
   preserveModulesRoot: 'src',
   exports: 'named',
   assetFileNames: '[name].[ext]',
-}
+};
 
 export default () => {
   switch (BABEL_ENV) {
     case 'umd':
-      return [{
-        input: entryFile,
-        output: {...umdOutput, file: 'dist/umd/acme-ui.development.js'},
-        external,
-        plugins: [postcss(postcssConfig), ...commonPlugins]
-      }, {
-        input: entryFile,
-        output: {...umdOutput, file: 'dist/umd/acme-ui.production.min.js', plugins: [terser()]},
-        external,
-        plugins: [postcss({...postcssConfig, minimize: true}), ...commonPlugins]
-      }];
+      return [
+        {
+          input: entryFile,
+          output: { ...umdOutput, file: 'dist/umd/acme-ui.development.js' },
+          external,
+          plugins: [postcss(postcssConfig), ...commonPlugins],
+        },
+        {
+          input: entryFile,
+          output: { ...umdOutput, file: 'dist/umd/acme-ui.production.min.js', plugins: [terser()] },
+          external,
+          plugins: [postcss({ ...postcssConfig, minimize: true }), ...commonPlugins],
+        },
+      ];
     case 'esm':
       return {
         input: [entryFile, ...componentEntryFiles],
-        output: { ...esOutput, dir: 'dist/es', format: 'es'},
+        output: { ...esOutput, dir: 'dist/es', format: 'es' },
         external,
-        plugins: [postcss(postcssConfig), ...commonPlugins]
+        plugins: [postcss(postcssConfig), ...commonPlugins],
       };
     case 'cjs':
       return {
         input: [entryFile, ...componentEntryFiles],
-        output: { ...esOutput, dir: 'dist/cjs', format: 'cjs'},
+        output: { ...esOutput, dir: 'dist/cjs', format: 'cjs' },
         external,
-        plugins: [postcss(postcssConfig), ...commonPlugins]
+        plugins: [postcss(postcssConfig), ...commonPlugins],
       };
     default:
       return [];

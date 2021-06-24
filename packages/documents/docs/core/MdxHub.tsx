@@ -23,6 +23,8 @@ import FormDescriptionCode from './FormDescription/Code.mdx';
 import FormDescriptionDesign from './FormDescription/Design.mdx';
 import TagCode from './Tag/Code.mdx';
 import TagDesign from './Tag/Design.mdx';
+import TooltipCode from './Tooltip/Code.mdx';
+import TooltipDesign from './Tooltip/Design.mdx';
 import FormHintCode from './FormHint/Code.mdx';
 import FormHintDesign from './FormHint/Design.mdx';
 
@@ -113,6 +115,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '标签用于进行标记和分类。',
     designMdx: TagDesign,
     codeMdx: TagCode,
+  },
+  {
+    tagName: 'Tooltip',
+    name: '工具提示',
+    description: '当用户鼠标悬停，聚焦或者轻触一个元素时，工具提示组件会显示一段有意义的文本。',
+    designMdx: TooltipDesign,
+    codeMdx: TooltipCode,
   },
   {
     tagName: 'Form Hint',
