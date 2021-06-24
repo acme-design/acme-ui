@@ -6,7 +6,7 @@ import joinAssetPath from '../../lib/joinAssetPath';
 
 type Props = React.ComponentProps<'img'>;
 
-const Paragraph: React.FC<Props> = (props: Props) => {
+const Img: React.FC<Props> = (props: Props) => {
   const { src, alt, ...extra } = props;
 
   if (!src) return null;
@@ -14,4 +14,4 @@ const Paragraph: React.FC<Props> = (props: Props) => {
   return <img {...extra} src={/^https?\:\/\//.test(src) ? src : joinAssetPath(src)} alt={alt} />;
 };
 
-export default Paragraph;
+export default Img;
