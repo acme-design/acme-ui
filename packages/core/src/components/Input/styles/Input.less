@@ -11,6 +11,7 @@
 .@{acmeInputPrefix}-clear-icon {
   display: none;
   cursor: pointer;
+  margin: 0 @spacing-sm 0 @spacing-normal;
 }
 
 .@{acmeInputPrefix}-root {
@@ -36,9 +37,10 @@
 }
 
 .@{acmeInputPrefix} {
-  flex: 1 1 auto;
+  width: 0;
   padding: 0;
   border: none;
+  flex: 1 1 auto;
   &::-ms-input-placeholder {
     color: @font-color-placeholder;
   }
@@ -62,7 +64,7 @@
 }
 
 .@{acmeInputPrefix}-end-element {
-  margin: @spacing-normal 0 @spacing-sm 0;
+  margin: 0 @spacing-sm 0 @spacing-normal;
 }
 
 .@{acmeInputPrefix}-default {

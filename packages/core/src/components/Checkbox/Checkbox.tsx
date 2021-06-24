@@ -88,11 +88,11 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     const checkboxGroup = React.useContext(CheckGroupContext);
 
     const [currChecked, setCurrChecked] = React.useState(defaultChecked);
-
     React.useEffect(() => {
-      setCurrChecked(checked);
+      if ('checked' in props) {
+        setCurrChecked(checked);
+      }
     }, [checked]);
-
     const inputProps = {
       checked: !!currChecked,
       ref,
@@ -146,14 +146,6 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   },
 ) as React.ForwardRefExoticComponent<CheckboxProps & React.RefAttributes<HTMLInputElement>> & {
   Group: typeof CheckboxGroup;
-};
-
-Checkbox.defaultProps = {
-  className: '',
-  value: '',
-  disabled: false,
-  defaultChecked: false,
-  indeterminate: false,
 };
 
 export default Checkbox;

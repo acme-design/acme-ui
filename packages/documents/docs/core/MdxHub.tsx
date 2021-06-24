@@ -25,6 +25,8 @@ import TagCode from './Tag/Code.mdx';
 import TagDesign from './Tag/Design.mdx';
 import TooltipCode from './Tooltip/Code.mdx';
 import TooltipDesign from './Tooltip/Design.mdx';
+import FormHintCode from './FormHint/Code.mdx';
+import FormHintDesign from './FormHint/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -120,6 +122,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '当用户鼠标悬停，聚焦或者轻触一个元素时，工具提示组件会显示一段有意义的文本。',
     designMdx: TooltipDesign,
     codeMdx: TooltipCode,
+  },
+  {
+    tagName: 'Form Hint',
+    name: '表单提示',
+    description: '',
+    designMdx: FormHintDesign,
+    codeMdx: FormHintCode,
   },
 ];
 

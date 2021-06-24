@@ -6,9 +6,10 @@ import omit from 'lodash/omit';
 import { getPages, IPageItem, PageItemType } from './util/Pagination';
 import Arrow from './Arrow';
 import DoubleArrow from './DoubleArrow';
-import Input from './Input';
+import Input from '../Input';
 import Select from './Select';
 import './style/pagination.less';
+import { uniteClassNames } from '../../utils/tools';
 
 const classNamePrefix = 'acme-pagination';
 
@@ -18,10 +19,11 @@ export const classes = {
   pageContent: `${classNamePrefix}-content`,
   pageItem: `${classNamePrefix}-item`,
   dotGroup: `${classNamePrefix}-dot-group`,
-  doubleArrow: `${classNamePrefix}-doubleArrow`,
-  leftDoubleArrow: `${classNamePrefix}-left-doubleArrow`,
-  rightDoubleArrow: `${classNamePrefix}-right-doubleArrow`,
-  jumpInput: `${classNamePrefix}-jumpInput`,
+  doubleArrow: `${classNamePrefix}-double-arrow`,
+  leftDoubleArrow: `${classNamePrefix}-left-double-arrow`,
+  rightDoubleArrow: `${classNamePrefix}-right-double-arrow`,
+  jumpBase: `${classNamePrefix}-jump-base-input`,
+  jumpInput: (type: PaginationProps['type']) => `${classNamePrefix}-jump-${type}-input`,
   default: {
     item: `${classNamePrefix}-default-item`,
     active: `${classNamePrefix}-default-item-active`,
@@ -84,7 +86,7 @@ export interface PaginationProps {
    * 是否展示 总数
    * @default false
    * */
-  showTotal: boolean;
+  showTotal?: boolean;
   /**
    * 当前页
    * */
@@ -114,14 +116,14 @@ export interface PaginationProps {
    * 是否展示 pageSize 选择器
    * @default false
    * */
-  showPageSize: boolean;
+  showPageSize?: boolean;
   /** 切换 pageSize */
   onPageSizeChange?: (pageSize: number) => void;
   /**
    * 是否展示快速跳转
    * @default false
    * */
-  showJump: boolean;
+  showJump?: boolean;
   /** 最外层容器的 className */
   className?: string;
 }
@@ -140,10 +142,6 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     pageSizeOptions: [10, 20, 50, 100],
     defaultCurrent: 1,
     defaultPageSize: 10,
-    showPageSize: false,
-    showTotal: false,
-    showJump: false,
-    className: '',
   };
 
   constructor(props: PaginationProps) {
@@ -256,7 +254,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     this.pageChange(page);
   };
 
-  private jumpInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private jumpInputChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
     const value = get(e, 'target.value');
     this.setState({
       jumpPage: value,
@@ -301,7 +299,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     const { total } = this.props;
     const totalClassNames = classes[type];
     return (
-      <li className={`${classes.pageItem} ${totalClassNames.total}`}>
+      <li className={uniteClassNames(classes.pageItem, totalClassNames.total)}>
         <span className={classes.text}>共{total}条</span>
       </li>
     );
@@ -323,6 +321,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
 
   private renderJumpBtn = (): React.ReactNode => {
     const { jumpPage } = this.state;
+    const { type } = this.props;
     return (
       <li className={classes.pageItem}>
         <div>
@@ -331,8 +330,9 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
             value={jumpPage}
             onBlur={this.quickJumpPage}
             onKeyDown={this.quickJumpKeyDown}
-            className={classes.jumpInput}
+            className={uniteClassNames(classes.jumpBase, classes.jumpInput(type))}
             onChange={this.jumpInputChange}
+            size={type === PaginationType.DEFAULT ? 'default' : 'small'}
           />
           页
         </div>
@@ -345,13 +345,18 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     const contentClasses = classes[type];
     return (
       <div
-        className={`${contentClasses.item} ${currPage <= 1 ? contentClasses.disabled : ''}`}
+        className={uniteClassNames(
+          contentClasses.item,
+          currPage <= 1 ? contentClasses.disabled : '',
+        )}
         onClick={this.decreasePage}
       >
         <Arrow
-          className={`${contentClasses.arrow} ${contentClasses.leftBtn} ${
-            currPage <= 1 ? contentClasses.arrowDisabled : ''
-          }`}
+          className={uniteClassNames(
+            contentClasses.arrow,
+            contentClasses.leftBtn,
+            currPage <= 1 ? contentClasses.arrowDisabled : '',
+          )}
         />
       </div>
     );
@@ -362,13 +367,18 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     const contentClasses = classes[type];
     return (
       <div
-        className={`${contentClasses.item} ${currPage >= totalPage ? contentClasses.disabled : ''}`}
+        className={uniteClassNames(
+          contentClasses.item,
+          currPage >= totalPage ? contentClasses.disabled : '',
+        )}
         onClick={this.increasePage}
       >
         <Arrow
-          className={`${contentClasses.arrow} ${contentClasses.rightBtn} ${
-            currPage >= totalPage ? contentClasses.arrowDisabled : ''
-          }`}
+          className={uniteClassNames(
+            contentClasses.arrow,
+            contentClasses.rightBtn,
+            currPage >= totalPage ? contentClasses.arrowDisabled : '',
+          )}
         />
       </div>
     );
@@ -387,15 +397,16 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
             <li className={classes.pageItem} key={key}>
               {item.type === PageItemType.PAGE ? (
                 <div
-                  className={`${contentClasses.item} ${
-                    item.val === currPage ? contentClasses.active : ''
-                  }`}
+                  className={uniteClassNames(
+                    contentClasses.item,
+                    item.val === currPage ? contentClasses.active : '',
+                  )}
                   onClick={() => this.pageChange(item.val as number)}
                 >
                   {item.val}
                 </div>
               ) : (
-                <div className={`${contentClasses.item} ${contentClasses.more}`}>
+                <div className={uniteClassNames(contentClasses.item, contentClasses.more)}>
                   <span className={classes.dotGroup}>
                     <span className={contentClasses.dot} />
                     <span className={contentClasses.dot} />
@@ -436,14 +447,16 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
     const { totalPage, currPage } = this.state;
     return (
       <>
-        <div className={`${classes.pageItem} ${classes.simple.item}`}>
+        <div className={uniteClassNames(classes.pageItem, classes.simple.item)}>
           {this.renderLeftArrow(PaginationType.SIMPLE)}
         </div>
         <span className={classes.simple.container}>
-          <span className={`${classes.simple.text} ${classes.simple.active}`}>{currPage}</span>/
-          <span className={classes.simple.text}>{totalPage}</span>
+          <span className={uniteClassNames(classes.simple.text, classes.simple.active)}>
+            {currPage}
+          </span>
+          /<span className={classes.simple.text}>{totalPage}</span>
         </span>
-        <div className={`${classes.pageItem} ${classes.simple.item}`}>
+        <div className={uniteClassNames(classes.pageItem, classes.simple.item)}>
           {this.renderRightArrow(PaginationType.SIMPLE)}
         </div>
       </>
@@ -482,7 +495,7 @@ class Pagination extends React.PureComponent<PaginationProps, PaginationState> {
       'showJump',
     ]);
     return (
-      <div className={`${classes.root} ${className}`} {...otherProps}>
+      <div className={uniteClassNames(classes.root, className)} {...otherProps}>
         {this.renderPagination()}
       </div>
     );

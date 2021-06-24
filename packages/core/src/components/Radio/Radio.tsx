@@ -18,11 +18,15 @@ export const classes = {
   disabled: `${classNamePrefix}-disabled`,
 };
 
-export interface RadioProps {
+export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * 自定义类名
    */
   className?: string;
+  /**
+   * style样式
+   */
+  style?: React.HTMLAttributes<HTMLDivElement>['style'];
   /**
    * 当前值
    */
@@ -63,9 +67,6 @@ export interface RadioProps {
    * 同input的name属性
    */
   name?: string;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
 }
 
 const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLInputElement>) => {
@@ -76,17 +77,21 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
     inline,
     disabled,
     defaultChecked,
+    labelPlacement,
     error,
     value,
     onChange,
     name,
+    style,
     ...otherProps
   } = props;
 
   const [internalChecked, setInternalChecked] = React.useState(defaultChecked);
-  React.useEffect(() => {
-    setInternalChecked(checked);
-  }, [checked]);
+  if ('checked' in props) {
+    React.useEffect(() => {
+      setInternalChecked(checked);
+    }, [checked]);
+  }
 
   let currentChecked = internalChecked;
   let radioGroupChange: RadioProps['onChange'] | null = null;
@@ -128,19 +133,22 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
         disabled ? classes.disabled : '',
         className,
       )}
+      style={style}
+      labelPlacement={labelPlacement}
       control={
         <input
           className={classes.radio}
-          type="radio"
           value={value}
           checked={!!currentChecked}
           disabled={!!disabled}
           onChange={handleRadioChange}
           name={internalName}
           ref={ref}
+          {...otherProps}
+          type="radio"
         />
       }
-      {...otherProps}
+      data-testid="acme-radio-root"
     >
       {label}
     </FormLabel>

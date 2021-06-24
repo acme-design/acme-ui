@@ -15,7 +15,7 @@ type InputSizeType = `${InputSize}`;
 
 /** TODO 数字类型的input 待设计给出详细设计和样式 */
 
-export interface InputProps {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /**
    * 样式类名
    */
@@ -146,20 +146,22 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
     } = props;
 
     const [currentValue, setCurrentValue] = React.useState(defaultValue);
-    React.useEffect(() => {
-      setCurrentValue(value);
-    }, [value]);
+    if ('value' in props) {
+      React.useEffect(() => {
+        setCurrentValue(value);
+      }, [value]);
+    }
 
     const [currentValueLen, setCurrentValueLen] = React.useState(0);
-    const propValueLength = isString(value) ? value.length : 0;
+    const propValueLength = isString(currentValue) ? currentValue.length : 0;
     const [limitError, setLimitError] = React.useState(limit ? propValueLength > limit : false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const internalValue = get(e, 'target.value');
       const valueLength = isString(internalValue) ? internalValue.length : 0;
-      setCurrentValueLen(valueLength);
       setCurrentValue(internalValue);
       if (limit) {
+        setCurrentValueLen(valueLength);
         setLimitError(valueLength > limit);
       }
       if (isFunction(onChange)) {
@@ -223,7 +225,7 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
           onFocus={handleFocus}
           onBlur={handleBlur}
           disabled={disabled}
-          value={currentValue}
+          value={currentValue || ''}
           type={type === 'password' ? passwordType : type}
           {...otherProps}
           ref={ref}
@@ -258,8 +260,6 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
   });
 
 Input.defaultProps = {
-  defaultValue: '',
-  value: '',
   size: 'default',
   type: 'text',
 };

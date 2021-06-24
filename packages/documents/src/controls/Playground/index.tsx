@@ -62,25 +62,20 @@ class Playground extends React.PureComponent<Props, State> {
     __position: 0,
     links: {},
     placeholder: 'data-mark',
+    defaultComProps: {},
   };
 
   private editContainer: HTMLDivElement | undefined;
 
   constructor(props: Props) {
     super(props);
+    const { __code, placeholder, defaultComProps } = this.props;
+    const code = resetCodePlaceholder(__code, defaultComProps, placeholder);
     this.state = {
       expand: false,
-      displayCode: props.__code,
-      currentComProps: props.defaultComProps,
+      displayCode: code,
+      currentComProps: props.defaultComProps || {},
     };
-  }
-
-  public componentDidMount() {
-    const { __code, placeholder } = this.props;
-    const { currentComProps } = this.state;
-    const code = resetCodePlaceholder(__code, currentComProps, placeholder);
-
-    this.setState({ displayCode: code });
   }
 
   public componentDidUpdate(prevProps: Props, prevState: State) {
@@ -93,7 +88,7 @@ class Playground extends React.PureComponent<Props, State> {
       this.setState({ displayCode: code });
     }
     if (!isEqual(prevProps.defaultComProps, props.defaultComProps))
-      this.setState({ currentComProps: props.defaultComProps });
+      this.setState({ currentComProps: props.defaultComProps || {} });
   }
 
   private toCopy = () => {
