@@ -12,6 +12,7 @@ interface AnchorProps {
 }
 
 interface AnchorState {
+  isIE: boolean;
   right: null | number;
   isFixed: boolean;
   activeId: string;
@@ -77,6 +78,7 @@ class Anchor extends React.PureComponent<AnchorProps, AnchorState> {
   public constructor(props: AnchorProps) {
     super(props);
     this.state = {
+      isIE: false,
       right: null,
       isFixed: false,
       activeId: '',
@@ -84,6 +86,9 @@ class Anchor extends React.PureComponent<AnchorProps, AnchorState> {
   }
 
   public componentDidMount() {
+    const isIE = !!get(window, 'ActiveXObject') || 'ActiveXObject' in window;
+    this.setState({ isIE });
+
     this.scrollContainer = document.getElementById(Anchor.scrollContainerId);
     this.mdxWrapper = document.getElementById(Anchor.mdxWrapperId);
 
@@ -93,7 +98,7 @@ class Anchor extends React.PureComponent<AnchorProps, AnchorState> {
     this.judgeWhichIsActive();
     this.scrollContainer.addEventListener('scroll', this.judgeWhichIsActive);
 
-    if (!this.mdxWrapper || !this.isIE) return;
+    if (!this.mdxWrapper || !isIE) return;
 
     this.resizeRightWhenResize();
     this.toggleFixedWhenScroll();
@@ -110,14 +115,6 @@ class Anchor extends React.PureComponent<AnchorProps, AnchorState> {
     window.removeEventListener('resize', this.resizeRightWhenResize);
     this.scrollContainer?.removeEventListener('scroll', this.toggleFixedWhenScroll);
     this.scrollContainer?.removeEventListener('scroll', this.judgeWhichIsActive);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  get isIE(): boolean {
-    if (global.window) {
-      return !!get(global.window, 'ActiveXObject') || 'ActiveXObject' in global.window;
-    }
-    return false;
   }
 
   private resizeRightWhenResize = () => {
@@ -141,15 +138,16 @@ class Anchor extends React.PureComponent<AnchorProps, AnchorState> {
 
   render(): React.ReactNode {
     const { anchors } = this.props;
-    const { isFixed, right, activeId } = this.state;
+    const { isFixed, right, activeId, isIE } = this.state;
+
     return (
       <aside
         ref={(ref: HTMLElement) => {
           this.anchorPoint = ref;
         }}
-        className={`${AnchorLess.container} ${this.isIE ? AnchorLess.ie : ''}`}
+        className={`${AnchorLess.container} ${isIE ? AnchorLess.ie : ''}`}
         style={
-          this.isIE && isFixed
+          isIE && isFixed
             ? {
                 position: 'fixed',
                 top: this.fixedTop + 64,

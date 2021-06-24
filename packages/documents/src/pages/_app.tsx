@@ -3,7 +3,7 @@ import './globals.less';
 import '@acme-ui/core/styles/cover/index.less';
 import type { AppProps } from 'next/app';
 import { MDXProvider } from '@mdx-js/react';
-import { Wrapper, Paragraph, headings, UL, OL, Code } from '~controls';
+import { Wrapper, Paragraph, headings, UL, OL, Code, Img } from '~controls';
 
 const components = {
   ...headings,
@@ -11,6 +11,7 @@ const components = {
   ol: OL,
   ul: UL,
   pre: Code,
+  img: Img,
   wrapper: Wrapper,
 };
 
@@ -18,9 +19,9 @@ const components = {
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <MDXProvider components={components}>
-      <main id="document-scroll-container">
+      <div id="document-scroll-container">
         <Component {...pageProps} />
-      </main>
+      </div>
     </MDXProvider>
   );
 };
