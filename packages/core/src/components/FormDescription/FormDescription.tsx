@@ -6,8 +6,6 @@ const classNamePrefix = 'acme-form-description';
 
 export const classes = {
   root: classNamePrefix,
-  error: `${classNamePrefix}-error`,
-  disabled: `${classNamePrefix}-disabled`,
 };
 
 export interface FormDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
@@ -19,40 +17,17 @@ export interface FormDescriptionProps extends React.HTMLAttributes<HTMLParagraph
    * 子元素
    */
   children?: React.ReactNode;
-  /**
-   * 错误状态
-   */
-  error?: boolean;
-  /**
-   * 禁用状态
-   */
-  disabled?: boolean;
 }
 
-const FormGroup = React.forwardRef<HTMLParagraphElement, FormDescriptionProps>(
+const FormDescription = React.forwardRef<HTMLParagraphElement, FormDescriptionProps>(
   (props: FormDescriptionProps, ref: React.ForwardedRef<HTMLParagraphElement>) => {
-    const { className, children, error, disabled, ...otherProps } = props || {};
+    const { className, children, ...otherProps } = props || {};
     return (
-      <p
-        className={uniteClassNames(
-          classes.root,
-          error ? classes.error : '',
-          disabled ? classes.disabled : '',
-          className,
-        )}
-        {...otherProps}
-        ref={ref}
-      >
+      <p className={uniteClassNames(classes.root, className)} {...otherProps} ref={ref}>
         {children}
       </p>
     );
   },
 );
 
-FormGroup.defaultProps = {
-  className: '',
-  error: false,
-  disabled: false,
-};
-
-export default FormGroup;
+export default FormDescription;

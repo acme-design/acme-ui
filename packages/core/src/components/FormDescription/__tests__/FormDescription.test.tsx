@@ -12,36 +12,10 @@ describe('FormDescription', () => {
   describe('render correctly with default props', () => {
     test('should render a default description', () => {
       const { getByTestId } = render(
-        <FormDescription data-testid={testId} error>
-          default description
-        </FormDescription>,
+        <FormDescription data-testid={testId}>default description</FormDescription>,
       );
       const des = getByTestId(testId);
       expect(des).toHaveClass(classes.root);
-    });
-  });
-
-  describe('render correctly with other props', () => {
-    test('should render a error description', () => {
-      const { getByTestId } = render(
-        <FormDescription data-testid={testId} error>
-          error description
-        </FormDescription>,
-      );
-      const des = getByTestId(testId);
-      expect(des).toHaveClass(classes.root);
-      expect(des).toHaveClass(classes.error);
-    });
-
-    test('should render a disabled description', () => {
-      const { getByTestId } = render(
-        <FormDescription data-testid={testId} disabled>
-          disabled description
-        </FormDescription>,
-      );
-      const des = getByTestId(testId);
-      expect(des).toHaveClass(classes.root);
-      expect(des).toHaveClass(classes.disabled);
     });
   });
 
