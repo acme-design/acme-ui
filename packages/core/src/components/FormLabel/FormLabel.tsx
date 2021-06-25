@@ -1,6 +1,13 @@
 import * as React from 'react';
+import omit from 'lodash/omit';
 import get from 'lodash/get';
 import { uniteClassNames } from '../../utils/tools';
+import { FormLabelPlacement, FormLabelStatus } from './types';
+import {
+  useFormField,
+  mergeFormFieldProps,
+  FormFieldPropKeysType,
+} from '../FormField/FormFieldContext';
 import './style/formLabel.less';
 
 const classNamePrefix = 'acme-form-label';
@@ -9,20 +16,14 @@ export const classes = {
   root: classNamePrefix,
   placement: (placement: FormLabelProps['labelPlacement']): string =>
     `${classNamePrefix}-${placement}`,
+  status: (status: FormLabelProps['status']) => `${classNamePrefix}-${status}`,
   control: `${classNamePrefix}-control`,
   content: `${classNamePrefix}-content`,
   required: `${classNamePrefix}-required`,
-  error: `${classNamePrefix}-error`,
 };
 
-export enum FormLabelPlacement {
-  TOP = 'top',
-  LEFT = 'left',
-  RIGHT = 'right',
-  BOTTOM = 'bottom',
-}
-
-type TFormLabelPlacement = `${FormLabelPlacement}`;
+type FormLabelPlacementType = `${FormLabelPlacement}`;
+type FormLabelStatusType = `${FormLabelStatus}`;
 
 export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   /**
@@ -35,19 +36,16 @@ export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelEleme
   children?: React.ReactNode;
   /**
    * 是否必填
-   * @default false
    */
   required?: boolean;
   /**
-   * 是否处于错误状态
-   * @default false
+   * 状态
    */
-  error?: boolean;
+  status?: FormLabelStatusType;
   /**
    * 所在位置
-   * @default right
    */
-  labelPlacement?: TFormLabelPlacement;
+  labelPlacement?: FormLabelPlacementType;
   /**
    * 控件元素
    */
@@ -56,27 +54,32 @@ export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelEleme
 
 const FormLabel = React.forwardRef<HTMLLabelElement, FormLabelProps>(
   (props: FormLabelProps, ref: React.ForwardedRef<HTMLLabelElement>) => {
-    const { className, children, control, required, error, labelPlacement, ...otherProps } =
-      props || {};
-    const controlProps = {
-      error,
-      className: uniteClassNames(classes.control, get(control, 'props.className')),
-    };
+    const { className, children, control, labelPlacement, ...otherProps } = props || {};
+    const mergeWithContextProps: FormFieldPropKeysType = control ? [] : ['required', 'status'];
+
+    const formFieldContext = useFormField();
+    const mergedProps = mergeFormFieldProps<FormLabelProps>({
+      props,
+      propKeys: mergeWithContextProps,
+      context: formFieldContext,
+    });
+
     return (
       <label
         className={uniteClassNames(
           classes.root,
           classes.placement(labelPlacement),
-          error ? classes.error : '',
+          mergedProps.status ? classes.status(mergedProps.status) : '',
           className,
         )}
+        id={get(formFieldContext, 'labelId')}
+        {...omit(otherProps, mergeWithContextProps)}
         ref={ref}
-        {...otherProps}
       >
-        {control ? React.cloneElement(control, controlProps) : null}
+        {control ? <div className={classes.control}>{control}</div> : null}
         <span className={classes.content}>
           {children}
-          {required ? (
+          {mergedProps.required ? (
             <span aria-hidden className={classes.required}>
               *
             </span>
@@ -88,8 +91,7 @@ const FormLabel = React.forwardRef<HTMLLabelElement, FormLabelProps>(
 );
 
 FormLabel.defaultProps = {
-  className: '',
-  labelPlacement: 'right',
+  labelPlacement: FormLabelPlacement.RIGHT,
 };
 
 export default FormLabel;
