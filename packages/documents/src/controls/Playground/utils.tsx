@@ -43,7 +43,9 @@ export const resetCodePlaceholder = (code: string, comProps: ComProps, placehold
       }
     });
   }
-  const replaceCode = transformCode(code.replaceAll(placeholder, comPropsArr.join(' ')));
+  const replaceCode = transformCode(
+    code.replace(new RegExp(placeholder, 'g'), comPropsArr.join(' ')),
+  );
   const result = prettier.format(replaceCode, {
     parser: 'babel',
     plugins: [parserBabel],
