@@ -39,3 +39,6 @@ export type { TooltipProps } from './components/Tooltip';
 
 export { default as FormHint } from './components/FormHint';
 export type { FormHintProps } from './components/FormHint';
+
+export { default as FormField } from './components/FormField';
+export type { FormFieldProps } from './components/FormField';
