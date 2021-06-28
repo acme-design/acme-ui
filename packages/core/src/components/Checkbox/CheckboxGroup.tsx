@@ -52,9 +52,11 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
       props;
     const [currValues, setCurrValues] = React.useState(defaultValues || []);
 
-    React.useEffect(() => {
-      if (values) setCurrValues(values);
-    }, [values]);
+    if ('values' in props) {
+      React.useEffect(() => {
+        setCurrValues(values || []);
+      }, [values]);
+    }
 
     const handleChange = (value: string | number) => {
       const intervalValues = [...currValues];
@@ -86,11 +88,5 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
     );
   },
 );
-
-CheckboxGroup.defaultProps = {
-  defaultValues: [],
-  disabled: false,
-  name: '',
-};
 
 export default CheckboxGroup;
