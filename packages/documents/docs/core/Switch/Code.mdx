@@ -60,10 +60,10 @@ import { Switch } from "@acme-ui/core";
         () => {
             const [checked, setChecked] = React.useState(false);
             const [loading, setLoading] = React.useState(false);
-            const onChange = (check, e) => {
+            const onChange = (e) => {
                 setLoading(true)
                 const timer = setTimeout(() => {
-                    setChecked(check);
+                    setChecked(!e.target.checked);
                     setLoading(false);
                     clearTimeout(timer);
                 }, 1000)
