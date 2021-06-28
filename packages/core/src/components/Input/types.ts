@@ -9,3 +9,9 @@ export enum InputSize {
   LARGE = 'large',
   SMALL = 'small',
 }
+
+export enum InputStatus {
+  ERROR = 'error',
+  SUCCESS = 'success',
+  LOADING = 'loading',
+}

@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { RefTestCaseType } from 'tests/shared/refTest';
 import { mountTestSuite, refTestSuite } from 'tests/shared';
 import Input, { classes } from '../Input';
+import { InputStatus } from '../types';
 
 describe('Input', () => {
   mountTestSuite(<Input />);
@@ -27,21 +28,21 @@ describe('Input', () => {
 
     // 成功状态
     test('render a success status input', () => {
-      const { getByTestId } = render(<Input success />);
+      const { getByTestId } = render(<Input status={InputStatus.SUCCESS} />);
       const inputRoot = getByTestId('acme-input-root');
-      expect(inputRoot).toHaveClass(classes.success);
+      expect(inputRoot).toHaveClass(classes.status(InputStatus.SUCCESS));
     });
 
     // 错误态
     test('render a error status input', () => {
-      const { getByTestId } = render(<Input error />);
+      const { getByTestId } = render(<Input status={InputStatus.ERROR} />);
       const inputRoot = getByTestId('acme-input-root');
-      expect(inputRoot).toHaveClass(classes.error);
+      expect(inputRoot).toHaveClass(classes.status(InputStatus.ERROR));
     });
 
     // loading状态
     test('should render a startIcon button', () => {
-      const { getByTestId } = render(<Input loading />);
+      const { getByTestId } = render(<Input status={InputStatus.LOADING} />);
       const inputRoot = getByTestId('acme-input-root');
       const endIcon = inputRoot.getElementsByClassName(classes.loadingIcon)[0];
       expect(endIcon).toBeInTheDocument();

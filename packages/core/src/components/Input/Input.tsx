@@ -2,16 +2,23 @@ import * as React from 'react';
 import get from 'lodash/get';
 import isString from 'lodash/isString';
 import isFunction from 'lodash/isFunction';
+import omit from 'lodash/omit';
 import { PrimaryLoadingSvg } from '../Icon/LoadingIcon';
 import { SuccessSvg } from '../Icon/SuccessIcon';
 import { PasswordOpenEyeSvg, PasswordCloseEyeSvg } from '../Icon/PasswordEyeIcon';
 import { ClearSvg } from '../Icon/ClearIcon';
+import {
+  useFormField,
+  mergeFormFieldProps,
+  FormFieldPropKeysType,
+} from '../FormField/FormFieldContext';
 import { uniteClassNames } from '../../utils/tools';
-import { InputMode, InputSize } from './types';
+import { InputMode, InputSize, InputStatus } from './types';
 import './styles/Input.less';
 
 type InputModeType = `${InputMode}`;
 type InputSizeType = `${InputSize}`;
+type InputStatusType = `${InputStatus}`;
 
 /** TODO 数字类型的input 待设计给出详细设计和样式 */
 
@@ -45,17 +52,9 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
    */
   disabled?: boolean;
   /**
-   * 错误状态
+   * 状态
    */
-  error?: boolean;
-  /**
-   * 成功态
-   */
-  success?: boolean;
-  /**
-   * 输入框内是否展示loading状态
-   */
-  loading?: boolean;
+  status?: InputStatusType;
   /**
    * 是否撑满父元素
    */
@@ -109,15 +108,15 @@ export const classes = {
   input: `${classNamePrefix}`,
   active: `${classNamePrefix}-active`,
   size: (size: InputProps['size']) => `${classNamePrefix}-${size}`,
-  error: `${classNamePrefix}-error`,
-  success: `${classNamePrefix}-success`,
+  status: (status: InputProps['status']) => `${classNamePrefix}-${status}`,
   disabled: `${classNamePrefix}-disabled`,
   full: `${classNamePrefix}-full`,
   number: `${classNamePrefix}-number`,
-  loading: `${classNamePrefix}-loading`,
   loadingIcon: `${classNamePrefix}-loading-icon`,
   clear: `${classNamePrefix}-clear-icon`,
 };
+
+const mergeWithContextProps: FormFieldPropKeysType = ['id', 'status', 'disabled', 'fullWidth'];
 
 const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>> =
   React.forwardRef((props: InputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
@@ -126,18 +125,13 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
       placeholder,
       size,
       limit,
-      error,
       defaultValue,
       value,
       onChange,
       onFocus,
       onBlur,
-      disabled,
-      fullWidth,
       type,
-      success,
       style,
-      loading,
       clear,
       onClear,
       startElement,
@@ -199,16 +193,23 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
       }
     };
 
+    const formFieldContext = useFormField();
+    const mergedProps = mergeFormFieldProps<InputProps>({
+      props,
+      propKeys: mergeWithContextProps,
+      context: formFieldContext,
+    });
+    const error = mergedProps.status === 'error' || limitError;
+
     return (
       <div
         className={uniteClassNames(
           classes.root,
           isFocus ? classes.active : '',
-          success ? classes.success : '',
-          error || limitError ? classes.error : '',
-          loading ? classes.loading : '',
-          disabled ? classes.disabled : '',
-          fullWidth ? classes.full : '',
+          mergedProps.status ? classes.status(mergedProps.status) : '',
+          error ? classes.status('error') : '',
+          mergedProps.disabled ? classes.disabled : '',
+          mergedProps.fullWidth ? classes.full : '',
           type === 'number' ? classes.number : '',
           className,
         )}
@@ -220,14 +221,17 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
         ) : null}
         <input
           className={uniteClassNames(classes.input, classes.size(size))}
+          id={mergedProps.id}
+          aria-invalid={error}
+          aria-describedby={get(formFieldContext, 'hintId')}
           placeholder={placeholder}
           onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          disabled={disabled}
+          disabled={mergedProps.disabled}
           value={currentValue || ''}
           type={type === 'password' ? passwordType : type}
-          {...otherProps}
+          {...omit(otherProps, mergeWithContextProps)}
           ref={ref}
         />
         {clear ? (
@@ -247,8 +251,10 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
             )}
           >{`${currentValueLen}/${limit}`}</div>
         ) : null}
-        {success ? <SuccessSvg /> : null}
-        {loading ? <PrimaryLoadingSvg className={classes.loadingIcon} /> : null}
+        {mergedProps.status === 'success' ? <SuccessSvg /> : null}
+        {mergedProps.status === 'loading' ? (
+          <PrimaryLoadingSvg className={classes.loadingIcon} />
+        ) : null}
         {type === 'password' ? (
           <span className={`${classNamePrefix}-password-icon`} onClick={handlePasswordVisible}>
             {isPassword ? <PasswordOpenEyeSvg /> : <PasswordCloseEyeSvg />}
