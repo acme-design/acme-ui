@@ -1,0 +1,221 @@
+import { Playground, Props } from '~controls';
+import { FormField, Input, Checkbox, Radio, Switch } from '@acme-ui/core';
+
+## 配合 Input 使用
+
+<Playground>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-input"
+    label="邮箱"
+    description="邮箱是一个什么东西"
+    hint="我们绝不会分享您的邮箱地址"
+    required
+  >
+    <Input />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    label="邮箱"
+    labelFor="demo-single-input"
+    hint="我们绝不会分享您的邮箱地址"
+    hintId="demo-single-input-hint"
+  >
+    <Input id="demo-single-input" defaultValue="acme-ui@acme-design.com" />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-full-input"
+    label="占满宽度的邮箱"
+    hint="我们绝不会分享您的邮箱地址"
+    fullWidth
+  >
+    <Input defaultValue="acme-ui@acme-design.com" />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-error-input"
+    label="错误的邮箱"
+    hint="邮箱地址输入不正确"
+    status="error"
+  >
+    <Input defaultValue="acme-ui@acme-design" />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-success-input"
+    label="正确的邮箱"
+    hint="邮箱地址输入正确"
+    status="success"
+  >
+    <Input defaultValue="acme-ui@acme-design.com" />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-warning-input"
+    label="警告的邮箱"
+    hint="warning！！"
+    status="warning"
+  >
+    <Input defaultValue="acme-ui@acme-design.com" status="loading" />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-disabled-input"
+    label="禁用的邮箱"
+    hint="该邮箱禁止填写"
+    disabled
+  >
+    <Input defaultValue="acme-ui@acme-design.com" />
+  </FormField>
+</Playground>
+
+## 配合 Checkbox 使用
+
+<Playground>
+  <FormField style={{ marginBottom: 24 }} id="demo-checkbox" label="正常的选项" hint="请选择选项">
+    <Checkbox.Group layout="horizontal">
+      <Checkbox value="a" style={{ marginRight: 30 }}>
+        选项A
+      </Checkbox>
+      <Checkbox value="b" style={{ marginRight: 30 }}>
+        选项B
+      </Checkbox>
+      <Checkbox value="c">选项C</Checkbox>
+    </Checkbox.Group>
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-required-checkbox"
+    label="正常的选项"
+    hint="请选择选项"
+    required
+  >
+    <Checkbox.Group layout="horizontal">
+      <Checkbox value="a" style={{ marginRight: 30 }}>
+        选项A
+      </Checkbox>
+      <Checkbox value="b" style={{ marginRight: 30 }}>
+        选项B
+      </Checkbox>
+      <Checkbox value="c">选项C</Checkbox>
+    </Checkbox.Group>
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-error-checkbox"
+    label="错误的选项"
+    hint="该选项选择错误"
+    status="error"
+  >
+    <Checkbox.Group layout="horizontal" defaultValues={['b', 'c']}>
+      <Checkbox value="a" style={{ marginRight: 30 }}>
+        选项A
+      </Checkbox>
+      <Checkbox value="b" style={{ marginRight: 30 }}>
+        选项B
+      </Checkbox>
+      <Checkbox value="c">选项C</Checkbox>
+    </Checkbox.Group>
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-disabled-checkbox"
+    label="禁用的选项"
+    hint="该选项禁止选择🚫"
+    disabled
+  >
+    <Checkbox.Group layout="horizontal" values={['a', 'b']}>
+      <Checkbox value="a" style={{ marginRight: 30 }}>
+        选项A
+      </Checkbox>
+      <Checkbox value="b" style={{ marginRight: 30 }}>
+        选项B
+      </Checkbox>
+      <Checkbox value="c">选项C</Checkbox>
+    </Checkbox.Group>
+  </FormField>
+</Playground>
+
+## 配合 Radio 使用
+
+<Playground>
+  {() => {
+    const [sex, setSex] = React.useState('1');
+    const onSexChange = (e) => {
+      const value = e.target.value;
+      setSex(value);
+    };
+    return (
+      <div>
+        <FormField
+          style={{ marginBottom: 24 }}
+          id="demo-radio"
+          label="正常的性别"
+          hint="请选择选项"
+        >
+          <Radio.Group layout="horizontal" value={sex} onChange={onSexChange}>
+            <Radio label="男" value="1" style={{ marginRight: 32 }} />
+            <Radio label="女" value="0" />
+          </Radio.Group>
+        </FormField>
+        <FormField
+          style={{ marginBottom: 24 }}
+          id="demo-error-radio"
+          label="错误的性别"
+          hint="该选项错误"
+          status="error"
+        >
+          <Radio.Group value={sex} onChange={onSexChange}>
+            <Radio label="男" value="1" style={{ marginBottom: 8 }} />
+            <Radio label="女" value="0" />
+          </Radio.Group>
+        </FormField>
+        <FormField
+          style={{ marginBottom: 24 }}
+          id="demo-disabled-radio"
+          label="禁用的性别"
+          hint="该选项禁止选择🚫"
+          disabled
+        >
+          <Radio.Group value={sex} onChange={onSexChange}>
+            <Radio label="男" value="1" style={{ marginBottom: 8 }} />
+            <Radio label="女" value="0" />
+          </Radio.Group>
+        </FormField>
+      </div>
+    );
+  }}
+</Playground>
+
+## 配合 Switch 使用
+
+<Playground>
+  <FormField style={{ marginBottom: 24 }} id="demo-switch" label="开关" hint="请使用开关">
+    <Switch />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-error-switch"
+    label="错误的开关"
+    hint="该开关使用错误"
+    status="error"
+  >
+    <Switch />
+  </FormField>
+  <FormField
+    style={{ marginBottom: 24 }}
+    id="demo-disabled-switch"
+    label="禁用的开关"
+    hint="该开关禁止使用"
+    disabled
+  >
+    <Switch defaultChecked />
+  </FormField>
+</Playground>
+
+## API
+
+通过设置不同的属性展示不同状态
+
+<Props of={FormField} />
