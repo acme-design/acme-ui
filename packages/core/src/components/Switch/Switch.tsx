@@ -83,7 +83,7 @@ const Switch = React.forwardRef<HTMLLabelElement, SwitchProps>(
       defaultChecked,
     };
     if ('checked' in props) {
-      set(inputCheckedProps, 'checked', checked);
+      set(inputCheckedProps, 'checked', !!checked);
       delete inputCheckedProps.defaultChecked;
     }
 
