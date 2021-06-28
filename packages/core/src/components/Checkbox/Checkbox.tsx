@@ -112,6 +112,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       const checkboxGroupDisabled = get(checkboxGroup, 'disabled');
       if (checkboxGroupDisabled) {
         set(inputProps, 'disabled', !!checkboxGroupDisabled);
+        set(mergedProps, 'disabled', !!checkboxGroupDisabled);
       }
       set(inputProps, 'name', get(checkboxGroup, 'name'));
     }
