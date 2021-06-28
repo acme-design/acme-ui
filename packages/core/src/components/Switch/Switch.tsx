@@ -2,6 +2,11 @@ import * as React from 'react';
 import isFunction from 'lodash/isFunction';
 import omit from 'lodash/omit';
 import set from 'lodash/set';
+import {
+  useFormField,
+  mergeFormFieldProps,
+  FormFieldPropKeysType,
+} from '../FormField/FormFieldContext';
 import { uniteClassNames } from '../../utils/tools';
 import { PrimaryLoadingSvg } from '../Icon/LoadingIcon';
 
@@ -24,9 +29,9 @@ export enum SwitchSize {
   SMALL = 'small',
 }
 
-type TSwitchSize = `${SwitchSize}`;
+type SwitchSizeType = `${SwitchSize}`;
 
-export interface SwitchProps {
+export interface SwitchProps extends Omit<React.HTMLAttributes<HTMLLabelElement>, 'onChange'> {
   /**
    * Switch 样式
    */
@@ -34,7 +39,7 @@ export interface SwitchProps {
   /**
    * Switch 大小
    */
-  size?: TSwitchSize;
+  size?: SwitchSizeType;
   /**
    * 当前是否选中
    */
@@ -57,16 +62,23 @@ export interface SwitchProps {
   loading?: boolean;
   /**
    * 状态切换事件
-   * @param checked
    * @param event
    */
-  onChange?: (event: React.ChangeEvent) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+const mergeWithContextProps: FormFieldPropKeysType = ['id', 'disabled'];
 
 const Switch = React.forwardRef<HTMLLabelElement, SwitchProps>(
   (props: SwitchProps, ref: React.ForwardedRef<HTMLLabelElement>): React.ReactElement => {
-    const { size, className, inputRef, onChange, disabled, loading, defaultChecked, checked } =
-      props;
+    const { className, size, inputRef, onChange, loading, defaultChecked, checked, ...otherProps } =
+      props || {};
+    const formFieldContext = useFormField();
+    const mergedProps = mergeFormFieldProps<SwitchProps>({
+      props,
+      propKeys: mergeWithContextProps,
+      context: formFieldContext,
+    });
     const inputCheckedProps = {
       defaultChecked,
     };
@@ -74,16 +86,6 @@ const Switch = React.forwardRef<HTMLLabelElement, SwitchProps>(
       set(inputCheckedProps, 'checked', checked);
       delete inputCheckedProps.defaultChecked;
     }
-    const otherProps = omit(props, [
-      'className',
-      'inputRef',
-      'onChange',
-      'size',
-      'loading',
-      'disabled',
-      'defaultChecked',
-      'checked',
-    ]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (isFunction(onChange)) {
@@ -93,24 +95,27 @@ const Switch = React.forwardRef<HTMLLabelElement, SwitchProps>(
       }
     };
 
+    const internalDisabled = mergedProps.disabled || loading;
+
     return (
       <label
-        ref={ref}
         className={uniteClassNames(
           classes.root,
           classes.size(size),
-          disabled || loading ? classes.disabled : '',
+          internalDisabled ? classes.disabled : '',
           className,
         )}
-        {...otherProps}
+        {...omit(otherProps, mergeWithContextProps)}
+        ref={ref}
       >
         <input
           className={classes.input}
+          id={mergedProps.id}
+          {...inputCheckedProps}
           type="checkbox"
           ref={inputRef}
           onChange={handleInputChange}
-          disabled={loading || disabled}
-          {...inputCheckedProps}
+          disabled={internalDisabled}
         />
         <span className={classes.content}>
           <span className={classes.btn}>
@@ -124,10 +129,6 @@ const Switch = React.forwardRef<HTMLLabelElement, SwitchProps>(
 
 Switch.defaultProps = {
   size: SwitchSize.DEFAULT,
-  defaultChecked: false,
-  disabled: false,
-  inputRef: null,
-  loading: false,
 };
 
 export default Switch;
