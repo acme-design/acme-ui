@@ -10,7 +10,7 @@ import { Switch, FormLabel } from '@acme-ui/core';
   <FormLabel style={{ marginRight: '24px' }} required>
     我是一个必填的标题
   </FormLabel>
-  <FormLabel style={{ marginRight: '24px' }} error>
+  <FormLabel style={{ marginRight: '24px' }} status="error">
     我是一个报错的标题
   </FormLabel>
 </Playground>
@@ -36,10 +36,6 @@ import { Switch, FormLabel } from '@acme-ui/core';
   </FormLabel>
   <FormLabel style={{ marginRight: '24px' }} control={<Switch />} labelPlacement="bottom">
     Bottom
-  </FormLabel>
-  <br />
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />} required error>
-    错误
   </FormLabel>
 </Playground>
 
