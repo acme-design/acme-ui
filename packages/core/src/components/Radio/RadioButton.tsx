@@ -94,7 +94,7 @@ const RadioButton: React.ForwardRefExoticComponent<
 });
 
 RadioButton.defaultProps = {
-  size: 'default',
+  size: RadioSize.DEFAULT,
 };
 
 export default RadioButton;

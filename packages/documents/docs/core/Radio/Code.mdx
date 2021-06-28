@@ -26,22 +26,22 @@ import { Radio, FormLabel } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const [horizontalValue, setHorizontalValue] = React.useState('1');
-    const onHorizontalChange = (e) => {
+    const [sex, setSex] = React.useState('1');
+    const onSexChange = (e) => {
       const value = e.target.value;
-      setHorizontalValue(value);
+      setSex(value);
     };
     return (
       <div>
         <FormLabel style={{ marginBottom: 24 }}>水平方向</FormLabel>
-        <Radio.Group layout="horizontal" value={horizontalValue} onChange={onHorizontalChange}>
+        <Radio.Group layout="horizontal" value={sex} onChange={onSexChange}>
           <Radio label="男" value="1" style={{ marginRight: '32px' }} />
           <Radio label="女" value="0" />
         </Radio.Group>
         <FormLabel style={{ marginBottom: 24, marginTop: '40px' }}>垂直方向</FormLabel>
-        <Radio.Group>
-          <Radio label="男" />
-          <Radio label="女" />
+        <Radio.Group value={sex} onChange={onSexChange}>
+          <Radio label="男" value="1" />
+          <Radio label="女" value="0" />
         </Radio.Group>
       </div>
     );
