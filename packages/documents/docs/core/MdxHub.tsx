@@ -105,7 +105,7 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     codeMdx: CheckboxCode,
   },
   {
-    tagName: 'FormDescription',
+    tagName: 'Form Description',
     name: '表单描述',
     description: '',
     designMdx: FormDescriptionDesign,
