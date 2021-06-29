@@ -9,17 +9,23 @@ import { Input, FormLabel, FormHint } from '@acme-ui/core';
   <FormLabel style={{ marginBottom: 8 }}>邮箱</FormLabel>
   <Input />
   <FormHint style={{ marginTop: 4 }}>我们绝不会分享您的邮箱地址</FormHint>
-  <FormLabel style={{ marginBottom: 8, marginTop: 24 }}>错误的邮箱</FormLabel>
-  <Input error defaultValue="test" />
+  <FormLabel style={{ marginBottom: 8, marginTop: 24 }} status="error">
+    错误的邮箱
+  </FormLabel>
+  <Input status="error" defaultValue="test" />
   <FormHint style={{ marginTop: 4 }} status="error">
     邮箱地址输入不正确
   </FormHint>
-  <FormLabel style={{ marginBottom: 8, marginTop: 24 }}>成功的邮箱</FormLabel>
-  <Input success />
+  <FormLabel style={{ marginBottom: 8, marginTop: 24 }} status="success">
+    成功的邮箱
+  </FormLabel>
+  <Input status="success" />
   <FormHint style={{ marginTop: 4 }} status="success">
     邮箱地址输入正确
   </FormHint>
-  <FormLabel style={{ marginBottom: 8, marginTop: 24 }}>警告的邮箱</FormLabel>
+  <FormLabel style={{ marginBottom: 8, marginTop: 24 }} status="warning">
+    警告的邮箱
+  </FormLabel>
   <Input />
   <FormHint style={{ marginTop: 4 }} status="warning">
     ⚠️ 邮箱地址

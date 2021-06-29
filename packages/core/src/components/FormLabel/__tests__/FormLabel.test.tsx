@@ -2,7 +2,8 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { RefTestCaseType } from 'tests/shared/refTest';
 import { mountTestSuite, refTestSuite } from 'tests/shared';
-import FormLabel, { classes, FormLabelPlacement } from '../FormLabel';
+import FormLabel, { classes } from '../FormLabel';
+import { FormLabelPlacement, FormLabelStatus } from '../types';
 import Radio from '../../Radio';
 
 const testId = 'test-form-label';
@@ -83,22 +84,20 @@ describe('FormLabel', () => {
   describe('render correctly with error props', () => {
     test('should render a error label', () => {
       const { getByTestId } = render(
-        <FormLabel data-testid={testId} error>
+        <FormLabel data-testid={testId} status={FormLabelStatus.ERROR}>
           error label
         </FormLabel>,
       );
       const label = getByTestId(testId);
-      expect(label).toHaveClass(classes.error);
+      expect(label).toHaveClass(classes.status(FormLabelStatus.ERROR));
     });
 
     test('should render a error label with control', () => {
-      const { getByTestId, getByRole } = render(
-        <FormLabel data-testid={testId} error control={<Radio />}>
+      const { getByRole } = render(
+        <FormLabel data-testid={testId} status={FormLabelStatus.ERROR} control={<Radio />}>
           error label with control
         </FormLabel>,
       );
-      const label = getByTestId(testId);
-      expect(label).toHaveClass(classes.error);
       const control = getByRole('radio');
       expect(control).toBeInTheDocument();
     });

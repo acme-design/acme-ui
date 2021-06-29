@@ -1,10 +1,16 @@
 import * as React from 'react';
 import isFunction from 'lodash/isFunction';
 import get from 'lodash/get';
+import omit from 'lodash/omit';
 import FormLabel, { FormLabelProps } from '../FormLabel/index';
 import RadioGroup from './RadioGroup';
 import RadioButton from './RadioButton';
 import RadioGroupContext from './RadioGroupContext';
+import {
+  useFormField,
+  mergeFormFieldProps,
+  FormFieldPropKeysType,
+} from '../FormField/FormFieldContext';
 import { uniteClassNames } from '../../utils/tools';
 import './style/Radio.less';
 
@@ -14,7 +20,6 @@ export const classes = {
   root: `${classNamePrefix}-root`,
   radio: classNamePrefix,
   inline: `${classNamePrefix}-inline`,
-  error: `${classNamePrefix}-error`,
   disabled: `${classNamePrefix}-disabled`,
 };
 
@@ -52,10 +57,6 @@ export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> 
    */
   disabled?: boolean;
   /**
-   * 错误样式展示，一般在表单中用
-   */
-  error?: boolean;
-  /**
    * 事件变化方法
    */
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -63,11 +64,9 @@ export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> 
    * 当前Radio是否为行内元素
    */
   inline?: boolean;
-  /**
-   * 同input的name属性
-   */
-  name?: string;
 }
+
+const mergeWithContextProps: FormFieldPropKeysType = ['id', 'disabled'];
 
 const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLInputElement>) => {
   const {
@@ -75,10 +74,8 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
     checked,
     label,
     inline,
-    disabled,
     defaultChecked,
     labelPlacement,
-    error,
     value,
     onChange,
     name,
@@ -98,6 +95,14 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
   let internalName = name;
   const radioGroup = React.useContext(RadioGroupContext);
 
+  const formFieldContext = useFormField();
+  const mergedProps = mergeFormFieldProps<RadioProps>({
+    props,
+    propKeys: mergeWithContextProps,
+    context: formFieldContext,
+  });
+  let disabled = mergedProps.disabled;
+
   if (radioGroup) {
     const radioGroupValue = get(radioGroup, 'value');
     if (!('checked' in props) && radioGroupValue) {
@@ -107,6 +112,11 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
     const radioGroupChangeFunc = get(radioGroup, 'onChange');
     if (isFunction(radioGroupChangeFunc)) {
       radioGroupChange = radioGroupChangeFunc;
+    }
+
+    const radioGroupDisabled = get(radioGroup, 'disabled');
+    if (radioGroupDisabled) {
+      disabled = radioGroupDisabled;
     }
 
     const radioGroupName = get(radioGroup, 'name');
@@ -129,7 +139,6 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
       className={uniteClassNames(
         classes.root,
         inline ? classes.inline : '',
-        error ? classes.error : '',
         disabled ? classes.disabled : '',
         className,
       )}
@@ -138,13 +147,15 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
       control={
         <input
           className={classes.radio}
+          id={mergedProps.id}
+          aria-describedby={get(formFieldContext, 'hintId')}
           value={value}
           checked={!!currentChecked}
-          disabled={!!disabled}
+          disabled={!!mergedProps.disabled}
           onChange={handleRadioChange}
           name={internalName}
           ref={ref}
-          {...otherProps}
+          {...omit(otherProps, mergeWithContextProps)}
           type="radio"
         />
       }
@@ -160,7 +171,6 @@ const Radio = React.forwardRef((props: RadioProps, ref: React.ForwardedRef<HTMLI
 
 Radio.defaultProps = {
   labelPlacement: 'right',
-  onChange: undefined,
 };
 
 export default Radio;

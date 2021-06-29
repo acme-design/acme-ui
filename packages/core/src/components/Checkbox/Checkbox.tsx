@@ -3,29 +3,26 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import isFunction from 'lodash/isFunction';
 import indexOf from 'lodash/indexOf';
+import omit from 'lodash/omit';
 import { uniteClassNames } from '../../utils/tools';
-import FormLabel from '../FormLabel';
+import FormLabel, { FormLabelProps } from '../FormLabel';
+import {
+  useFormField,
+  mergeFormFieldProps,
+  FormFieldPropKeysType,
+} from '../FormField/FormFieldContext';
 import CheckboxGroup, { CheckGroupContext } from './CheckboxGroup';
-import { FormLabelProps } from '../FormLabel/FormLabel';
 import './style/Checkbox.less';
 
-export interface CheckboxProps {
+export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * 最外层元素样式
    */
   className?: string;
   /**
-   * input name
+   * label内容
    */
-  name?: string;
-  /**
-   * checkbox 值
-   */
-  value?: string | number;
-  /**
-   * 禁用状态
-   */
-  disabled?: boolean;
+  children?: FormLabelProps['children'];
   /**
    * 是否选中
    */
@@ -39,23 +36,23 @@ export interface CheckboxProps {
    */
   indeterminate?: boolean;
   /**
+   * checkbox 值
+   */
+  value?: string | number;
+  /**
    * checkbox 状态改变
    */
   onChange?: (e: React.ChangeEvent) => void;
-  /**
-   * label内容
-   */
-  children?: FormLabelProps['children'];
   /**
    * 是否必填
    */
   required?: FormLabelProps['required'];
   /**
-   * 是否处于错误状态
+   * 禁用状态
    */
-  error?: boolean;
+  disabled?: boolean;
   /**
-   * 所在位置
+   * 标签所在位置
    */
   labelPlacement?: FormLabelProps['labelPlacement'];
 }
@@ -71,18 +68,22 @@ export const classes = {
   content: `${classNamePrefix}-content`,
 };
 
+const mergeWithContextProps: FormFieldPropKeysType = ['id', 'disabled', 'required'];
+
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   (props: CheckboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const {
       className,
-      disabled,
-      onChange,
-      indeterminate,
-      checked,
+      children,
       defaultChecked,
+      checked,
+      indeterminate,
       value,
+      onChange,
       name,
-      ...labelProps
+      labelPlacement,
+      style,
+      ...otherProps
     } = props;
 
     const checkboxGroup = React.useContext(CheckGroupContext);
@@ -93,16 +94,26 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         setCurrChecked(checked);
       }
     }, [checked]);
+
+    const formFieldContext = useFormField();
+    const mergedProps = mergeFormFieldProps<CheckboxProps>({
+      props,
+      propKeys: mergeWithContextProps,
+      context: formFieldContext,
+    });
     const inputProps = {
+      ...omit(otherProps, mergeWithContextProps),
       checked: !!currChecked,
-      ref,
-      disabled: !!disabled,
-      value,
+      disabled: !!mergedProps.disabled,
       name,
     };
     if (checkboxGroup) {
       set(inputProps, 'checked', indexOf(get(checkboxGroup, 'values'), value) > -1);
-      set(inputProps, 'disabled', !!get(checkboxGroup, 'disabled'));
+      const checkboxGroupDisabled = get(checkboxGroup, 'disabled');
+      if (checkboxGroupDisabled) {
+        set(inputProps, 'disabled', !!checkboxGroupDisabled);
+        set(mergedProps, 'disabled', !!checkboxGroupDisabled);
+      }
       set(inputProps, 'name', get(checkboxGroup, 'name'));
     }
 
@@ -123,13 +134,24 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <FormLabel
-        className={uniteClassNames(classes.root, disabled ? classes.disabled : '', className)}
+        className={uniteClassNames(
+          classes.root,
+          mergedProps.disabled ? classes.disabled : '',
+          className,
+        )}
+        labelPlacement={labelPlacement}
+        style={style}
+        required={mergedProps.required}
         control={
           <span className={classes.content}>
             <input
               className={classes.input}
-              onChange={handleInputChange}
+              id={mergedProps.id}
+              aria-describedby={get(formFieldContext, 'hintId')}
               {...inputProps}
+              value={value}
+              onChange={handleInputChange}
+              ref={ref}
               type="checkbox"
             />
             <span
@@ -140,8 +162,10 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             />
           </span>
         }
-        {...labelProps}
-      />
+        data-testid="acme-checkbox-root"
+      >
+        {children}
+      </FormLabel>
     );
   },
 ) as React.ForwardRefExoticComponent<CheckboxProps & React.RefAttributes<HTMLInputElement>> & {

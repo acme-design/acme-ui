@@ -27,6 +27,8 @@ import TooltipCode from './Tooltip/Code.mdx';
 import TooltipDesign from './Tooltip/Design.mdx';
 import FormHintCode from './FormHint/Code.mdx';
 import FormHintDesign from './FormHint/Design.mdx';
+import FormFieldCode from './FormField/Code.mdx';
+import FormFieldDesign from './FormField/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -103,7 +105,7 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     codeMdx: CheckboxCode,
   },
   {
-    tagName: 'FormDescription',
+    tagName: 'Form Description',
     name: '表单描述',
     description: '',
     designMdx: FormDescriptionDesign,
@@ -129,6 +131,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '',
     designMdx: FormHintDesign,
     codeMdx: FormHintCode,
+  },
+  {
+    tagName: 'Form Field',
+    name: '表单域',
+    description: '',
+    designMdx: FormFieldDesign,
+    codeMdx: FormFieldCode,
   },
 ];
 

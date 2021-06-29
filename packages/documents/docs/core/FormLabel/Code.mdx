@@ -6,11 +6,11 @@ import { Switch, FormLabel } from '@acme-ui/core';
 该演示使您可以预览不同类型的不同状态
 
 <Playground>
-  <FormLabel style={{ marginRight: '24px' }}>我是一个标题</FormLabel>
-  <FormLabel style={{ marginRight: '24px' }} required>
+  <FormLabel style={{ marginRight: 24 }}>我是一个标题</FormLabel>
+  <FormLabel style={{ marginRight: 24 }} required>
     我是一个必填的标题
   </FormLabel>
-  <FormLabel style={{ marginRight: '24px' }} error>
+  <FormLabel style={{ marginRight: 24 }} status="error">
     我是一个报错的标题
   </FormLabel>
 </Playground>
@@ -18,28 +18,21 @@ import { Switch, FormLabel } from '@acme-ui/core';
 ## 配合组件用法
 
 <Playground>
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />}>
-    开关
-  </FormLabel>
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />} required>
+  <FormLabel style={{ marginRight: 24 }} control={<Switch />}>
     开关
   </FormLabel>
   <br />
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />} labelPlacement="right">
+  <FormLabel style={{ marginRight: 24 }} control={<Switch />} labelPlacement="right">
     Right
   </FormLabel>
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />} labelPlacement="left">
+  <FormLabel style={{ marginRight: 24 }} control={<Switch />} labelPlacement="left">
     Left
   </FormLabel>
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />} labelPlacement="top">
+  <FormLabel style={{ marginRight: 24 }} control={<Switch />} labelPlacement="top">
     Top
   </FormLabel>
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />} labelPlacement="bottom">
+  <FormLabel style={{ marginRight: 24 }} control={<Switch />} labelPlacement="bottom">
     Bottom
-  </FormLabel>
-  <br />
-  <FormLabel style={{ marginRight: '24px' }} control={<Switch />} required error>
-    错误
   </FormLabel>
 </Playground>
 

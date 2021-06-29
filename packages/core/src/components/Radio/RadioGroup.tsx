@@ -27,6 +27,10 @@ export interface RadioGroupProps {
    */
   layout?: FormGroupProps['layout'];
   /**
+   * 禁用状态
+   */
+  disabled?: boolean;
+  /**
    * 同input的name属性
    */
   name?: string;
@@ -49,7 +53,8 @@ export const classes = {
 const RadioGroup: React.ForwardRefExoticComponent<
   RadioGroupProps & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef((props: RadioGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-  const { className, children, value, layout, name, size, onChange, ...otherProps } = props;
+  const { className, children, value, layout, disabled, name, size, onChange, ...otherProps } =
+    props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isFunction(onChange)) {
@@ -58,7 +63,7 @@ const RadioGroup: React.ForwardRefExoticComponent<
   };
 
   return (
-    <RadioGroupContext.Provider value={{ value, name, onChange: handleChange, size }}>
+    <RadioGroupContext.Provider value={{ value, name, disabled, onChange: handleChange, size }}>
       <FormGroup
         className={uniteClassNames(classes.root, className)}
         ref={ref}
@@ -72,7 +77,6 @@ const RadioGroup: React.ForwardRefExoticComponent<
 });
 
 RadioGroup.defaultProps = {
-  className: '',
   layout: 'vertical',
 };
 

@@ -5,28 +5,28 @@ import userEvent from '@testing-library/user-event';
 import Checkbox, { classes } from '../Checkbox';
 import { RefTestCaseType } from '../../../../tests/shared/refTest';
 
-const testId = 'checkbox-test-id';
+const testId = 'acme-checkbox-root';
 
 describe('checkbox', () => {
   mountTestSuite(<Checkbox />);
 
   describe('render a checkbox correctly', () => {
     test('render default checkbox', () => {
-      const { getByTestId } = render(<Checkbox data-testid={testId} />);
+      const { getByTestId } = render(<Checkbox />);
       const checkbox = getByTestId(testId);
       expect(checkbox).not.toBeNull();
       expect(checkbox).toHaveClass(classes.root);
       expect(checkbox).toContainHTML('input');
     });
     test('render disabled checkbox', () => {
-      const { getByTestId } = render(<Checkbox data-testid={testId} disabled />);
+      const { getByTestId } = render(<Checkbox disabled />);
       const checkbox = getByTestId(testId);
       expect(checkbox).not.toBeNull();
       expect(checkbox).toHaveClass(classes.disabled);
       expect(checkbox.querySelector('input')).toBeDisabled();
     });
     test('render indeterminate checkbox', () => {
-      const { getByTestId } = render(<Checkbox data-testid={testId} indeterminate />);
+      const { getByTestId } = render(<Checkbox indeterminate />);
       const checkbox = getByTestId(testId);
       expect(checkbox).not.toBeNull();
       expect(checkbox.querySelector(`.${classes.indeterminate}`)).not.toBeNull();
@@ -41,7 +41,7 @@ describe('checkbox', () => {
         target = e.target;
         checked = target.checked;
       });
-      const { getByTestId } = render(<Checkbox data-testid={testId} onChange={mockFn} />);
+      const { getByTestId } = render(<Checkbox onChange={mockFn} />);
       const checkbox = getByTestId(testId);
       userEvent.click(checkbox);
       expect(target).toEqual(expect.any(HTMLInputElement));
@@ -50,7 +50,7 @@ describe('checkbox', () => {
     });
     test('on disabled checkbox', () => {
       const mockFn = jest.fn(() => {});
-      const { getByTestId } = render(<Checkbox data-testid={testId} disabled onChange={mockFn} />);
+      const { getByTestId } = render(<Checkbox disabled onChange={mockFn} />);
       const checkbox = getByTestId(testId);
       userEvent.click(checkbox);
       expect(checkbox.querySelector('input')).not.toHaveFocus();

@@ -1,6 +1,13 @@
 import * as React from 'react';
+import omit from 'lodash/omit';
+import get from 'lodash/get';
 import { FormHintStatus } from './types';
 import { uniteClassNames } from '../../utils/tools';
+import {
+  useFormField,
+  mergeFormFieldProps,
+  FormFieldPropKeysType,
+} from '../FormField/FormFieldContext';
 import './style/formHint.less';
 
 type FormHintStatusType = `${FormHintStatus}`;
@@ -32,18 +39,28 @@ export const classes = {
   disabled: `${classNamePrefix}-disabled`,
 };
 
-const FormGroup = React.forwardRef<HTMLParagraphElement, FormHintProps>(
+const mergeWithContextProps: FormFieldPropKeysType = ['status', 'disabled'];
+
+const FormHint = React.forwardRef<HTMLParagraphElement, FormHintProps>(
   (props: FormHintProps, ref: React.ForwardedRef<HTMLParagraphElement>) => {
-    const { className, children, status, disabled, ...otherProps } = props || {};
+    const { className, children, ...otherProps } = props || {};
+    const formFieldContext = useFormField();
+    const mergedProps = mergeFormFieldProps<FormHintProps>({
+      props,
+      propKeys: mergeWithContextProps,
+      context: formFieldContext,
+    });
+
     return (
       <p
         className={uniteClassNames(
           classes.root,
-          status ? classes.status(status) : '',
-          disabled ? classes.disabled : '',
+          mergedProps.status ? classes.status(mergedProps.status) : '',
+          mergedProps.disabled ? classes.disabled : '',
           className,
         )}
-        {...otherProps}
+        id={get(formFieldContext, 'hintId')}
+        {...omit(otherProps, mergeWithContextProps)}
         ref={ref}
       >
         {children}
@@ -52,4 +69,4 @@ const FormGroup = React.forwardRef<HTMLParagraphElement, FormHintProps>(
   },
 );
 
-export default FormGroup;
+export default FormHint;
