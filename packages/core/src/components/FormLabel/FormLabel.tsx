@@ -43,7 +43,7 @@ export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelEleme
    */
   status?: FormLabelStatusType;
   /**
-   * 所在位置
+   * 所在位置，配合control有效果
    */
   labelPlacement?: FormLabelPlacementType;
   /**
