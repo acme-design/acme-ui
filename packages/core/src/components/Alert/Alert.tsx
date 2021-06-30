@@ -44,7 +44,7 @@ export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   /**
    * 自定义操作
    */
-  action: React.ReactNode;
+  action?: React.ReactNode;
 }
 
 const classPrefix = 'acme-alert';
