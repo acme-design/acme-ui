@@ -1,0 +1,41 @@
+import {Playground, Props} from "~controls";
+import { Alert } from "@acme-ui/core";
+
+## 演示
+该演示使您可以预览下拉菜单的不同类型，以及不同类型的不同状态。
+<Playground
+    links={{
+        codeSandbox: '',
+        codePen: '',
+        stackblitz: '',
+    }}
+    defaultComProps={{size: 'default', loading: false, disabled: false}}
+    headWrapper={Playground.renderChecker([
+        {label: '基础用法', onClick: (p) => ({...p, size: 'default', loading: false}),highlight: (p) => (p.size === 'default') },
+        {label: '大小', onClick: (p) => ({...p, size: 'small', loading: false}),highlight: (p) => (p.size === 'small')},
+    ])}
+    asideWrapper={Playground.renderCheckbox([
+        {label: '加载中', onClick: (p) => ({...p, loading: !p.loading}),isChecked: (p) => p.loading},
+        {label: '禁用状态',  onClick: (p) => ({...p, disabled: !p.disabled}), isChecked: (p) => p.disabled}
+    ])}
+>
+    <Alert data-mark>消息提示文案</Alert>
+</Playground>
+
+## 基础用法
+该演示使您可以预览下拉菜单的不同类型，以及不同类型的不同状态
+<Playground >
+    <Alert showIcon>消息提示文案</Alert>
+    <br/>
+    <Alert title="消息提示文案" closable>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert type="warning">消息提示文案</Alert>
+    <br/>
+    <Alert type="success">消息提示文案</Alert>
+    <br/>
+    <Alert type="error">消息提示文案</Alert>
+</Playground>
+
+## API
+通过设置不同的属性展示不同的开关状态
+<Props of={Alert} />
