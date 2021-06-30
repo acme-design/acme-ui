@@ -23,17 +23,67 @@ import { Alert } from "@acme-ui/core";
 </Playground>
 
 ## 基础用法
-该演示使您可以预览下拉菜单的不同类型，以及不同类型的不同状态
+基本使用方法，有四种样式可以选择info、success、warning、error。
 <Playground >
-    <Alert showIcon>消息提示文案</Alert>
+    <Alert>消息提示文案</Alert>
     <br/>
-    <Alert title="消息提示文案" closable>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <Alert type="success">成功提示文案</Alert>
     <br/>
-    <Alert type="warning">消息提示文案</Alert>
+    <Alert type="warning">警告提示文案</Alert>
     <br/>
-    <Alert type="success">消息提示文案</Alert>
+    <Alert type="error">错误提示文案</Alert>
+</Playground>
+
+## 含头部信息
+<Playground>
+    <Alert title="消息提示文案">这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
     <br/>
-    <Alert type="error">消息提示文案</Alert>
+    <Alert title="成功提示文案" type='success'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+</Playground>
+
+## 带有图标
+<Playground>
+    <Alert showIcon >消息提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="success">成功提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="warning">警告提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="error">错误提示文案</Alert>
+    <br/>
+    <Alert  showIcon title="消息提示文案">这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon  title="成功提示文案" type='success'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert  showIcon title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon  title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+</Playground>
+
+## 关闭
+<Playground>
+    <Alert closable action={<span style={{fontSize: '14px'}}>我知道了</span>} >消息提示文案</Alert>
+    <br/>
+    <Alert closable  type="success">成功提示文案</Alert>
+    <br/>
+    <Alert closable showIcon title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon closable title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+</Playground>
+
+## 文字居中
+<Playground >
+    <Alert align="center">消息提示文案</Alert>
+    <br/>
+    <Alert type="success" align="center">成功提示文案</Alert>
+    <br/>
+    <Alert type="warning" align="center">警告提示文案</Alert>
+    <br/>
+    <Alert type="error" align="center">错误提示文案</Alert>
 </Playground>
 
 ## API

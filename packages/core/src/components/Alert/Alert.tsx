@@ -1,6 +1,6 @@
 import * as React from 'react';
 import isFunction from 'lodash/isFunction';
-import { AlertType } from './types';
+import { AlertAlign, AlertType } from './types';
 import { uniteClassNames } from '../../utils/tools';
 
 import './style/Alert.less';
@@ -11,6 +11,7 @@ import WarningIcon from '../Icon/Warning';
 import ErrorIcon from '../Icon/Error';
 
 type AlertTypeType = `${AlertType}`;
+type AlertAlignType = `${AlertAlign}`;
 
 export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /**
@@ -21,6 +22,10 @@ export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
    * alert 类型
    */
   type: AlertTypeType;
+  /**
+   * 文案位置
+   */
+  align: AlertAlignType;
   /**
    * 是否显示关闭按钮
    */
@@ -54,6 +59,7 @@ export const classes = {
   appearance: (type: AlertProps['type']) => `${classPrefix}-${type}`,
   visible: `${classPrefix}-visible`,
   content: `${classPrefix}-content`,
+  align: (align: AlertProps['align']) => `${classPrefix}-content-${align}`,
   title: `${classPrefix}-title`,
   description: `${classPrefix}-description`,
   closeWrap: `${classPrefix}-close-wrap`,
@@ -61,6 +67,7 @@ export const classes = {
   icon: `${classPrefix}-icon`,
   largeIcon: `${classPrefix}-icon-large`,
   iconWrap: `${classPrefix}-icon-wrap`,
+  largeIconWrap: `${classPrefix}-icon-large-wrap`,
 };
 
 const AlertIcon = {
@@ -71,7 +78,19 @@ const AlertIcon = {
 };
 
 const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-  const { className, type, title, action, closable, onClose, showIcon, icon, children } = props;
+  const {
+    className,
+    type,
+    title,
+    action,
+    closable,
+    onClose,
+    showIcon,
+    icon,
+    children,
+    align,
+    ...otherProps
+  } = props;
   const [visible, setVisible] = React.useState(false);
 
   const handleClose = (e: React.MouseEvent) => {
@@ -81,9 +100,9 @@ const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLD
     }
   };
 
-  const hasClose = closable || Boolean(onClose);
+  const hasClose = closable || isFunction(onClose);
 
-  const hasIcon = showIcon || Boolean(icon);
+  const hasIcon = showIcon || React.isValidElement(icon);
 
   return (
     <div
@@ -94,13 +113,14 @@ const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLD
         className,
       )}
       ref={ref}
+      {...otherProps}
     >
       {hasIcon ? (
-        <span className={classes.iconWrap}>
+        <span className={uniteClassNames(classes.iconWrap, title ? classes.largeIconWrap : '')}>
           {icon || AlertIcon[type](title ? classes.largeIcon : classes.icon)}
         </span>
       ) : null}
-      <div className={classes.content}>
+      <div className={uniteClassNames(classes.content, classes.align(align))}>
         {title ? <div className={classes.title}>{title}</div> : null}
         <div className={classes.description}>{children}</div>
       </div>
@@ -116,6 +136,7 @@ const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLD
 
 Alert.defaultProps = {
   type: 'info',
+  align: 'left',
 };
 
 export default Alert;

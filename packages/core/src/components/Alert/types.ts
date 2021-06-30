@@ -4,3 +4,9 @@ export enum AlertType {
   SUCCESS = 'success',
   ERROR = 'error',
 }
+
+export enum AlertAlign {
+  LEFT = 'left',
+  CENTER = 'center',
+  RIGHT = 'right',
+}

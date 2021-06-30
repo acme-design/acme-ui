@@ -38,6 +38,18 @@
   flex-grow: 1;
 }
 
+.@{classPrefix}-content-left {
+  text-align: left;
+}
+
+.@{classPrefix}-content-center {
+  text-align: center;
+}
+
+.@{classPrefix}-content-right {
+  text-align: right;
+}
+
 .@{classPrefix}-title {
   .heading-4();
 
@@ -57,13 +69,16 @@
 .@{classPrefix}-icon-large {
   width: 28px;
   height: 28px;
-  margin-right: @spacing-sm;
-  margin-left: @spacing-normal;
 }
 
 .@{classPrefix}-close-wrap {
   padding-left: @spacing-md;
   cursor: pointer;
+}
+
+.@{classPrefix}-icon-large-wrap {
+  margin-right: @spacing-sm;
+  margin-left: @spacing-normal;
 }
 
 .@{classPrefix}-close {
