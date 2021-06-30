@@ -50,7 +50,7 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * 控制popper是否展开
    */
-  open?: boolean;
+  visible?: boolean;
   /**
    * 提示框翻转边界 默认为document
    */
@@ -87,7 +87,7 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       overlayStyle,
       boundary,
       onVisibleChange,
-      open,
+      visible,
       interactive,
       ...otherProps
     } = props;
@@ -230,7 +230,7 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       };
     }, [content]);
 
-    const visible = 'open' in props ? open : isShowPopper;
+    const innerVisible = 'visible' in props ? visible : isShowPopper;
 
     return (
       <div className={classes.root} ref={ref} {...otherProps}>
@@ -242,7 +242,7 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
           className={uniteClassNames(
             classes.popper,
             overlayClassName,
-            visible ? '' : classes.hidden,
+            innerVisible ? '' : classes.hidden,
           )}
           style={{ maxWidth: width, ...overlayStyle }}
           data-testid="acme-popper"
