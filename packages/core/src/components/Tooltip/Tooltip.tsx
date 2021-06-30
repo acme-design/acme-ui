@@ -32,10 +32,6 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   openDelay?: number;
   /**
-   * 提示框关闭的延时时间，单位：毫秒
-   */
-  closeDelay?: number;
-  /**
    * 提示框位置
    */
   placement?: TooltipPlacementType;
@@ -54,11 +50,15 @@ export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * 控制popper是否展开
    */
-  open?: boolean;
+  visible?: boolean;
   /**
    * 提示框翻转边界 默认为document
    */
   boundary?: React.ReactElement;
+  /**
+   * 鼠标移入popper是否保持提示框弹出
+   */
+  interactive?: boolean;
 }
 
 const classNamePrefix = `acme-tooltip`;
@@ -72,6 +72,8 @@ export const classes = {
   content: `${classNamePrefix}-content`,
 };
 
+const interactiveDefaultDelay = 500;
+
 const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttributes<HTMLDivElement>> =
   React.forwardRef((props: TooltipProps, ref: React.ForwardedRef<HTMLDivElement>) => {
     const {
@@ -80,13 +82,13 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       width,
       trigger,
       openDelay,
-      closeDelay,
       placement,
       overlayClassName,
       overlayStyle,
       boundary,
       onVisibleChange,
-      open,
+      visible,
+      interactive,
       ...otherProps
     } = props;
 
@@ -114,10 +116,10 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
     };
 
     const hide = () => {
-      if (closeDelay) {
+      if (interactive) {
         hideTimeout = setTimeout(() => {
           setIsShowPopper(false);
-        }, closeDelay);
+        }, interactiveDefaultDelay);
       } else {
         setIsShowPopper(false);
       }
@@ -139,6 +141,17 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
 
     const handleHoverEvent = () => {
       const childrenDom = get(referenceRef, 'current');
+      const popperDom = get(popperRef, 'current');
+
+      if (interactive && popperDom) {
+        popperDom.addEventListener('mouseenter', () => {
+          if (hideTimeout) clearTimeout(hideTimeout);
+        });
+        popperDom.addEventListener('mouseout', () => {
+          hide();
+        });
+      }
+
       if (childrenDom) {
         childrenDom.addEventListener('mouseenter', show);
         childrenDom.addEventListener('mouseout', hide);
@@ -217,16 +230,11 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
       };
     }, [content]);
 
-    if ('open' in props) {
-      // TODO 如果传了open，那是否还能通过trigger控制提示框的显隐？
-      React.useEffect(() => {
-        setIsShowPopper(!!open);
-      }, [open]);
-    }
+    const innerVisible = 'visible' in props ? visible : isShowPopper;
 
     return (
       <div className={classes.root} ref={ref} {...otherProps}>
-        <div ref={referenceRef} className={classes.reference}>
+        <div className={classes.reference} ref={referenceRef}>
           {children}
         </div>
         <div
@@ -234,7 +242,7 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
           className={uniteClassNames(
             classes.popper,
             overlayClassName,
-            isShowPopper ? '' : classes.hidden,
+            innerVisible ? '' : classes.hidden,
           )}
           style={{ maxWidth: width, ...overlayStyle }}
           data-testid="acme-popper"
