@@ -218,7 +218,6 @@ const Tooltip: React.ForwardRefExoticComponent<TooltipProps & React.RefAttribute
     }, [content]);
 
     if ('open' in props) {
-      // TODO 如果传了open，那是否还能通过trigger控制提示框的显隐？
       React.useEffect(() => {
         setIsShowPopper(!!open);
       }, [open]);
