@@ -21,11 +21,11 @@ export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   /**
    * alert 类型
    */
-  type: AlertTypeType;
+  type?: AlertTypeType;
   /**
    * 文案位置
    */
-  align: AlertAlignType;
+  align?: AlertAlignType;
   /**
    * 是否显示关闭按钮
    */
@@ -117,7 +117,7 @@ const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLD
     >
       {hasIcon ? (
         <span className={uniteClassNames(classes.iconWrap, title ? classes.largeIconWrap : '')}>
-          {icon || AlertIcon[type](title ? classes.largeIcon : classes.icon)}
+          {icon || AlertIcon[type as AlertTypeType](title ? classes.largeIcon : classes.icon)}
         </span>
       ) : null}
       <div className={uniteClassNames(classes.content, classes.align(align))}>
