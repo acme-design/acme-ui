@@ -1,0 +1,32 @@
+import { Playground, Props } from '~controls';
+import { Select } from '@acme-ui/core';
+
+## 基础用法
+
+适用广泛的基础单选
+
+<Playground>
+  <Select placeholder="请选择">
+    <Select.Option value="1">选项1</Select.Option>
+    <Select.Option value="2">选项2</Select.Option>
+  </Select>
+</Playground>
+
+## 基础用法
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState('1');
+    const onChange = (value) => {
+      setValue(value);
+    };
+    return (
+      <Select placeholder="请选择" onChange={onChange} value={value}>
+        <Select.Option value="1">
+          <span>+</span>选项1
+        </Select.Option>
+        <Select.Option value="2">选项2</Select.Option>
+      </Select>
+    );
+  }}
+</Playground>

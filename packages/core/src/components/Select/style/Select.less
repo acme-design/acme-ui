@@ -1,0 +1,56 @@
+@import '../../../styles/index.less';
+
+@acmeSelectPrefix: ~'@{acme-prefix}-select';
+
+.@{acmeSelectPrefix} {
+  width: 300px;
+}
+
+.@{acmeSelectPrefix}-selector {
+  display: flex;
+  width: inherit;
+  padding: @spacing-normal + @spacing-xs @spacing-md;
+  border: @border-width-normal solid @border-color-primary;
+  border-radius: @border-radius-normal;
+}
+
+.@{acmeSelectPrefix}-selection {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  .text-primary();
+}
+
+.@{acmeSelectPrefix}-input {
+  flex: 1 1 auto;
+  border: none;
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.@{acmeSelectPrefix}-arrow {
+  cursor: pointer;
+}
+
+.@{acmeSelectPrefix}-arrow-animation {
+  // animation: arrowRotate 0.2s linear;
+  transform: rotate(180deg);
+  animation-duration: 0.2s;
+}
+
+.@{acmeSelectPrefix}-dropdown {
+  padding: @spacing-normal 0;
+  border-radius: @border-radius-normal;
+  border: @border-width-normal solid @border-color-primary;
+  box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d; // TODO
+}
+
+// @keyframes arrowRotate {
+//   0% {
+//     transform: rotate(0);
+//   }
+//   100% {
+//     transform: rotate(180deg);
+//   }
+// }
