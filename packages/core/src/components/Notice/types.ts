@@ -4,5 +4,9 @@ export type NoticeInstanceType<T> = {
 };
 
 export interface NoticeParent {
-  key?: string;
+  key: string;
+  className?: string;
+  delay?: number;
+  onClose?: () => void;
+  closable?: boolean;
 }

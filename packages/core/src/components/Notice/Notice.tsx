@@ -1,9 +1,12 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import isFunction from 'lodash/isFunction';
 import { NoticeInstanceType, NoticeParent } from './types';
+import { uniteClassNames } from '../../utils/tools';
 
 export interface NoticeProps<T> {
   className: string;
+  closeClassName?: string;
   Content: React.ForwardRefExoticComponent<T>;
 }
 
@@ -21,26 +24,44 @@ class Notice<T extends NoticeParent> extends React.Component<NoticeProps<T>, Not
 
   public add = (notice: T) => {
     const { notices } = this.state;
-    const key = this.getNoticeKey();
-    const newNotices = [...notices, { ...notice, key }];
+    const newNotices = [...notices, notice];
     this.setState({
       notices: newNotices,
     });
+    const delay = (notice.delay || 3000) + 100 * notices.length;
     const timer = setTimeout(() => {
-      this.remove(key);
+      this.remove(notice.key, notice.onClose);
       clearTimeout(timer);
-    }, 2000);
+    }, delay);
   };
 
-  public remove = (key: string) => {
+  private visibleItem = (key: string) => {
     const { notices } = this.state;
-    this.setState({
-      notices: notices.filter((notice) => notice.key !== key),
+    const { closeClassName } = this.props;
+    const newNotices = notices.map((notice) => {
+      if (notice.key === key)
+        return {
+          ...notice,
+          className: uniteClassNames(notice.className, closeClassName),
+        };
+      return notice;
     });
+    this.setState({ notices: newNotices });
   };
 
-  private getNoticeKey = (): string => {
-    return `${new Date().getTime()}:${Math.random() * 100}`;
+  public remove = (key: string, onClose?: () => void) => {
+    const { notices } = this.state;
+
+    if (isFunction(onClose)) {
+      onClose();
+    }
+    this.visibleItem(key);
+    const closeTimer = setTimeout(() => {
+      this.setState({
+        notices: notices.filter((notice) => notice.key !== key),
+      });
+      clearTimeout(closeTimer);
+    }, 150);
   };
 
   public render() {
@@ -49,7 +70,7 @@ class Notice<T extends NoticeParent> extends React.Component<NoticeProps<T>, Not
     return notices.length > 0 ? (
       <div className={className}>
         {notices.map((notice) => (
-          <Content {...notice} />
+          <Content {...notice} onClose={() => this.remove(notice.key, notice.onClose)} />
         ))}
       </div>
     ) : null;
