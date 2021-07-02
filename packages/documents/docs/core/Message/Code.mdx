@@ -1,0 +1,16 @@
+import {Playground} from "../../../src/controls";
+import {Message} from "@acme-ui/core";
+
+## 基础用法
+简单的展示。
+
+<Playground>
+    {
+        () => {
+            return <div>
+                <button onClick={() => Message.info({className: 'message'})}>message info</button>
+                <button onClick={() => Message.warning()}>message warning</button>
+            </div>
+        }
+    }
+</Playground>

@@ -29,6 +29,8 @@ import FormHintCode from './FormHint/Code.mdx';
 import FormHintDesign from './FormHint/Design.mdx';
 import FormFieldCode from './FormField/Code.mdx';
 import FormFieldDesign from './FormField/Design.mdx';
+import MessageCode from './Message/Code.mdx';
+import MessageDesign from './Message/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -138,6 +140,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '',
     designMdx: FormFieldDesign,
     codeMdx: FormFieldCode,
+  },
+  {
+    tagName: 'Message',
+    name: '消息提示',
+    description: '',
+    designMdx: MessageDesign,
+    codeMdx: MessageCode,
   },
 ];
 
