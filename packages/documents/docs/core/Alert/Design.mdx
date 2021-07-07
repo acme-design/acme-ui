@@ -1,59 +1,91 @@
 import {Playground, Props} from "~controls";
-import { Switch } from "@acme-ui/core";
+import { Alert } from "@acme-ui/core";
 
-# Switch 开关
+## 演示
+该演示使您可以预览下拉菜单的不同类型，以及不同类型的不同状态。
+<Playground
+    links={{
+        codeSandbox: '',
+        codePen: '',
+        stackblitz: '',
+    }}
+    defaultComProps={{size: 'default', loading: false, disabled: false}}
+    headWrapper={Playground.renderChecker([
+        {label: '基础用法', onClick: (p) => ({...p, size: 'default', loading: false}),highlight: (p) => (p.size === 'default') },
+        {label: '大小', onClick: (p) => ({...p, size: 'small', loading: false}),highlight: (p) => (p.size === 'small')},
+    ])}
+    asideWrapper={Playground.renderCheckbox([
+        {label: '加载中', onClick: (p) => ({...p, loading: !p.loading}),isChecked: (p) => p.loading},
+        {label: '禁用状态',  onClick: (p) => ({...p, disabled: !p.disabled}), isChecked: (p) => p.disabled}
+    ])}
+>
+    <Alert data-mark>消息提示文案</Alert>
+</Playground>
 
 ## 基础用法
-基本用法，状态切换时会触发事件。
-<Playground>
-    <Switch />
+基本使用方法，有四种样式可以选择info、success、warning、error。
+<Playground >
+    <Alert>消息提示文案</Alert>
+    <br/>
+    <Alert type="success">成功提示文案</Alert>
+    <br/>
+    <Alert type="warning">警告提示文案</Alert>
+    <br/>
+    <Alert type="error">错误提示文案</Alert>
 </Playground>
 
-## 大小
-想用一些优雅的小开关？ 我们提供了 size 这个属性供您调整。
+## 含头部信息
 <Playground>
-    <Switch defaultChecked={true} />
-    <Switch size="small" />
+    <Alert title="消息提示文案">这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="成功提示文案" type='success'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
 </Playground>
 
-## 禁用状态
-禁用开关
+## 带有图标
 <Playground>
-    <Switch disabled />
-    <Switch defaultChecked={true} disabled />
-    <Switch size="small" disabled />
-    <Switch size="small" disabled defaultChecked={true} />
+    <Alert showIcon >消息提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="success">成功提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="warning">警告提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="error">错误提示文案</Alert>
+    <br/>
+    <Alert  showIcon title="消息提示文案">这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon  title="成功提示文案" type='success'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert  showIcon title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon  title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
 </Playground>
 
-## 加载中
-标识开关操作仍在执行中
+## 关闭
 <Playground>
-    <Switch loading />
-    <Switch defaultChecked loading />
-    <Switch size="small"  loading/>
-    <Switch size="small" defaultChecked loading />
+    <Alert closable action={<span style={{fontSize: '14px'}}>我知道了</span>} >消息提示文案</Alert>
+    <br/>
+    <Alert closable  type="success">成功提示文案</Alert>
+    <br/>
+    <Alert closable showIcon title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon closable title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
 </Playground>
 
-## 受控
-
-<Playground>
-    {
-        () => {
-            const [checked, setChecked] = React.useState(false);
-            const [loading, setLoading] = React.useState(false);
-            const onChange = (check, e) => {
-                setLoading(true)
-                setTimeout(() => {
-                    setChecked(check);
-                    setLoading(false)
-                }, 1000)
-            }
-            return <Switch checked={checked} onChange={onChange} loading={loading} />
-        }
-    }
+## 文字居中
+<Playground >
+    <Alert align="center">消息提示文案</Alert>
+    <br/>
+    <Alert type="success" align="center">成功提示文案</Alert>
+    <br/>
+    <Alert type="warning" align="center">警告提示文案</Alert>
+    <br/>
+    <Alert type="error" align="center">错误提示文案</Alert>
 </Playground>
-
 
 ## API
 通过设置不同的属性展示不同的开关状态
-<Props of={Switch} />
+<Props of={Alert} />
