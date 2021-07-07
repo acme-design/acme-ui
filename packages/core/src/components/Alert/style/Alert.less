@@ -1,0 +1,87 @@
+@import '../../../styles/index';
+
+@classPrefix: ~'@{acme-prefix}-alert';
+
+.@{classPrefix} {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: @border-radius-normal;
+  padding: (@spacing-md - 3px) @spacing-md;
+  transition: all ease-out 0.5s;
+}
+.@{classPrefix}-info {
+  color: @color-info;
+  background-color: @color-info-1;
+}
+
+.@{classPrefix}-warning {
+  color: @color-warning;
+  background-color: @color-warning-1;
+}
+
+.@{classPrefix}-success {
+  color: @color-success;
+  background-color: @color-success-1;
+}
+
+.@{classPrefix}-error {
+  color: @color-error;
+  background-color: @color-error-1;
+}
+
+.@{classPrefix}-hide {
+  display: none;
+}
+
+.@{classPrefix}-content {
+  flex: 1 1 auto;
+}
+
+.@{classPrefix}-content-left {
+  text-align: left;
+}
+
+.@{classPrefix}-content-center {
+  text-align: center;
+}
+
+.@{classPrefix}-content-right {
+  text-align: right;
+}
+
+.@{classPrefix}-title {
+  .heading-4();
+
+  margin-bottom: @spacing-xs;
+  font-weight: @font-weight-medium;
+}
+
+.@{classPrefix}-description {
+  .text-primary();
+}
+
+.@{classPrefix}-icon-wrap {
+  display: inline-flex;
+  margin-right: @spacing-normal;
+}
+
+.@{classPrefix}-icon-large {
+  width: 28px;
+  height: 28px;
+}
+
+.@{classPrefix}-close-wrap {
+  margin-left: @spacing-md;
+  cursor: pointer;
+}
+
+.@{classPrefix}-icon-large-wrap {
+  margin-right: @spacing-sm + @spacing-normal;
+  margin-left: @spacing-normal;
+}
+
+.@{classPrefix}-close {
+  width: 10px;
+  height: 10px;
+}

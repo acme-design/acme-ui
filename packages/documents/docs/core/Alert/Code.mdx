@@ -1,0 +1,89 @@
+import {Playground, Props} from "~controls";
+import { Alert } from "@acme-ui/core";
+
+## 演示
+该演示使您可以预览下拉菜单的不同类型，以及不同类型的不同状态。
+<Playground
+    links={{
+        codeSandbox: '',
+        codePen: '',
+        stackblitz: '',
+    }}
+    defaultComProps={{type: 'info'}}
+    headWrapper={Playground.renderChecker([
+        {label: '默认', onClick: (p) => ({...p, type: 'info'}),highlight: (p) => (p.type === 'info') },
+        {label: '警告', onClick: (p) => ({...p, type: 'warning'}),highlight: (p) => (p.type === 'warning')},
+        {label: '成功', onClick: (p) => ({...p, type: 'success'}),highlight: (p) => (p.type === 'success')},
+        {label: '失败', onClick: (p) => ({...p, type: 'error'}),highlight: (p) => (p.type === 'error')},
+    ])}
+>
+    <Alert data-mark>消息提示文案</Alert>
+</Playground>
+
+## 基础用法
+基本使用方法，有四种样式可以选择info、success、warning、error。
+<Playground >
+    <Alert>消息提示文案</Alert>
+    <br/>
+    <Alert type="success">成功提示文案</Alert>
+    <br/>
+    <Alert type="warning">警告提示文案</Alert>
+    <br/>
+    <Alert type="error">错误提示文案</Alert>
+</Playground>
+
+## 含头部信息
+<Playground>
+    <Alert title="消息提示文案">这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="成功提示文案" type='success'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+</Playground>
+
+## 带有图标
+<Playground>
+    <Alert showIcon >消息提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="success">成功提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="warning">警告提示文案</Alert>
+    <br/>
+    <Alert showIcon  type="error">错误提示文案</Alert>
+    <br/>
+    <Alert  showIcon title="消息提示文案">这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon  title="成功提示文案" type='success'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert  showIcon title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon  title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+</Playground>
+
+## 关闭
+<Playground>
+    <Alert closable action={<span style={{fontSize: '14px'}}>我知道了</span>} >消息提示文案</Alert>
+    <br/>
+    <Alert closable  type="success">成功提示文案</Alert>
+    <br/>
+    <Alert closable showIcon title="警告提示文案" type='warning'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+    <br/>
+    <Alert showIcon closable title="错误提示文案" type='error'>这里会有更详尽的消息提示的描述文案这里会有更详尽的消息提示的描述文案</Alert>
+</Playground>
+
+## 文字居中
+<Playground >
+    <Alert align="center">消息提示文案</Alert>
+    <br/>
+    <Alert type="success" align="center">成功提示文案</Alert>
+    <br/>
+    <Alert type="warning" align="center">警告提示文案</Alert>
+    <br/>
+    <Alert type="error" align="center">错误提示文案</Alert>
+</Playground>
+
+## API
+通过设置不同的属性展示不同的开关状态
+<Props of={Alert} />
