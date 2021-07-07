@@ -30,12 +30,12 @@
   background-color: @color-error-1;
 }
 
-.@{classPrefix}-visible {
+.@{classPrefix}-hide {
   display: none;
 }
 
 .@{classPrefix}-content {
-  flex-grow: 1;
+  flex: 1 1 auto;
 }
 
 .@{classPrefix}-content-left {
@@ -63,7 +63,7 @@
 
 .@{classPrefix}-icon-wrap {
   display: inline-flex;
-  padding-right: @spacing-normal;
+  margin-right: @spacing-normal;
 }
 
 .@{classPrefix}-icon-large {
@@ -72,12 +72,12 @@
 }
 
 .@{classPrefix}-close-wrap {
-  padding-left: @spacing-md;
+  margin-left: @spacing-md;
   cursor: pointer;
 }
 
 .@{classPrefix}-icon-large-wrap {
-  margin-right: @spacing-sm;
+  margin-right: @spacing-sm + @spacing-normal;
   margin-left: @spacing-normal;
 }
 

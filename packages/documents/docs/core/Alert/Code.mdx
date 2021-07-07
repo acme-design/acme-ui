@@ -9,14 +9,12 @@ import { Alert } from "@acme-ui/core";
         codePen: '',
         stackblitz: '',
     }}
-    defaultComProps={{size: 'default', loading: false, disabled: false}}
+    defaultComProps={{type: 'info'}}
     headWrapper={Playground.renderChecker([
-        {label: '基础用法', onClick: (p) => ({...p, size: 'default', loading: false}),highlight: (p) => (p.size === 'default') },
-        {label: '大小', onClick: (p) => ({...p, size: 'small', loading: false}),highlight: (p) => (p.size === 'small')},
-    ])}
-    asideWrapper={Playground.renderCheckbox([
-        {label: '加载中', onClick: (p) => ({...p, loading: !p.loading}),isChecked: (p) => p.loading},
-        {label: '禁用状态',  onClick: (p) => ({...p, disabled: !p.disabled}), isChecked: (p) => p.disabled}
+        {label: '默认', onClick: (p) => ({...p, type: 'info'}),highlight: (p) => (p.type === 'info') },
+        {label: '警告', onClick: (p) => ({...p, type: 'warning'}),highlight: (p) => (p.type === 'warning')},
+        {label: '成功', onClick: (p) => ({...p, type: 'success'}),highlight: (p) => (p.type === 'success')},
+        {label: '失败', onClick: (p) => ({...p, type: 'error'}),highlight: (p) => (p.type === 'error')},
     ])}
 >
     <Alert data-mark>消息提示文案</Alert>

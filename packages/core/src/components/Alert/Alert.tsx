@@ -57,7 +57,7 @@ const classPrefix = 'acme-alert';
 export const classes = {
   root: classPrefix,
   appearance: (type: AlertProps['type']) => `${classPrefix}-${type}`,
-  visible: `${classPrefix}-visible`,
+  hide: `${classPrefix}-hide`,
   content: `${classPrefix}-content`,
   align: (align: AlertProps['align']) => `${classPrefix}-content-${align}`,
   title: `${classPrefix}-title`,
@@ -91,10 +91,10 @@ const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLD
     align,
     ...otherProps
   } = props;
-  const [visible, setVisible] = React.useState(false);
+  const [hide, setHide] = React.useState(false);
 
   const handleClose = (e: React.MouseEvent) => {
-    setVisible(true);
+    setHide(true);
     if (isFunction(onClose)) {
       onClose(e);
     }
@@ -109,7 +109,7 @@ const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLD
       className={uniteClassNames(
         classes.root,
         classes.appearance(type),
-        visible ? classes.visible : '',
+        hide ? classes.hide : '',
         className,
       )}
       ref={ref}
