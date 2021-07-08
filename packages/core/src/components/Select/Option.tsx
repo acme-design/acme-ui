@@ -1,8 +1,11 @@
 import * as React from 'react';
 import isFunction from 'lodash/isFunction';
 import get from 'lodash/get';
+import isArray from 'lodash/isArray';
+import includes from 'lodash/includes';
 import { SelectSvg } from '../Icon/SelectIcon';
 import SelectContext from './SelectContext';
+import OptionGroupContext from './OptionGroupContext';
 import { uniteClassNames } from '../../utils/tools';
 import './style/Option.less';
 
@@ -15,10 +18,10 @@ export interface SelectOptionProps extends React.HTMLAttributes<HTMLDivElement> 
    * option内容
    */
   children: React.ReactNode;
-  // /**
-  //  * 点击选项的回调
-  //  */
-  // onClickOption?: (value: string | number) => void;
+  /**
+   * 选项是否被禁用
+   */
+  disabled?: boolean;
 }
 
 const classNamePrefix = `acme-select-option`;
@@ -26,22 +29,40 @@ const classNamePrefix = `acme-select-option`;
 export const classes = {
   root: classNamePrefix,
   active: `${classNamePrefix}-active`,
+  disabled: `${classNamePrefix}-disabled`,
 };
 
 const Option: React.ForwardRefExoticComponent<
   SelectOptionProps & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef((props: SelectOptionProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-  const { value: propValue, children } = props;
+  const { value: propValue, children, disabled: propDisabled } = props;
 
   const Select = React.useContext(SelectContext);
+  const OptionGroup = React.useContext(OptionGroupContext);
+
+  let disabled = !!propDisabled;
 
   let active = false;
   if (Select) {
     const value = get(Select, 'value');
-    active = value === propValue;
+    active = isArray(value) ? includes(value, propValue) : value === propValue;
   }
 
+  if (OptionGroup && !('disabled' in props)) {
+    disabled = get(OptionGroup, 'disabled');
+  }
+
+  React.useEffect(() => {
+    if (active && Select) {
+      const onSetOptions = get(Select, 'onSetOptions');
+      if (isFunction(onSetOptions)) {
+        onSetOptions(propValue, children);
+      }
+    }
+  }, []);
+
   const handleClick = () => {
+    if (disabled) return;
     if (Select) {
       const onClick = get(Select, 'onClick');
       if (isFunction(onClick)) {
@@ -52,7 +73,11 @@ const Option: React.ForwardRefExoticComponent<
 
   return (
     <div
-      className={uniteClassNames(classes.root, active ? classes.active : '')}
+      className={uniteClassNames(
+        classes.root,
+        active ? classes.active : '',
+        disabled ? classes.disabled : '',
+      )}
       ref={ref}
       onClick={handleClick}
     >

@@ -17,15 +17,247 @@ import { Select } from '@acme-ui/core';
 <Playground>
   {() => {
     const [value, setValue] = React.useState('1');
+    const [visible, setVisible] = React.useState(false);
+    const onChange = (value) => {
+      setValue(value);
+    };
+    const onVisibleChange = (open) => {
+      setVisible(open);
+    };
+    React.useEffect(() => {
+      const scrollDom = document.getElementById('scroll-container');
+      scrollDom.addEventListener('scroll', () => {
+        console.log(visible);
+        onVisibleChange(false);
+      });
+      return () => {
+        scrollDom.removeEventListener('scroll', () => {
+          if (visible) onVisibleChange(false);
+        });
+      };
+    }, []);
+    console.log(visible, '111');
+    return (
+      <div id="scroll-container" style={{ height: '100px', overflow: 'auto' }}>
+        <Select
+          placeholder="请选择"
+          onChange={onChange}
+          value={value}
+          visible={visible}
+          onVisibleChange={onVisibleChange}
+        >
+          <Select.Option value="1">
+            <span>+</span>选项1
+          </Select.Option>
+          <Select.Option value="2">选项2</Select.Option>
+        </Select>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+        <div>这是一个毛毛雨</div>
+      </div>
+    );
+  }}
+</Playground>
+
+## 分组
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState(['1']);
     const onChange = (value) => {
       setValue(value);
     };
     return (
-      <Select placeholder="请选择" onChange={onChange} value={value}>
-        <Select.Option value="1">
-          <span>+</span>选项1
-        </Select.Option>
-        <Select.Option value="2">选项2</Select.Option>
+      <div style={{ height: '100px', overflow: 'auto' }}>
+        <Select placeholder="请选择" onChange={onChange} value={value}>
+          <Select.OptionGroup label="城市">
+            <Select.Option value="1">北京</Select.Option>
+            <Select.Option value="2">上海</Select.Option>
+            <Select.Option value="3">广州</Select.Option>
+          </Select.OptionGroup>
+        </Select>
+      </div>
+    );
+  }}
+</Playground>
+
+## 多选
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState(['1']);
+    const onChange = (value) => {
+      setValue(value);
+    };
+    return (
+      <div style={{ height: '100px', overflow: 'auto' }}>
+        <Select placeholder="请选择" onChange={onChange} value={value} multiple>
+          <Select.Option value="1">北京</Select.Option>
+          <Select.Option value="2">上海</Select.Option>
+          <Select.Option value="3">广州</Select.Option>
+        </Select>
+      </div>
+    );
+  }}
+</Playground>
+
+## 禁用状态
+
+选择器不可用状态活着有选项处于禁用状态
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState(['1']);
+    const onChange = (value) => {
+      setValue(value);
+    };
+    return (
+      <div style={{ height: '100px', overflow: 'auto' }}>
+        <Select placeholder="请选择" onChange={onChange} value={value} disabled>
+          <Select.Option value="1">北京</Select.Option>
+          <Select.Option value="2">上海</Select.Option>
+          <Select.Option value="3">广州</Select.Option>
+        </Select>
+      </div>
+    );
+  }}
+</Playground>
+
+## 分组禁用状态
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState(['1']);
+    const onChange = (value) => {
+      setValue(value);
+    };
+    return (
+      <div style={{ height: '100px', overflow: 'auto' }}>
+        <Select placeholder="请选择" onChange={onChange} value={value}>
+          <Select.OptionGroup label="城市" disabled>
+            <Select.Option value="1">北京</Select.Option>
+            <Select.Option value="2">上海</Select.Option>
+            <Select.Option value="3">广州</Select.Option>
+          </Select.OptionGroup>
+        </Select>
+      </div>
+    );
+  }}
+</Playground>
+
+## 选项禁用状态
+
+选项不可用状态活着有选项处于禁用状态
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState(['1']);
+    const onChange = (value) => {
+      setValue(value);
+    };
+    return (
+      <div style={{ height: '100px', overflow: 'auto' }}>
+        <Select placeholder="请选择" onChange={onChange} value={value}>
+          <Select.Option value="1" disabled>
+            北京
+          </Select.Option>
+          <Select.Option value="2">上海</Select.Option>
+          <Select.Option value="3">广州</Select.Option>
+        </Select>
+      </div>
+    );
+  }}
+</Playground>
+
+## 尺寸
+
+<Playground>
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <Select placeholder="请选择" size="large">
+      <Select.Option value="1">选项1</Select.Option>
+      <Select.Option value="2">选项2</Select.Option>
+    </Select>
+    <Select placeholder="请选择">
+      <Select.Option value="1">选项1</Select.Option>
+      <Select.Option value="2">选项2</Select.Option>
+    </Select>
+    <Select placeholder="请选择" size="small">
+      <Select.Option value="1">选项1</Select.Option>
+      <Select.Option value="2">选项2</Select.Option>
+    </Select>
+  </div>
+</Playground>
+
+## 状态
+
+<Playground>
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <Select placeholder="请选择" status="success">
+      <Select.Option value="1">选项1</Select.Option>
+      <Select.Option value="2">选项2</Select.Option>
+    </Select>
+    <Select placeholder="请选择" status="error">
+      <Select.Option value="1">选项1</Select.Option>
+      <Select.Option value="2">选项2</Select.Option>
+    </Select>
+  </div>
+</Playground>
+
+## full
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState(['1']);
+    const onChange = (value) => {
+      setValue(value);
+    };
+    return (
+      <Select placeholder="请选择" onChange={onChange} value={value} fullWidth>
+        <Select.Option value="1">北京</Select.Option>
+        <Select.Option value="2">上海</Select.Option>
+        <Select.Option value="3">广州</Select.Option>
+      </Select>
+    );
+  }}
+</Playground>
+
+## visible
+
+<Playground>
+  {() => {
+    const [value, setValue] = React.useState(['1']);
+    const [visible, setVisible] = React.useState(false);
+    const onChange = (value) => {
+      setValue(value);
+    };
+    const onVisibleChange = (open) => {
+      setVisible(open);
+    };
+    return (
+      <Select
+        placeholder="请选择"
+        onChange={onChange}
+        value={value}
+        visible={visible}
+        onVisibleChange={onVisibleChange}
+      >
+        <Select.Option value="1">北京</Select.Option>
+        <Select.Option value="2">上海</Select.Option>
+        <Select.Option value="3">广州</Select.Option>
       </Select>
     );
   }}

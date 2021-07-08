@@ -7,14 +7,20 @@
   justify-content: space-between;
   align-items: center;
   padding: @spacing-md @spacing-lg;
+  cursor: pointer;
   .text-primary();
   &:hover {
     background-color: @bg-color-gray; //TODO
-    cursor: pointer;
   }
 }
 
 .@{acmeSelectOptionPrefix}-active {
   font-weight: @font-weight-medium;
   background-color: rgba(51, 51, 255, 0.04); // TODO
+}
+
+.@{acmeSelectOptionPrefix}-disabled {
+  color: @bg-color-unselected;
+  background-color: @bg-color-gray;
+  cursor: not-allowed;
 }

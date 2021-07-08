@@ -2,16 +2,25 @@
 
 @acmeSelectPrefix: ~'@{acme-prefix}-select';
 
+// @default-height: 36px;
+// @small-height: 32px;
+@default-height: 40px;
+
 .@{acmeSelectPrefix} {
   width: 300px;
+  cursor: pointer;
 }
 
 .@{acmeSelectPrefix}-selector {
   display: flex;
+  align-items: center;
   width: inherit;
-  padding: @spacing-normal + @spacing-xs @spacing-md;
+  padding: 0 @spacing-md;
   border: @border-width-normal solid @border-color-primary;
   border-radius: @border-radius-normal;
+  &:not(.@{acmeSelectPrefix}-disabled):not(.@{acmeSelectPrefix}-success):not(.@{acmeSelectPrefix}-error):hover {
+    border-color: @border-color-secondary;
+  }
 }
 
 .@{acmeSelectPrefix}-selection {
@@ -21,15 +30,49 @@
   .text-primary();
 }
 
+.@{acmeSelectPrefix}-selected {
+  display: flex;
+  align-items: center;
+}
+.@{acmeSelectPrefix}-selected-item {
+  display: flex;
+  align-items: center;
+  padding: @spacing-normal;
+  margin: @spacing-normal - @spacing-xs;
+  margin-right: @spacing-sm;
+  background-color: @bg-color-gray;
+  border-radius: @border-radius-sm;
+}
+
+.@{acmeSelectPrefix}-selected-item-clear {
+  cursor: pointer;
+  margin-left: @spacing-normal;
+  color: @font-color-disabled;
+}
+
 .@{acmeSelectPrefix}-input {
   flex: 1 1 auto;
   border: none;
+  cursor: pointer;
+  &::-ms-input-placeholder {
+    color: @font-color-placeholder;
+  }
+  &::-webkit-input-placeholder {
+    color: @font-color-placeholder;
+  }
+  &::-moz-input-placeholder {
+    color: @font-color-placeholder;
+  }
+  &::-o-input-placeholder {
+    color: @font-color-placeholder;
+  }
   &:focus-visible {
     outline: none;
   }
 }
 
 .@{acmeSelectPrefix}-arrow {
+  margin-left: @spacing-normal;
   cursor: pointer;
 }
 
@@ -40,10 +83,58 @@
 }
 
 .@{acmeSelectPrefix}-dropdown {
+  position: absolute;
+  z-index: 1000;
   padding: @spacing-normal 0;
+  background-color: @color-white;
   border-radius: @border-radius-normal;
   border: @border-width-normal solid @border-color-primary;
   box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d; // TODO
+}
+
+.@{acmeSelectPrefix}-disabled {
+  background-color: @bg-color-gray;
+  cursor: not-allowed;
+  .@{acmeSelectPrefix}-input {
+    background-color: @bg-color-gray;
+    cursor: not-allowed;
+  }
+  .@{acmeSelectPrefix}-arrow {
+    color: @font-color-placeholder;
+    cursor: not-allowed;
+  }
+}
+
+.@{acmeSelectPrefix}-default {
+  height: @default-height;
+}
+
+.@{acmeSelectPrefix}-small {
+  // TODO
+  height: @default-height;
+}
+
+.@{acmeSelectPrefix}-large {
+  // TODO
+  height: @default-height;
+}
+
+.@{acmeSelectPrefix}-success {
+  border-color: @color-success;
+  &:hover {
+    border-color: @color-success-7;
+  }
+}
+
+.@{acmeSelectPrefix}-error {
+  border-color: @border-color-danger;
+  &:hover {
+    border-color: @color-error-7;
+  }
+}
+
+.@{acmeSelectPrefix}-full {
+  width: 100%;
 }
 
 // @keyframes arrowRotate {

@@ -1,0 +1,17 @@
+@import '../../../styles/index.less';
+@import './Option.less';
+
+@acmeSelectOptionGroupPrefix: ~'@{acme-prefix}-select-option-group';
+
+.@{acmeSelectOptionGroupPrefix} {
+  //   padding: @spacing-md @spacing-lg;
+  .@{acmeSelectOptionPrefix} {
+    padding: @spacing-md @spacing-lg + @spacing-lg;
+  }
+}
+
+.@{acmeSelectOptionGroupPrefix}-label {
+  padding: @spacing-md @spacing-lg @spacing-normal;
+  font-size: @font-size-1;
+  color: @font-color-disabled;
+}
