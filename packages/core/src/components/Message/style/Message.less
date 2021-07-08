@@ -12,16 +12,20 @@
 
 .@{messagePrefix} {
   display: flex;
+  flex-direction: row;
   min-width: 320px;
   padding: @spacing-md;
   margin-top: @spacing-md;
   text-align: center;
   background-color: @bg-color-white;
-  justify-content: space-around;
   box-shadow: 0 7px 14px 0 rgba(0, 0, 0, 0.1);
   border-radius: @border-radius-normal;
   transition: all ease-out 0.2s;
   animation: inner 0.1s;
+}
+
+.@{messagePrefix}-content {
+  flex: 1 1 auto;
 }
 
 .@{messagePrefix}-info {
@@ -49,7 +53,14 @@
   }
 }
 
-.@{messagePrefix}-close {
+.@{messagePrefix}-hide {
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.@{messagePrefix}-close {
+  width: 10px;
+  height: 10px;
+  margin-left: @spacing-md;
+  cursor: pointer;
 }

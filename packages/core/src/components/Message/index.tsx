@@ -16,7 +16,7 @@ const messageInstance = (props: MessageProps): void => {
     notice = NoticeInstance({
       Content: MessageDom,
       className: classes.wrap,
-      closeClassName: classes.close,
+      closeClassName: classes.hide,
     });
   }
   if (props) {

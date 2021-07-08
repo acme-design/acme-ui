@@ -6,6 +6,7 @@ import { uniteClassNames } from '../../utils/tools';
 import './style/Message.less';
 import { NoticeParent } from '../Notice/types';
 import { MessageType } from './types';
+import DeleteSvg from '../Icon/Delete';
 
 type TMessageType = `${MessageType}`;
 
@@ -20,7 +21,8 @@ export const classes = {
   root: `${classNamePrefix}`,
   wrap: `${classNamePrefix}-wrap`,
   appearance: (type: MessageDomProps['type']) => `${classNamePrefix}-${type}`,
-  visible: `${classNamePrefix}-visible`,
+  content: `${classNamePrefix}-content`,
+  hide: `${classNamePrefix}-hide`,
   close: `${classNamePrefix}-close`,
 };
 
@@ -35,9 +37,10 @@ const MessageDom = React.forwardRef((props: MessageDomProps, ref: ForwardedRef<H
 
   return (
     <div className={uniteClassNames(classes.root, classes.appearance(type), className)} ref={ref}>
-      {content}
-
-      <span onClick={handlerClose}>关闭</span>
+      <div className={classes.content}>{content}</div>
+      <span className={classes.close} onClick={handlerClose}>
+        <DeleteSvg />
+      </span>
     </div>
   );
 });
