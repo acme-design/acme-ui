@@ -35,7 +35,7 @@ class Notice<T extends NoticeParent> extends React.Component<NoticeProps<T>, Not
     }, delay);
   };
 
-  private visibleItem = (key: string) => {
+  private hideItem = (key: string) => {
     const { notices } = this.state;
     const { closeClassName } = this.props;
     const newNotices = notices.map((notice) => {
@@ -55,7 +55,7 @@ class Notice<T extends NoticeParent> extends React.Component<NoticeProps<T>, Not
     if (isFunction(onClose)) {
       onClose();
     }
-    this.visibleItem(key);
+    this.hideItem(key);
     const closeTimer = setTimeout(() => {
       this.setState({
         notices: notices.filter((notice) => notice.key !== key),
