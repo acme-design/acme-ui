@@ -6,6 +6,7 @@ import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import difference from 'lodash/difference';
 import omit from 'lodash/omit';
+import { includes } from 'lodash';
 import { uniteClassNames } from '../../utils/tools';
 import { ArrowSvg } from '../Icon/ArrowIcon';
 import SelectContext from './SelectContext';
@@ -59,14 +60,6 @@ export interface SelectProps {
    * 选择框值变化时的回调
    */
   onChange?: (value?: ValueType) => void;
-  // /**
-  //  * 是否可以清除
-  //  */
-  // clear?: boolean;
-  // /**
-  //  * 选择框清空时的回调
-  //  */
-  // onClear?: () => void;
   /**
    * 是否与父元素同宽
    */
@@ -82,7 +75,7 @@ export interface SelectProps {
   /**
    * 取消选择的回调
    */
-  onDeselect?: () => void;
+  onDeselect?: (val: string | number) => void;
 }
 
 const classNamePrefix = 'acme-select';
@@ -115,9 +108,6 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     disabled,
     size,
     status,
-
-    // clear,
-    // onClear,
     fullWidth,
     onDeselect,
     visible,
@@ -210,9 +200,19 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
 
   const handleSelectOption = (val: string | number, option: React.ReactNode) => {
     handleOptions(val, option);
+    // TODO 反选的时候option选项也要去掉
     if (isFunction(onChange)) {
-      const newValue = (multiple && isArray(value) ? [...value, val] : val) as ValueType;
+      let newValue: ValueType;
+      if (multiple && isArray(value)) {
+        newValue = (includes(value, val) ? difference(value, [val]) : [...value, val]) as ValueType;
+      } else {
+        newValue = (val === value ? undefined : val) as ValueType;
+      }
       onChange(newValue);
+    }
+    // 如果点击的是当前已选的选项，那么调用取消选中方法
+    if (val === propValue || (isArray(value) && includes(value, val))) {
+      if (isFunction(onDeselect)) onDeselect(val);
     }
     // 如果非多选，直接关闭下拉框
     if (!multiple) {
@@ -233,19 +233,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     }
   };
 
-  // const handleClear = () => {
-  // if (isFunction(onClear)) {
-  //   onClear();
-  // }
-  //   if (isFunction(onChange)) {
-  //     onChange(multiple ? [] : undefined);
-  //   }
-  //   if (multiple) {
-  //     setMultipleValue({});
-  //   } else {
-  //     setInputValue(null);
-  //   }
-  // };
+  // 反选
 
   const innerVisible = 'visible' in props ? visible : isOpen;
 
