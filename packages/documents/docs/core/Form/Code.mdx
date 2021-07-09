@@ -1,0 +1,48 @@
+import { Playground, Props } from '~controls';
+import { Form, FormField, Input } from '@acme-ui/core';
+
+## 基础用法
+
+该演示使您可以预览不同类型的不同状态
+
+<Playground>
+  <Form>
+    <FormField
+      style={{ marginBottom: 24 }}
+      id="demo-input-email"
+      label="邮箱"
+      hint="我们绝不会分享您的邮箱地址"
+      required
+    >
+      <Input />
+    </FormField>
+    <FormField style={{ marginBottom: 24 }} id="demo-input-pwd" label="密码" required>
+      <Input type="password" />
+    </FormField>
+  </Form>
+</Playground>
+
+## 行内样式
+
+<Playground>
+  <Form inline>
+    <FormField
+      style={{ marginRight: 16 }}
+      id="demo-inline-input-email"
+      label="邮箱"
+      hint="我们绝不会分享您的邮箱地址"
+      required
+    >
+      <Input />
+    </FormField>
+    <FormField id="demo-inline-input-pwd" label="密码" required>
+      <Input type="password" />
+    </FormField>
+  </Form>
+</Playground>
+
+## API
+
+通过设置不同的属性展示不同状态
+
+<Props of={Form} />
