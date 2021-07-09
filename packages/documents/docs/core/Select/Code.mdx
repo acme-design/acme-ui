@@ -6,7 +6,7 @@ import { Select, FormLabel } from '@acme-ui/core';
 适用广泛的基础单选
 
 <Playground>
-  <Select placeholder="请选择" style={{ width: '500px' }}>
+  <Select placeholder="请选择" style={{ width: '500px' }} defaultValue="2">
     <Select.Option value="1">选项1</Select.Option>
     <Select.Option value="2">选项2</Select.Option>
   </Select>
@@ -41,7 +41,7 @@ import { Select, FormLabel } from '@acme-ui/core';
         <Select
           placeholder="请选择"
           onChange={onChange}
-          value={value}
+          value="2"
           visible={visible}
           onVisibleChange={onVisibleChange}
         >
@@ -76,7 +76,7 @@ import { Select, FormLabel } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const [value, setValue] = React.useState(['1']);
+    const [value, setValue] = React.useState('1');
     const onChange = (value) => {
       setValue(value);
     };
@@ -120,7 +120,7 @@ import { Select, FormLabel } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const [value, setValue] = React.useState(['1']);
+    const [value, setValue] = React.useState('1');
     const onChange = (value) => {
       setValue(value);
     };
@@ -140,7 +140,7 @@ import { Select, FormLabel } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const [value, setValue] = React.useState(['1']);
+    const [value, setValue] = React.useState('1');
     const onChange = (value) => {
       setValue(value);
     };
@@ -233,7 +233,7 @@ import { Select, FormLabel } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const [value, setValue] = React.useState(['1']);
+    const [value, setValue] = React.useState('1');
     const onChange = (value) => {
       setValue(value);
     };

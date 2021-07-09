@@ -5,7 +5,7 @@ import isFunction from 'lodash/isFunction';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import difference from 'lodash/difference';
-import omit from 'lodash/omit';
+// import omit from 'lodash/omit';
 import { includes } from 'lodash';
 import { uniteClassNames } from '../../utils/tools';
 import { ArrowSvg } from '../Icon/ArrowIcon';
@@ -116,9 +116,13 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     ...otherProps
   } = props;
 
-  const [value, setValue] = React.useState(propValue);
-  const [inputValue, setInputValue] = React.useState<React.ReactNode>(null);
-  const [multipleValue, setMultipleValue] = React.useState<{ [key: string]: React.ReactNode }>({});
+  const innerDefaultValue = 'value' in props ? propValue : defaultValue;
+  const [value, setValue] = React.useState(innerDefaultValue);
+  // const [multipleValue, setMultipleValue] = React.useState<{
+  //   [key: string | number]: React.ReactNode;
+  // }>({});
+
+  const [options, setOptions] = React.useState<{ [key: string]: React.ReactNode }>({});
 
   let popper: Instance;
   const referenceRef: React.RefObject<HTMLInputElement> = React.createRef();
@@ -188,9 +192,11 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     };
   }, []);
 
-  React.useEffect(() => {
-    setValue(propValue);
-  }, [propValue]);
+  if ('value' in props) {
+    React.useEffect(() => {
+      setValue(propValue);
+    }, [propValue]);
+  }
 
   React.useEffect(() => {
     document.addEventListener('click', () => {
@@ -203,35 +209,38 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     };
   }, []);
 
-  const handleOptions = (val: string | number, option: React.ReactNode) => {
-    if (multiple) {
-      const isSelected = includes(Object.keys(multipleValue), val);
-      const newMultipleValue = isSelected
-        ? omit(multipleValue, [val])
-        : { ...multipleValue, [val]: option };
-      setMultipleValue(newMultipleValue);
-    } else {
-      const isSelected = val === value;
-      setInputValue(isSelected ? null : option);
-    }
+  const handleAllOptions = () => {
+    let currentOptions = {};
+    React.Children.map(children, (c: unknown) => {
+      const { value: v, children: ch } = get(c, 'props');
+      currentOptions = { ...currentOptions, [v]: ch };
+    });
+    setOptions(currentOptions);
   };
+
+  React.useEffect(() => {
+    handleAllOptions();
+  }, []);
 
   const handleSelectOption = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     val: string | number,
-    option: React.ReactNode,
   ) => {
     if (e) e.stopPropagation();
-    handleOptions(val, option);
+    let newValue: ValueType;
+    if (multiple && isArray(value)) {
+      newValue = (includes(value, val) ? difference(value, [val]) : [...value, val]) as ValueType;
+    } else {
+      newValue = (val === value ? undefined : val) as ValueType;
+    }
+    // 如果外部没有value属性，则内部控制value展示
+    if (!('value' in props)) {
+      setValue(newValue);
+    }
     if (isFunction(onChange)) {
-      let newValue: ValueType;
-      if (multiple && isArray(value)) {
-        newValue = (includes(value, val) ? difference(value, [val]) : [...value, val]) as ValueType;
-      } else {
-        newValue = (val === value ? undefined : val) as ValueType;
-      }
       onChange(newValue);
     }
+
     // 如果点击的是当前已选的选项，那么调用取消选中方法
     if (val === propValue || (isArray(value) && includes(value, val))) {
       if (isFunction(onDeselect)) onDeselect(val);
@@ -248,29 +257,21 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     val: string | number,
   ) => {
     if (e) e.stopPropagation();
-    setMultipleValue(omit(multipleValue, [val]));
+    // setMultipleValue(omit(multipleValue, [val]));
+    const newValue = (multiple && isArray(value) ? difference(value, [val]) : val) as ValueType;
+    // 如果外部没有value属性，则内部控制value展示
+    if (!('value' in props)) {
+      setValue(newValue);
+    }
     if (isFunction(onChange)) {
-      const newValue = (multiple && isArray(value) ? difference(value, [val]) : val) as ValueType;
       onChange(newValue);
     }
   };
 
-  // 如果点击的是当前的dropdown 不收起
-  // const handleDropdownVisible = () => {
-  //   const popperDom = get(popperRef, 'current');
-  //   if (popperDom) {
-  //     popperDom.addEventListener('click', (e: Event) => {
-  //       if (e) e.stopPropagation();
-  //     });
-  //   }
-  // };
-
   const innerVisible = 'visible' in props ? visible : isOpen;
 
   return (
-    <SelectContext.Provider
-      value={{ onClick: handleSelectOption, value, multiple, onSetOptions: handleOptions }}
-    >
+    <SelectContext.Provider value={{ onClick: handleSelectOption, value, multiple }}>
       <div
         className={uniteClassNames(classes.root, fullWidth ? classes.full : '')}
         ref={ref}
@@ -286,30 +287,33 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
         >
           <div className={classes.selection}>
             <div className={classes.selected}>
-              {multiple ? (
+              {isArray(value) ? (
                 <>
-                  {Object.keys(multipleValue).map((mValue: string | number) => (
-                    <div className={classes.selectedItem}>
-                      {get(multipleValue, mValue)}
-                      {/** TODO 替换iconfont */}
-                      <span
-                        className={classes.selectedItemClear}
-                        onClick={(e) => {
-                          handleOptionClear(e, mValue);
-                        }}
-                      >
-                        x
-                      </span>
-                    </div>
-                  ))}
+                  {/* TODO 这个地方类型应该还有number[] */}
+                  {(value as string[]).map(
+                    (mValue: string | number): React.ReactNode => (
+                      <div className={classes.selectedItem}>
+                        {get(options, mValue)}
+                        {/** TODO 替换iconfont */}
+                        <span
+                          className={classes.selectedItemClear}
+                          onClick={(e) => {
+                            handleOptionClear(e, mValue);
+                          }}
+                        >
+                          x
+                        </span>
+                      </div>
+                    ),
+                  )}
                 </>
               ) : (
-                inputValue
+                value && get(options, value)
               )}
             </div>
             <input
               className={uniteClassNames(classes.input, classes.size(size))}
-              placeholder={inputValue || !isEmpty(multipleValue) ? '' : placeholder}
+              placeholder={value || isEmpty(value) ? '' : placeholder}
               readOnly
             />
           </div>

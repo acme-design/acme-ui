@@ -52,21 +52,25 @@ const Option: React.ForwardRefExoticComponent<
     disabled = get(OptionGroup, 'disabled');
   }
 
-  React.useEffect(() => {
-    if (active && Select) {
-      const onSetOptions = get(Select, 'onSetOptions');
-      if (isFunction(onSetOptions)) {
-        onSetOptions(propValue, children);
-      }
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   const onSetOptions = get(Select, 'onSetOptions');
+  //   // if (active && Select) {
+  //   //   if (isFunction(onSetOptions)) {
+  //   //     onSetOptions(propValue, children);
+  //   //   }
+  //   // }
+  //   // 每次都拿到所有option的children
+  //   if (isFunction(onSetOptions)) {
+  //     onSetOptions(propValue, children);
+  //   }
+  // }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (disabled) return;
     if (Select) {
       const onClick = get(Select, 'onClick');
       if (isFunction(onClick)) {
-        onClick(e, propValue, children);
+        onClick(e, propValue);
       }
     }
   };
