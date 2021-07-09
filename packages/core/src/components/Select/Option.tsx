@@ -61,12 +61,12 @@ const Option: React.ForwardRefExoticComponent<
     }
   }, []);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (disabled) return;
     if (Select) {
       const onClick = get(Select, 'onClick');
       if (isFunction(onClick)) {
-        onClick(propValue, children);
+        onClick(e, propValue, children);
       }
     }
   };

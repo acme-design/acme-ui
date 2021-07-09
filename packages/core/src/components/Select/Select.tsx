@@ -95,6 +95,7 @@ export const classes = {
   size: (size: SelectProps['size']) => `${classNamePrefix}-${size}`,
   status: (status: SelectProps['status']) => `${classNamePrefix}-${status}`,
   full: `${classNamePrefix}-full`,
+  dropdownHidden: `${classNamePrefix}-dropdown-hidden`,
 };
 
 const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTMLDivElement>) => {
@@ -102,7 +103,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     children,
     placeholder,
     onChange,
-    defaultValue, // TODO
+    defaultValue,
     value: propValue,
     multiple,
     disabled,
@@ -125,9 +126,14 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
 
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const handleVisible = (open: boolean) => {
+    if (popper && open) popper.update();
+    setIsOpen(open);
+    if (isFunction(onVisibleChange)) onVisibleChange(open);
+  };
+
   React.useEffect(() => {
-    const referenceDom = document.body;
-    // const referenceDom = get(referenceRef, 'current');
+    const referenceDom = get(referenceRef, 'current');
     const popperDom = get(popperRef, 'current');
     if (referenceDom && popperDom) {
       popper = createPopper(referenceDom, popperDom, {
@@ -151,6 +157,12 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
             },
           },
           {
+            name: 'offset',
+            options: {
+              offset: [0, 4],
+            },
+          },
+          {
             name: 'flip',
             options: {
               padding: 5,
@@ -160,13 +172,21 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
         ],
       });
       popper.update();
+      referenceDom.addEventListener('click', (e: Event) => {
+        if (e) e.stopPropagation();
+        handleVisible(true);
+      });
     }
+    return () => {
+      if (popper) popper.destroy();
+      if (referenceDom) {
+        referenceDom.removeEventListener('click', (e: Event) => {
+          if (e) e.stopPropagation();
+          handleVisible(true);
+        });
+      }
+    };
   }, []);
-
-  const handleVisible = (open: boolean) => {
-    setIsOpen(open);
-    if (isFunction(onVisibleChange)) onVisibleChange(open);
-  };
 
   React.useEffect(() => {
     setValue(propValue);
@@ -185,22 +205,24 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
 
   const handleOptions = (val: string | number, option: React.ReactNode) => {
     if (multiple) {
-      const newMultipleValue = { ...multipleValue, [val]: option };
+      const isSelected = includes(Object.keys(multipleValue), val);
+      const newMultipleValue = isSelected
+        ? omit(multipleValue, [val])
+        : { ...multipleValue, [val]: option };
       setMultipleValue(newMultipleValue);
     } else {
-      setInputValue(option);
+      const isSelected = val === value;
+      setInputValue(isSelected ? null : option);
     }
   };
 
-  const handleOpenDropDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleSelectOption = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    val: string | number,
+    option: React.ReactNode,
+  ) => {
     if (e) e.stopPropagation();
-    if (disabled) return;
-    handleVisible(true);
-  };
-
-  const handleSelectOption = (val: string | number, option: React.ReactNode) => {
     handleOptions(val, option);
-    // TODO 反选的时候option选项也要去掉
     if (isFunction(onChange)) {
       let newValue: ValueType;
       if (multiple && isArray(value)) {
@@ -233,7 +255,15 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     }
   };
 
-  // 反选
+  // 如果点击的是当前的dropdown 不收起
+  // const handleDropdownVisible = () => {
+  //   const popperDom = get(popperRef, 'current');
+  //   if (popperDom) {
+  //     popperDom.addEventListener('click', (e: Event) => {
+  //       if (e) e.stopPropagation();
+  //     });
+  //   }
+  // };
 
   const innerVisible = 'visible' in props ? visible : isOpen;
 
@@ -253,7 +283,6 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
             status ? classes.status(status) : '',
           )}
           ref={referenceRef}
-          onClick={handleOpenDropDown}
         >
           <div className={classes.selection}>
             <div className={classes.selected}>
@@ -289,11 +318,13 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
             fill={disabled ? '#ccc' : '#666'}
           />
         </div>
-        {innerVisible ? (
-          <div className={classes.dropdown} ref={popperRef}>
-            {children}
-          </div>
-        ) : null}
+        <div
+          className={uniteClassNames(classes.dropdown, innerVisible ? '' : classes.dropdownHidden)}
+          ref={popperRef}
+          style={{ width: get(props, 'style.width') }}
+        >
+          {children}
+        </div>
       </div>
     </SelectContext.Provider>
   );

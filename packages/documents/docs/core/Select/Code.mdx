@@ -1,12 +1,12 @@
 import { Playground, Props } from '~controls';
-import { Select } from '@acme-ui/core';
+import { Select, FormLabel } from '@acme-ui/core';
 
 ## 基础用法
 
 适用广泛的基础单选
 
 <Playground>
-  <Select placeholder="请选择">
+  <Select placeholder="请选择" style={{ width: '500px' }}>
     <Select.Option value="1">选项1</Select.Option>
     <Select.Option value="2">选项2</Select.Option>
   </Select>
@@ -36,7 +36,6 @@ import { Select } from '@acme-ui/core';
         });
       };
     }, []);
-    console.log(visible, '111');
     return (
       <div id="scroll-container" style={{ height: '100px', overflow: 'auto' }}>
         <Select
@@ -105,7 +104,7 @@ import { Select } from '@acme-ui/core';
     };
     return (
       <div style={{ height: '100px', overflow: 'auto' }}>
-        <Select placeholder="请选择" onChange={onChange} value={value} multiple>
+        <Select placeholder="请选择" onChange={onChange} value={value} multiple size="large">
           <Select.Option value="1">北京</Select.Option>
           <Select.Option value="2">上海</Select.Option>
           <Select.Option value="3">广州</Select.Option>
@@ -185,19 +184,32 @@ import { Select } from '@acme-ui/core';
 
 ## 尺寸
 
+三种不同大小的尺寸
+
 <Playground>
-  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
+    <FormLabel style={{ width: '100px' }}>大/H： 40px</FormLabel>
     <Select placeholder="请选择" size="large">
       <Select.Option value="1">选项1</Select.Option>
       <Select.Option value="2">选项2</Select.Option>
     </Select>
+  </div>
+  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
+    <FormLabel style={{ width: '100px' }}>标准/H：36px</FormLabel>
     <Select placeholder="请选择">
       <Select.Option value="1">选项1</Select.Option>
       <Select.Option value="2">选项2</Select.Option>
     </Select>
+  </div>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <FormLabel style={{ width: '100px' }}>小/H：32px</FormLabel>
     <Select placeholder="请选择" size="small">
-      <Select.Option value="1">选项1</Select.Option>
-      <Select.Option value="2">选项2</Select.Option>
+      <Select.Option value="1" key="1">
+        选项1
+      </Select.Option>
+      <Select.Option value="2" key="2">
+        选项2
+      </Select.Option>
     </Select>
   </div>
 </Playground>
