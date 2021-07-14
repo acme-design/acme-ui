@@ -13,6 +13,7 @@ import SelectContext from './SelectContext';
 import { SelectSize, SelectStatus } from './types';
 import Option from './Option';
 import OptionGroup from './OptionGroup';
+import OptionGroupContext from './OptionGroupContext';
 import './style/Select.less';
 
 type SelectSizeType = `${SelectSize}`;
@@ -96,6 +97,7 @@ export const classes = {
   status: (status: SelectProps['status']) => `${classNamePrefix}-${status}`,
   full: `${classNamePrefix}-full`,
   dropdownHidden: `${classNamePrefix}-dropdown-hidden`,
+  multipleMaxHeight: (size: SelectProps['size']) => `${classNamePrefix}-selector-multiple-${size}`,
 };
 
 const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTMLDivElement>) => {
@@ -121,6 +123,8 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   // const [multipleValue, setMultipleValue] = React.useState<{
   //   [key: string | number]: React.ReactNode;
   // }>({});
+
+  const OptionGroupContextInstance = React.useContext(OptionGroupContext);
 
   const [options, setOptions] = React.useState<{ [key: string]: React.ReactNode }>({});
 
@@ -176,10 +180,13 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
         ],
       });
       popper.update();
-      referenceDom.addEventListener('click', (e: Event) => {
-        if (e) e.stopPropagation();
-        handleVisible(true);
-      });
+      // 点击的时候popper不一定存在 所以在初始化之后就绑定事件
+      if (!disabled) {
+        referenceDom.addEventListener('click', (e: Event) => {
+          if (e) e.stopPropagation();
+          handleVisible(true);
+        });
+      }
     }
     return () => {
       if (popper) popper.destroy();
@@ -211,10 +218,27 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
 
   const handleAllOptions = () => {
     let currentOptions = {};
-    React.Children.map(children, (c: unknown) => {
-      const { value: v, children: ch } = get(c, 'props');
-      currentOptions = { ...currentOptions, [v]: ch };
-    });
+    if (OptionGroupContextInstance) {
+      if (isArray(children)) {
+        (children as React.ReactNode[]).forEach((subChildren) => {
+          React.Children.map(subChildren, (c: unknown) => {
+            const { value: v, children: ch } = get(c, 'props');
+            currentOptions = { ...currentOptions, [v]: ch };
+          });
+        });
+      } else {
+        const subChildren = get(children, 'props.children');
+        React.Children.map(subChildren, (c: unknown) => {
+          const { value: v, children: ch } = get(c, 'props');
+          currentOptions = { ...currentOptions, [v]: ch };
+        });
+      }
+    } else {
+      React.Children.map(children, (c: unknown) => {
+        const { value: v, children: ch } = get(c, 'props');
+        currentOptions = { ...currentOptions, [v]: ch };
+      });
+    }
     setOptions(currentOptions);
   };
 
@@ -257,7 +281,6 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     val: string | number,
   ) => {
     if (e) e.stopPropagation();
-    // setMultipleValue(omit(multipleValue, [val]));
     const newValue = (multiple && isArray(value) ? difference(value, [val]) : val) as ValueType;
     // 如果外部没有value属性，则内部控制value展示
     if (!('value' in props)) {
@@ -282,6 +305,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
             classes.selector,
             disabled ? classes.disabled : '',
             status ? classes.status(status) : '',
+            multiple ? classes.multipleMaxHeight(size) : '',
           )}
           ref={referenceRef}
         >

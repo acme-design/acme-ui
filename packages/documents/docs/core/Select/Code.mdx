@@ -103,11 +103,21 @@ import { Select, FormLabel } from '@acme-ui/core';
       setValue(value);
     };
     return (
-      <div style={{ height: '100px', overflow: 'auto' }}>
+      <div style={{ height: '200px', overflow: 'auto' }}>
         <Select placeholder="请选择" onChange={onChange} value={value} multiple size="large">
           <Select.Option value="1">北京</Select.Option>
           <Select.Option value="2">上海</Select.Option>
           <Select.Option value="3">广州</Select.Option>
+          <Select.Option value="4">济南</Select.Option>
+          <Select.Option value="5">成都</Select.Option>
+          <Select.Option value="6">厦门</Select.Option>
+          <Select.Option value="7">哈尔滨</Select.Option>
+          <Select.Option value="8">南京</Select.Option>
+          <Select.Option value="9">青岛</Select.Option>
+          <Select.Option value="10">长沙</Select.Option>
+          <Select.Option value="11">杭州</Select.Option>
+          <Select.Option value="12">武汉</Select.Option>
+          <Select.Option value="13">拉萨</Select.Option>
         </Select>
       </div>
     );
@@ -164,7 +174,7 @@ import { Select, FormLabel } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const [value, setValue] = React.useState(['1']);
+    const [value, setValue] = React.useState('1');
     const onChange = (value) => {
       setValue(value);
     };
@@ -251,7 +261,7 @@ import { Select, FormLabel } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const [value, setValue] = React.useState(['1']);
+    const [value, setValue] = React.useState('1');
     const [visible, setVisible] = React.useState(false);
     const onChange = (value) => {
       setValue(value);

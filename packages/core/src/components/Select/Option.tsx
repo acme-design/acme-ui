@@ -52,6 +52,15 @@ const Option: React.ForwardRefExoticComponent<
     disabled = get(OptionGroup, 'disabled');
   }
 
+  React.useEffect(() => {
+    if (Select) {
+      const handleOpts = get(Select, 'handleOpts');
+      if (isFunction(handleOpts)) {
+        handleOpts(propValue, children);
+      }
+    }
+  }, []);
+
   // React.useEffect(() => {
   //   const onSetOptions = get(Select, 'onSetOptions');
   //   // if (active && Select) {
