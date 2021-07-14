@@ -129,7 +129,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   const [options, setOptions] = React.useState<{ [key: string]: React.ReactNode }>({});
 
   let popper: Instance;
-  const referenceRef: React.RefObject<HTMLInputElement> = React.createRef();
+  const referenceRef: React.RefObject<HTMLDivElement> = React.createRef();
   const popperRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   const [isOpen, setIsOpen] = React.useState(false);
@@ -308,13 +308,13 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
             multiple ? classes.multipleMaxHeight(size) : '',
           )}
           ref={referenceRef}
+          data-testid="acme-select-selector"
         >
           <div className={classes.selection}>
             <div className={classes.selected}>
               {isArray(value) ? (
                 <>
-                  {/* TODO 这个地方类型应该还有number[] */}
-                  {(value as string[]).map(
+                  {((value as string[]) || (value as number[])).map(
                     (mValue: string | number): React.ReactNode => (
                       <div className={classes.selectedItem}>
                         {get(options, mValue)}
@@ -339,6 +339,8 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
               className={uniteClassNames(classes.input, classes.size(size))}
               placeholder={value || isEmpty(value) ? '' : placeholder}
               readOnly
+              disabled={disabled}
+              data-testid="acme-select-input"
             />
           </div>
           <ArrowSvg
@@ -350,13 +352,14 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
           className={uniteClassNames(classes.dropdown, innerVisible ? '' : classes.dropdownHidden)}
           ref={popperRef}
           style={{ width: get(props, 'style.width') }}
+          data-testid="acme-select-dropdown"
         >
           {children}
         </div>
       </div>
     </SelectContext.Provider>
   );
-}) as React.ForwardRefExoticComponent<SelectProps & React.RefAttributes<HTMLInputElement>> & {
+}) as React.ForwardRefExoticComponent<SelectProps & React.RefAttributes<HTMLDivElement>> & {
   Option: typeof Option;
   OptionGroup: typeof OptionGroup;
 };
