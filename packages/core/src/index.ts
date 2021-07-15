@@ -43,5 +43,9 @@ export type { FormHintProps } from './components/FormHint';
 export { default as FormField } from './components/FormField';
 export type { FormFieldProps } from './components/FormField';
 
+
 export { default as Select } from './components/Select';
-// export type { FormFieldProps } from './components/FormField';
+
+export { default as Alert } from './components/Alert';
+export type { AlertProps } from './components/Alert';
+
