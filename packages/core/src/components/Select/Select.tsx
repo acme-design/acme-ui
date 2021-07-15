@@ -5,7 +5,7 @@ import isFunction from 'lodash/isFunction';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import difference from 'lodash/difference';
-// import omit from 'lodash/omit';
+import isBoolean from 'lodash/isBoolean';
 import { includes } from 'lodash';
 import { uniteClassNames } from '../../utils/tools';
 import { ArrowSvg } from '../Icon/ArrowIcon';
@@ -120,9 +120,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
 
   const innerDefaultValue = 'value' in props ? propValue : defaultValue;
   const [value, setValue] = React.useState(innerDefaultValue);
-  // const [multipleValue, setMultipleValue] = React.useState<{
-  //   [key: string | number]: React.ReactNode;
-  // }>({});
+  const [popperWidth, setPopperWidth] = React.useState(0);
 
   const OptionGroupContextInstance = React.useContext(OptionGroupContext);
 
@@ -131,13 +129,14 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   let popper: Instance;
   const referenceRef: React.RefObject<HTMLDivElement> = React.createRef();
   const popperRef: React.RefObject<HTMLDivElement> = React.createRef();
+  const closeRef: React.RefObject<HTMLSpanElement> = React.createRef();
 
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const handleVisible = (open: boolean) => {
-    if (popper && open) popper.update();
-    setIsOpen(open);
-    if (isFunction(onVisibleChange)) onVisibleChange(open);
+  const handleVisible = (open?: boolean) => {
+    const newIsOpen = isBoolean(open) ? open : !isOpen;
+    setIsOpen(newIsOpen);
+    if (isFunction(onVisibleChange)) onVisibleChange(newIsOpen);
   };
 
   React.useEffect(() => {
@@ -182,9 +181,16 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
       popper.update();
       // 点击的时候popper不一定存在 所以在初始化之后就绑定事件
       if (!disabled) {
-        referenceDom.addEventListener('click', (e: Event) => {
-          if (e) e.stopPropagation();
-          handleVisible(true);
+        document.addEventListener('click', (e: Event) => {
+          const closeDom = get(closeRef, 'current');
+          if (closeDom?.contains(e.target as Node)) {
+            e.stopPropagation();
+          } else if (referenceDom.contains(e.target as Node)) {
+            e.stopPropagation();
+            popper.update();
+          } else {
+            handleVisible(false);
+          }
         });
       }
     }
@@ -206,14 +212,8 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   }
 
   React.useEffect(() => {
-    document.addEventListener('click', () => {
-      handleVisible(false);
-    });
-    return () => {
-      document.removeEventListener('click', () => {
-        handleVisible(false);
-      });
-    };
+    const rootWidth = get(referenceRef.current?.getBoundingClientRect(), 'width') || 0;
+    setPopperWidth(rootWidth);
   }, []);
 
   const handleAllOptions = () => {
@@ -309,6 +309,9 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
           )}
           ref={referenceRef}
           data-testid="acme-select-selector"
+          onClick={() => {
+            handleVisible();
+          }}
         >
           <div className={classes.selection}>
             <div className={classes.selected}>
@@ -324,6 +327,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
                           onClick={(e) => {
                             handleOptionClear(e, mValue);
                           }}
+                          ref={closeRef}
                         >
                           x
                         </span>
@@ -351,7 +355,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
         <div
           className={uniteClassNames(classes.dropdown, innerVisible ? '' : classes.dropdownHidden)}
           ref={popperRef}
-          style={{ width: get(props, 'style.width') }}
+          style={{ width: `${popperWidth}px` }}
           data-testid="acme-select-dropdown"
         >
           {children}
