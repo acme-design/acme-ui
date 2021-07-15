@@ -37,49 +37,27 @@ const Option: React.ForwardRefExoticComponent<
 > = React.forwardRef((props: SelectOptionProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const { value: propValue, children, disabled: propDisabled } = props;
 
-  const Select = React.useContext(SelectContext);
-  const OptionGroup = React.useContext(OptionGroupContext);
+  const selectContextInstance = React.useContext(SelectContext);
+  const optionGroupContextInstance = React.useContext(OptionGroupContext);
 
   let disabled = !!propDisabled;
 
   let active = false;
-  if (Select) {
-    const value = get(Select, 'value');
+  if (selectContextInstance) {
+    const value = get(selectContextInstance, 'value');
     active = isArray(value) ? includes(value, propValue) : value === propValue;
   }
 
-  if (OptionGroup && !('disabled' in props)) {
-    disabled = get(OptionGroup, 'disabled');
+  if (optionGroupContextInstance && !('disabled' in props)) {
+    disabled = get(optionGroupContextInstance, 'disabled');
   }
-
-  React.useEffect(() => {
-    if (Select) {
-      const handleOpts = get(Select, 'handleOpts');
-      if (isFunction(handleOpts)) {
-        handleOpts(propValue, children);
-      }
-    }
-  }, []);
-
-  // React.useEffect(() => {
-  //   const onSetOptions = get(Select, 'onSetOptions');
-  //   // if (active && Select) {
-  //   //   if (isFunction(onSetOptions)) {
-  //   //     onSetOptions(propValue, children);
-  //   //   }
-  //   // }
-  //   // 每次都拿到所有option的children
-  //   if (isFunction(onSetOptions)) {
-  //     onSetOptions(propValue, children);
-  //   }
-  // }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (disabled) return;
-    if (Select) {
-      const onClick = get(Select, 'onClick');
-      if (isFunction(onClick)) {
-        onClick(e, propValue);
+    if (selectContextInstance) {
+      const onSelect = get(selectContextInstance, 'onSelect');
+      if (isFunction(onSelect)) {
+        onSelect(e, propValue);
       }
     }
   };

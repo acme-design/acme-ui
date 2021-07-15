@@ -28,7 +28,7 @@ export interface SelectProps {
   /**
    * 子元素
    */
-  children: typeof Option | typeof Option[] | React.ReactNode; // TODO 写完Option和OptionGroup以后要替换 Option | Option[] | OptionGroup | OptionGroup[]
+  children: typeof Option | typeof Option[] | React.ReactNode;
   /**
    * 是否多选
    */
@@ -81,6 +81,8 @@ export interface SelectProps {
 
 const classNamePrefix = 'acme-select';
 
+const dropdownPlacement = 'bottom';
+
 export const classes = {
   root: classNamePrefix,
   selector: `${classNamePrefix}-selector`,
@@ -92,6 +94,7 @@ export const classes = {
   selectedItemClear: `${classNamePrefix}-selected-item-clear`,
   input: `${classNamePrefix}-input`,
   selection: `${classNamePrefix}-selection`,
+  multipleSelection: `${classNamePrefix}-multiple-selection`,
   disabled: `${classNamePrefix}-disabled`,
   size: (size: SelectProps['size']) => `${classNamePrefix}-${size}`,
   status: (status: SelectProps['status']) => `${classNamePrefix}-${status}`,
@@ -122,7 +125,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   const [value, setValue] = React.useState(innerDefaultValue);
   const [popperWidth, setPopperWidth] = React.useState(0);
 
-  const OptionGroupContextInstance = React.useContext(OptionGroupContext);
+  const optionGroupContextInstance = React.useContext(OptionGroupContext);
 
   const [options, setOptions] = React.useState<{ [key: string]: React.ReactNode }>({});
 
@@ -134,6 +137,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleVisible = (open?: boolean) => {
+    if (disabled) return;
     const newIsOpen = isBoolean(open) ? open : !isOpen;
     setIsOpen(newIsOpen);
     if (isFunction(onVisibleChange)) onVisibleChange(newIsOpen);
@@ -144,7 +148,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     const popperDom = get(popperRef, 'current');
     if (referenceDom && popperDom) {
       popper = createPopper(referenceDom, popperDom, {
-        placement: 'bottom',
+        placement: dropdownPlacement,
         modifiers: [
           {
             name: 'offset',
@@ -179,29 +183,31 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
         ],
       });
       popper.update();
-      // 点击的时候popper不一定存在 所以在初始化之后就绑定事件
-      if (!disabled) {
-        document.addEventListener('click', (e: Event) => {
-          const closeDom = get(closeRef, 'current');
-          if (closeDom?.contains(e.target as Node)) {
-            e.stopPropagation();
-          } else if (referenceDom.contains(e.target as Node)) {
-            e.stopPropagation();
-            popper.update();
-          } else {
-            handleVisible(false);
-          }
-        });
-      }
+      document.addEventListener('click', (e: Event) => {
+        const closeDom = get(closeRef, 'current');
+        if (closeDom?.contains(e.target as Node)) {
+          e.stopPropagation();
+        } else if (referenceDom && referenceDom.contains(e.target as Node)) {
+          e.stopPropagation();
+          popper.update();
+        } else {
+          handleVisible(false);
+        }
+      });
     }
     return () => {
       if (popper) popper.destroy();
-      if (referenceDom) {
-        referenceDom.removeEventListener('click', (e: Event) => {
-          if (e) e.stopPropagation();
-          handleVisible(true);
-        });
-      }
+      document.removeEventListener('click', (e: Event) => {
+        const closeDom = get(closeRef, 'current');
+        if (closeDom?.contains(e.target as Node)) {
+          e.stopPropagation();
+        } else if (referenceDom && referenceDom.contains(e.target as Node)) {
+          e.stopPropagation();
+          popper.update();
+        } else {
+          handleVisible(false);
+        }
+      });
     };
   }, []);
 
@@ -211,14 +217,25 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     }, [propValue]);
   }
 
-  React.useEffect(() => {
+  if ('visible' in props) {
+    React.useEffect(() => {
+      setIsOpen(!!visible);
+    }, [visible]);
+  }
+
+  const handleRootWidth = () => {
     const rootWidth = get(referenceRef.current?.getBoundingClientRect(), 'width') || 0;
     setPopperWidth(rootWidth);
+  };
+
+  React.useEffect(() => {
+    // TODO 最好是当窗口大小变化的时候 也是需要重新监听变化
+    handleRootWidth();
   }, []);
 
   const handleAllOptions = () => {
     let currentOptions = {};
-    if (OptionGroupContextInstance) {
+    if (optionGroupContextInstance) {
       if (isArray(children)) {
         (children as React.ReactNode[]).forEach((subChildren) => {
           React.Children.map(subChildren, (c: unknown) => {
@@ -294,7 +311,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   const innerVisible = 'visible' in props ? visible : isOpen;
 
   return (
-    <SelectContext.Provider value={{ onClick: handleSelectOption, value, multiple }}>
+    <SelectContext.Provider value={{ onSelect: handleSelectOption, value, multiple }}>
       <div
         className={uniteClassNames(classes.root, fullWidth ? classes.full : '')}
         ref={ref}
@@ -313,7 +330,12 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
             handleVisible();
           }}
         >
-          <div className={classes.selection}>
+          <div
+            className={uniteClassNames(
+              classes.selection,
+              multiple ? classes.multipleSelection : '',
+            )}
+          >
             <div className={classes.selected}>
               {isArray(value) ? (
                 <>

@@ -10,7 +10,7 @@ export interface SelectOptionGroupProps extends React.HTMLAttributes<HTMLDivElem
   /** 子元素 */
   children: typeof Option | typeof Option[];
   /** 分组名称 */
-  label?: React.ReactNode;
+  label: React.ReactNode;
   /** 分组下所有Option是否禁止选中 */
   disabled?: boolean;
 }

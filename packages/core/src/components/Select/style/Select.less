@@ -16,7 +16,6 @@
 .@{acmeSelectPrefix}-selector {
   position: relative;
   display: flex;
-  // align-items: center;
   width: inherit;
   padding: 0 @spacing-md;
   border: @border-width-normal solid @border-color-primary;
@@ -47,6 +46,10 @@
   .text-primary();
 }
 
+.@{acmeSelectPrefix}-multiple-selection {
+  margin-left: -@spacing-md;
+}
+
 .@{acmeSelectPrefix}-selected {
   display: flex;
   align-items: center;
@@ -55,7 +58,6 @@
 .@{acmeSelectPrefix}-selected-item {
   display: flex;
   align-items: center;
-  // height: -webkit-fill-available;
   padding: @spacing-normal;
   margin: @spacing-normal - @spacing-xs;
   margin-right: @spacing-sm;
@@ -110,7 +112,9 @@
   position: absolute;
   z-index: 1000;
   width: @default-width; // NOTICE 默认
+  max-height: 280px; // TODO
   padding: @spacing-normal 0;
+  overflow: auto;
   background-color: @color-white;
   border-radius: @border-radius-normal;
   border: @border-width-normal solid @border-color-primary;
@@ -137,6 +141,9 @@
   .@{acmeSelectPrefix}-arrow {
     color: @font-color-placeholder;
     cursor: not-allowed;
+  }
+  .@{acmeSelectPrefix}-selected {
+    color: @font-color-placeholder;
   }
 }
 
@@ -169,12 +176,3 @@
 .@{acmeSelectPrefix}-full {
   width: 100%;
 }
-
-// @keyframes arrowRotate {
-//   0% {
-//     transform: rotate(0);
-//   }
-//   100% {
-//     transform: rotate(180deg);
-//   }
-// }
