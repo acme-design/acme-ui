@@ -45,3 +45,6 @@ export type { FormFieldProps } from './components/FormField';
 
 export { default as Select } from './components/Select';
 export type { SelectProps } from './components/Select';
+
+export { default as Alert } from './components/Alert';
+export type { AlertProps } from './components/Alert';
