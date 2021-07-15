@@ -44,4 +44,4 @@ export { default as FormField } from './components/FormField';
 export type { FormFieldProps } from './components/FormField';
 
 export { default as Select } from './components/Select';
-// export type { FormFieldProps } from './components/FormField';
+export type { SelectProps } from './components/Select';
