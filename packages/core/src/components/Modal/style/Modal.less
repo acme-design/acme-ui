@@ -1,0 +1,26 @@
+@import '../../../styles/index';
+
+@classPrefix: ~'@{acme-prefix}-modal';
+
+.@{classPrefix} {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1300; // TODO: z-index需要统一维护;
+}
+
+.@{classPrefix}-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  background-color: rgba(13, 24, 33, 0.8);
+}
+
+.@{classPrefix}-hidden {
+  display: none;
+}

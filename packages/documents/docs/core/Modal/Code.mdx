@@ -1,0 +1,112 @@
+import { Playground, Props } from '~controls';
+import { Modal, Button } from '@acme-ui/core';
+
+## 演示
+
+该演示使您可以预览下拉菜单的不同类型，以及不同类型的不同状态。
+
+## 基础用法
+
+<Playground>
+  {() => {
+    const [visible, setVisible] = React.useState(false);
+    const handleOpen = () => setVisible(true);
+    const handleClose = () => setVisible(false);
+    return (
+      <div>
+        <Button onClick={handleOpen}>打开Modal</Button>
+        <Modal visible={visible} onClose={handleClose}>
+          <div
+            style={{
+              backgroundColor: '#fff',
+              width: 400,
+              borderRadius: 4,
+              padding: 24,
+              paddingTop: 0,
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <h2>title</h2>
+            <p>description</p>
+          </div>
+        </Modal>
+      </div>
+    );
+  }}
+</Playground>
+
+## 关闭后节点不销毁
+
+<Playground>
+  {() => {
+    const [visible, setVisible] = React.useState(false);
+    const handleOpen = () => setVisible(true);
+    const handleClose = () => setVisible(false);
+    return (
+      <div>
+        <Button onClick={handleOpen}>打开Modal</Button>
+        <Modal visible={visible} keepMounted onClose={handleClose}>
+          <div
+            style={{
+              backgroundColor: '#fff',
+              width: 400,
+              borderRadius: 4,
+              padding: 24,
+              paddingTop: 0,
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <h2>title</h2>
+            <p>description</p>
+          </div>
+        </Modal>
+      </div>
+    );
+  }}
+</Playground>
+
+## 不显示黑色背景
+
+<Playground>
+  {() => {
+    const [visible, setVisible] = React.useState(false);
+    const handleOpen = () => setVisible(true);
+    const handleClose = () => setVisible(false);
+    return (
+      <div>
+        <Button onClick={handleOpen}>打开Modal</Button>
+        <Modal visible={visible} hideBackdrop onClose={handleClose}>
+          <div
+            style={{
+              backgroundColor: '#fff',
+              width: 400,
+              borderRadius: 4,
+              padding: 24,
+              paddingTop: 0,
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <h2>title</h2>
+            <p>description</p>
+            <Button mode="outlined" onClick={handleClose}>
+              关闭Modal
+            </Button>
+          </div>
+        </Modal>
+      </div>
+    );
+  }}
+</Playground>
+
+## API
+
+<Props of={Modal} />

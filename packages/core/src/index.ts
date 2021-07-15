@@ -45,3 +45,6 @@ export type { FormFieldProps } from './components/FormField';
 
 export { default as Alert } from './components/Alert';
 export type { AlertProps } from './components/Alert';
+
+export { default as Modal } from './components/Modal';
+export type { ModalProps } from './components/Modal';

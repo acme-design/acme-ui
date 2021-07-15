@@ -31,6 +31,8 @@ import FormFieldCode from './FormField/Code.mdx';
 import FormFieldDesign from './FormField/Design.mdx';
 import AlertCode from './Alert/Code.mdx';
 import AlertDesign from './Alert/Design.mdx';
+import ModalCode from './Modal/Code.mdx';
+import ModalDesign from './Modal/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -147,6 +149,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '',
     designMdx: AlertDesign,
     codeMdx: AlertCode,
+  },
+  {
+    tagName: 'Modal',
+    name: '模态框',
+    description: '',
+    designMdx: ModalDesign,
+    codeMdx: ModalCode,
   },
 ];
 
