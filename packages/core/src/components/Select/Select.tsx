@@ -28,7 +28,7 @@ export interface SelectProps {
   /**
    * 子元素
    */
-  children: typeof Option | typeof Option[] | React.ReactNode;
+  children: React.ReactNode;
   /**
    * 是否多选
    */
@@ -81,8 +81,6 @@ export interface SelectProps {
 
 const classNamePrefix = 'acme-select';
 
-const dropdownPlacement = 'bottom';
-
 export const classes = {
   root: classNamePrefix,
   selector: `${classNamePrefix}-selector`,
@@ -103,6 +101,41 @@ export const classes = {
   multipleMaxHeight: (size: SelectProps['size']) => `${classNamePrefix}-selector-multiple-${size}`,
 };
 
+const popperOption = {
+  modifiers: [
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 10],
+      },
+    },
+    {
+      name: 'preventOverflow',
+      options: {
+        padding: {
+          top: 2,
+          bottom: 2,
+          left: 5,
+          right: 5,
+        },
+      },
+    },
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 4],
+      },
+    },
+    {
+      name: 'flip',
+      options: {
+        padding: 5,
+        fallbackPlacement: ['left', 'right', 'top', 'bottom'],
+      },
+    },
+  ],
+};
+
 const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const {
     children,
@@ -121,18 +154,20 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     ...otherProps
   } = props;
 
+  let popper: Instance;
+
   const innerDefaultValue = 'value' in props ? propValue : defaultValue;
   const [value, setValue] = React.useState(innerDefaultValue);
   const [popperWidth, setPopperWidth] = React.useState(0);
+  const [dropdownContent, setDropdownContent] = React.useState<Instance>();
 
   const optionGroupContextInstance = React.useContext(OptionGroupContext);
 
   const [options, setOptions] = React.useState<{ [key: string]: React.ReactNode }>({});
 
-  let popper: Instance;
-  const referenceRef: React.RefObject<HTMLDivElement> = React.createRef();
-  const popperRef: React.RefObject<HTMLDivElement> = React.createRef();
-  const closeRef: React.RefObject<HTMLSpanElement> = React.createRef();
+  const referenceRef = React.useRef() as React.RefObject<HTMLDivElement>;
+  const popperRef = React.useRef() as React.RefObject<HTMLDivElement>;
+  const closeRef = React.useRef() as React.RefObject<HTMLSpanElement>;
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -143,71 +178,31 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     if (isFunction(onVisibleChange)) onVisibleChange(newIsOpen);
   };
 
+  const handleEvents = (e: Event) => {
+    const referenceDom = get(referenceRef, 'current');
+    const closeDom = get(closeRef, 'current');
+    if (closeDom?.contains(e.target as Node)) {
+      e.stopPropagation();
+    } else if (referenceDom && referenceDom.contains(e.target as Node)) {
+      e.stopPropagation();
+      popper.update();
+    } else {
+      handleVisible(false);
+    }
+  };
+
   React.useEffect(() => {
     const referenceDom = get(referenceRef, 'current');
     const popperDom = get(popperRef, 'current');
     if (referenceDom && popperDom) {
-      popper = createPopper(referenceDom, popperDom, {
-        placement: dropdownPlacement,
-        modifiers: [
-          {
-            name: 'offset',
-            options: {
-              offset: [0, 10],
-            },
-          },
-          {
-            name: 'preventOverflow',
-            options: {
-              padding: {
-                top: 2,
-                bottom: 2,
-                left: 5,
-                right: 5,
-              },
-            },
-          },
-          {
-            name: 'offset',
-            options: {
-              offset: [0, 4],
-            },
-          },
-          {
-            name: 'flip',
-            options: {
-              padding: 5,
-              fallbackPlacement: ['left', 'right', 'top', 'bottom'],
-            },
-          },
-        ],
-      });
+      popper = createPopper(referenceDom, popperDom, popperOption);
       popper.update();
-      document.addEventListener('click', (e: Event) => {
-        const closeDom = get(closeRef, 'current');
-        if (closeDom?.contains(e.target as Node)) {
-          e.stopPropagation();
-        } else if (referenceDom && referenceDom.contains(e.target as Node)) {
-          e.stopPropagation();
-          popper.update();
-        } else {
-          handleVisible(false);
-        }
-      });
+      setDropdownContent(popper);
+      document.addEventListener('click', handleEvents);
     }
     return () => {
       if (popper) popper.destroy();
-      document.removeEventListener('click', (e: Event) => {
-        const closeDom = get(closeRef, 'current');
-        if (closeDom?.contains(e.target as Node)) {
-          e.stopPropagation();
-        } else if (referenceDom && referenceDom.contains(e.target as Node)) {
-          e.stopPropagation();
-          popper.update();
-        } else {
-          handleVisible(false);
-        }
-      });
+      document.removeEventListener('click', handleEvents);
     };
   }, []);
 
@@ -222,6 +217,12 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
       setIsOpen(!!visible);
     }, [visible]);
   }
+
+  React.useEffect(() => {
+    if (multiple) {
+      if (dropdownContent) dropdownContent.update();
+    }
+  }, [value]);
 
   const handleRootWidth = () => {
     const rootWidth = get(referenceRef.current?.getBoundingClientRect(), 'width') || 0;
@@ -341,7 +342,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
                 <>
                   {((value as string[]) || (value as number[])).map(
                     (mValue: string | number): React.ReactNode => (
-                      <div className={classes.selectedItem}>
+                      <div className={classes.selectedItem} key={mValue}>
                         {get(options, mValue)}
                         {/** TODO 替换iconfont */}
                         <span
