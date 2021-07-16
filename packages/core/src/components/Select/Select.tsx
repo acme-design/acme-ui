@@ -174,6 +174,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   const handleVisible = (open?: boolean) => {
     if (disabled) return;
     const newIsOpen = isBoolean(open) ? open : !isOpen;
+    if (newIsOpen && dropdownContent) dropdownContent.update();
     setIsOpen(newIsOpen);
     if (isFunction(onVisibleChange)) onVisibleChange(newIsOpen);
   };
@@ -185,7 +186,6 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
       e.stopPropagation();
     } else if (referenceDom && referenceDom.contains(e.target as Node)) {
       e.stopPropagation();
-      popper.update();
     } else {
       handleVisible(false);
     }
