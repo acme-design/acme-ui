@@ -27,7 +27,6 @@ import { Select, FormLabel } from '@acme-ui/core';
     React.useEffect(() => {
       const scrollDom = document.getElementById('scroll-container');
       scrollDom.addEventListener('scroll', () => {
-        console.log(visible);
         onVisibleChange(false);
       });
       return () => {
@@ -41,7 +40,7 @@ import { Select, FormLabel } from '@acme-ui/core';
         <Select
           placeholder="请选择"
           onChange={onChange}
-          value="2"
+          value={value}
           visible={visible}
           onVisibleChange={onVisibleChange}
         >

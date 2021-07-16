@@ -52,6 +52,15 @@ const Option: React.ForwardRefExoticComponent<
     disabled = get(optionGroupContextInstance, 'disabled');
   }
 
+  React.useEffect(() => {
+    if (selectContextInstance) {
+      const onHandleOpts = get(selectContextInstance, 'onHandleOpts');
+      if (isFunction(onHandleOpts)) {
+        onHandleOpts(propValue, children);
+      }
+    }
+  }, []);
+
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (disabled) return;
     if (selectContextInstance) {

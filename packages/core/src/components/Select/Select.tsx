@@ -6,14 +6,13 @@ import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import difference from 'lodash/difference';
 import isBoolean from 'lodash/isBoolean';
-import { includes } from 'lodash';
+import includes from 'lodash/includes';
 import { uniteClassNames } from '../../utils/tools';
 import { ArrowSvg } from '../Icon/ArrowIcon';
 import SelectContext from './SelectContext';
 import { SelectSize, SelectStatus } from './types';
 import Option from './Option';
 import OptionGroup from './OptionGroup';
-import OptionGroupContext from './OptionGroupContext';
 import './style/Select.less';
 
 type SelectSizeType = `${SelectSize}`;
@@ -154,16 +153,11 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     ...otherProps
   } = props;
 
-  let popper: Instance;
-
   const innerDefaultValue = 'value' in props ? propValue : defaultValue;
   const [value, setValue] = React.useState(innerDefaultValue);
   const [popperWidth, setPopperWidth] = React.useState(0);
   const [dropdownContent, setDropdownContent] = React.useState<Instance>();
-
-  const optionGroupContextInstance = React.useContext(OptionGroupContext);
-
-  const [options, setOptions] = React.useState<{ [key: string]: React.ReactNode }>({});
+  const [opts, setOpts] = React.useState<{ [key: string]: React.ReactNode }>({});
 
   const referenceRef = React.useRef() as React.RefObject<HTMLDivElement>;
   const popperRef = React.useRef() as React.RefObject<HTMLDivElement>;
@@ -194,6 +188,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   React.useEffect(() => {
     const referenceDom = get(referenceRef, 'current');
     const popperDom = get(popperRef, 'current');
+    let popper: Instance;
     if (referenceDom && popperDom) {
       popper = createPopper(referenceDom, popperDom, popperOption);
       popper.update();
@@ -232,36 +227,6 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
   React.useEffect(() => {
     // TODO 最好是当窗口大小变化的时候 也是需要重新监听变化
     handleRootWidth();
-  }, []);
-
-  const handleAllOptions = () => {
-    let currentOptions = {};
-    if (optionGroupContextInstance) {
-      if (isArray(children)) {
-        (children as React.ReactNode[]).forEach((subChildren) => {
-          React.Children.map(subChildren, (c: unknown) => {
-            const { value: v, children: ch } = get(c, 'props');
-            currentOptions = { ...currentOptions, [v]: ch };
-          });
-        });
-      } else {
-        const subChildren = get(children, 'props.children');
-        React.Children.map(subChildren, (c: unknown) => {
-          const { value: v, children: ch } = get(c, 'props');
-          currentOptions = { ...currentOptions, [v]: ch };
-        });
-      }
-    } else {
-      React.Children.map(children, (c: unknown) => {
-        const { value: v, children: ch } = get(c, 'props');
-        currentOptions = { ...currentOptions, [v]: ch };
-      });
-    }
-    setOptions(currentOptions);
-  };
-
-  React.useEffect(() => {
-    handleAllOptions();
   }, []);
 
   const handleSelectOption = (
@@ -309,10 +274,18 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
     }
   };
 
+  const handleOpts = (val: string | number, opt: React.ReactNode) => {
+    setOpts((oldOpt) => {
+      return { ...oldOpt, [val]: opt };
+    });
+  };
+
   const innerVisible = 'visible' in props ? visible : isOpen;
 
   return (
-    <SelectContext.Provider value={{ onSelect: handleSelectOption, value, multiple }}>
+    <SelectContext.Provider
+      value={{ onSelect: handleSelectOption, value, multiple, onHandleOpts: handleOpts }}
+    >
       <div
         className={uniteClassNames(classes.root, fullWidth ? classes.full : '')}
         ref={ref}
@@ -343,7 +316,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
                   {((value as string[]) || (value as number[])).map(
                     (mValue: string | number): React.ReactNode => (
                       <div className={classes.selectedItem} key={mValue}>
-                        {get(options, mValue)}
+                        {get(opts, mValue)}
                         {/** TODO 替换iconfont */}
                         <span
                           className={classes.selectedItemClear}
@@ -359,7 +332,7 @@ const Select = React.forwardRef((props: SelectProps, ref: React.ForwardedRef<HTM
                   )}
                 </>
               ) : (
-                value && get(options, value)
+                value && get(opts, value)
               )}
             </div>
             <input
