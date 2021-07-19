@@ -26,16 +26,27 @@ describe('Modal', () => {
     });
 
     test('should render a single modal with event', () => {
+      const mockCloseCbFn = jest.fn();
+      const mockBackdropCbFn = jest.fn();
+
       const TestModal = () => {
         const [visible, setVisible] = React.useState(false);
         const handleOpen = () => setVisible(true);
-        const handleClose = () => setVisible(false);
+        const handleClose = () => {
+          mockCloseCbFn();
+          setVisible(false);
+        };
         return (
           <div>
             <button type="button" onClick={handleOpen}>
               打开Modal
             </button>
-            <Modal data-testid={testId} visible={visible} onClose={handleClose}>
+            <Modal
+              data-testid={testId}
+              visible={visible}
+              onClose={handleClose}
+              onBackdropClick={mockBackdropCbFn}
+            >
               <div>
                 <h2>title</h2>
                 <p>description</p>
@@ -46,6 +57,7 @@ describe('Modal', () => {
       };
       const { getByTestId, getByRole } = render(<TestModal />);
 
+      // open modal
       const openBtn = getByRole('button');
       userEvent.click(openBtn);
 
@@ -53,10 +65,54 @@ describe('Modal', () => {
       expect(modal).toHaveClass(classes.root);
 
       expect(modal).toBeInTheDocument();
+
+      // close modal
+      const backdrop = getByTestId('acme-test-modal-backdrop');
+      userEvent.click(backdrop);
+
+      expect(modal).not.toBeInTheDocument();
+      expect(mockCloseCbFn).toBeCalledTimes(1);
+      expect(mockBackdropCbFn).toBeCalledTimes(1);
     });
   });
 
-  // describe('render correctly with other props', () => {});
+  describe('render correctly with other props', () => {
+    test('should render a single modal with keepMounted', () => {
+      const TestModal = () => {
+        const [visible, setVisible] = React.useState(false);
+        const handleOpen = () => setVisible(true);
+        const handleClose = () => setVisible(false);
+        return (
+          <div>
+            <button type="button" onClick={handleOpen}>
+              打开Modal
+            </button>
+            <Modal data-testid={testId} visible={visible} keepMounted onClose={handleClose}>
+              <div>
+                <h2>title</h2>
+                <p>description</p>
+              </div>
+            </Modal>
+          </div>
+        );
+      };
+      const { getByTestId, getByRole } = render(<TestModal />);
+
+      // open modal
+      const openBtn = getByRole('button');
+      userEvent.click(openBtn);
+
+      const modal = getByTestId(testId);
+      expect(modal).toBeInTheDocument();
+
+      // close modal
+      const backdrop = getByTestId('acme-test-modal-backdrop');
+      userEvent.click(backdrop);
+
+      expect(modal).toBeInTheDocument();
+      expect(modal).not.toBeVisible();
+    });
+  });
 
   refTestSuite('✨ transfer ref correctly', {
     [RefTestCaseType.createRef]: () => {

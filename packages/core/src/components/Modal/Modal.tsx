@@ -103,7 +103,11 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
             ref={ref}
           >
             {hideBackdrop ? null : (
-              <div className={classes.backdrop} onClick={handleBackdropClick} />
+              <div
+                className={classes.backdrop}
+                data-testid="acme-test-modal-backdrop"
+                onClick={handleBackdropClick}
+              />
             )}
             {children}
           </div>,
