@@ -27,7 +27,6 @@ export interface FormGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   /**
    * 垂直/水平布局
-   * @default
    */
   layout?: TFormGroupLayout;
 }
@@ -48,8 +47,7 @@ const FormGroup = React.forwardRef<HTMLDivElement, FormGroupProps>(
 );
 
 FormGroup.defaultProps = {
-  className: '',
-  layout: 'vertical',
+  layout: FormGroupLayout.VERTICAL,
 };
 
 export default FormGroup;

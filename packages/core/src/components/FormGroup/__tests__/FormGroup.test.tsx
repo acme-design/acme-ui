@@ -6,7 +6,7 @@ import FormGroup, { classes, FormGroupLayout } from '../FormGroup';
 
 const testId = 'test-form-group';
 
-describe('FormLabel', () => {
+describe('FormGroup', () => {
   mountTestSuite(<FormGroup data-testid={testId}>label</FormGroup>);
 
   describe('render a group placement correctly', () => {

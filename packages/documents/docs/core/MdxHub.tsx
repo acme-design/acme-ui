@@ -29,10 +29,14 @@ import FormHintCode from './FormHint/Code.mdx';
 import FormHintDesign from './FormHint/Design.mdx';
 import FormFieldCode from './FormField/Code.mdx';
 import FormFieldDesign from './FormField/Design.mdx';
+import SelectCode from './Select/Code.mdx';
+import SelectDesign from './Select/Design.mdx';
 import AlertCode from './Alert/Code.mdx';
 import AlertDesign from './Alert/Design.mdx';
 import ModalCode from './Modal/Code.mdx';
 import ModalDesign from './Modal/Design.mdx';
+import FormCode from './Form/Code.mdx';
+import FormDesign from './Form/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -144,6 +148,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     codeMdx: FormFieldCode,
   },
   {
+    tagName: 'Select',
+    name: '选择器',
+    description: '',
+    designMdx: SelectDesign,
+    codeMdx: SelectCode,
+  },
+  {
     tagName: 'Alert',
     name: '警告提示',
     description: '',
@@ -156,6 +167,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '',
     designMdx: ModalDesign,
     codeMdx: ModalCode,
+  },
+  {
+    tagName: 'Form',
+    name: '表单',
+    description: '',
+    designMdx: FormDesign,
+    codeMdx: FormCode,
   },
 ];
 
