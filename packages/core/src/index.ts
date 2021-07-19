@@ -48,3 +48,6 @@ export type { SelectProps } from './components/Select';
 
 export { default as Alert } from './components/Alert';
 export type { AlertProps } from './components/Alert';
+
+export { default as SearchInput } from './components/SearchInput';
+export type { SearchInputProps } from './components/SearchInput';

@@ -33,6 +33,8 @@ import SelectCode from './Select/Code.mdx';
 import SelectDesign from './Select/Design.mdx';
 import AlertCode from './Alert/Code.mdx';
 import AlertDesign from './Alert/Design.mdx';
+import SearchInputCode from './SearchInput/Code.mdx';
+import SearchInputDesign from './SearchInput/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -100,6 +102,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '',
     designMdx: InputDesign,
     codeMdx: InputCode,
+  },
+  {
+    tagName: 'SearchInput',
+    name: '搜索框',
+    description: '',
+    designMdx: SearchInputDesign,
+    codeMdx: SearchInputCode,
   },
   {
     tagName: 'Checkbox',
