@@ -20,7 +20,7 @@ export interface SearchInputProps extends InputProps {
   /**
    * 点击搜索图标或者是enter键调用的方法
    */
-  onSearch: (value: string) => void;
+  onSearch?: (value?: InputProps['value']) => void;
 }
 
 const classNamePrefix = 'acme-search-input';
@@ -67,7 +67,7 @@ const SearchInput = React.forwardRef(
     };
 
     const searchIcon = (
-      <div className={classes.searchIcon} onClick={handleSearch}>
+      <div className={classes.searchIcon} onClick={handleSearch} data-testid={classes.searchIcon}>
         {/** TODO 待更换搜索图标，skecth上的抠不下来 */}
         搜索
       </div>
