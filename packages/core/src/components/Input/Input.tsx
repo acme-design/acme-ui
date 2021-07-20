@@ -153,7 +153,9 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const internalValue = get(e, 'target.value');
       const valueLength = isString(internalValue) ? internalValue.length : 0;
-      setCurrentValue(internalValue);
+      if (!('value' in props)) {
+        setCurrentValue(internalValue);
+      }
       if (limit) {
         setCurrentValueLen(valueLength);
         setLimitError(valueLength > limit);

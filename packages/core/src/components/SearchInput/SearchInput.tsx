@@ -1,5 +1,6 @@
 import * as React from 'react';
 import get from 'lodash/get';
+import set from 'lodash/set';
 import isFunction from 'lodash/isFunction';
 import Input, { InputProps } from '../Input';
 import { IconPlacement } from './types';
@@ -32,37 +33,32 @@ export const classes = {
 
 const SearchInput = React.forwardRef(
   (props: SearchInputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
-    const {
-      className,
-      iconPlacement,
-      onSearch,
-      value: propValue,
-      defaultValue,
-      onChange,
-      ...otherProps
-    } = props;
+    const { className, iconPlacement, onSearch, ...otherProps } = props;
 
-    const originValue = 'defaultValue' in props ? defaultValue : propValue;
-    const [value, setValue] = React.useState(originValue);
+    const innerRef = React.useRef<HTMLInputElement>(null);
+    React.useEffect(() => {
+      if (!ref) return;
 
-    const handleChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
-      const val = get(e, 'target.value');
-      setValue(val);
-      if (isFunction(onChange)) {
-        onChange(e);
+      const refCurrent = get(innerRef, 'current');
+      if (typeof ref === 'function') {
+        ref(refCurrent);
+      } else {
+        set(ref, 'current', refCurrent);
       }
-    };
+    });
 
     const handleSearch = () => {
       if (isFunction(onSearch)) {
-        onSearch(value);
+        const currentValue = get(innerRef, 'current.value');
+        onSearch(currentValue);
       }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       const currentKeyCode = get(e, 'keyCode');
       if (currentKeyCode === 13 && isFunction(onSearch)) {
-        onSearch(value);
+        const currentValue = get(innerRef, 'current.value');
+        onSearch(currentValue);
       }
     };
 
@@ -78,10 +74,9 @@ const SearchInput = React.forwardRef(
         className={uniteClassNames(classes.root, className)}
         startElement={iconPlacement === IconPlacement.START ? searchIcon : null}
         endElement={iconPlacement === IconPlacement.END ? searchIcon : null}
-        onChange={handleChange}
         onKeyDown={handleKeyDown}
         {...otherProps}
-        ref={ref}
+        ref={innerRef}
       />
     );
   },
