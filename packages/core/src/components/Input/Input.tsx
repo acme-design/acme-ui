@@ -165,6 +165,8 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
       setCurrentValueLen(valueLength);
       if (limit) {
         setLimitError(valueLength > limit);
+      } else {
+        setLimitError(false);
       }
     }, [currentValue, limit]);
 
