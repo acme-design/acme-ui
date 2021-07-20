@@ -51,3 +51,7 @@ export type { AlertProps } from './components/Alert';
 
 export { default as SearchInput } from './components/SearchInput';
 export type { SearchInputProps } from './components/SearchInput';
+
+export { default as Form } from './components/Form';
+export type { FormProps } from './components/Form';
+
