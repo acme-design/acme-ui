@@ -33,10 +33,12 @@ import SelectCode from './Select/Code.mdx';
 import SelectDesign from './Select/Design.mdx';
 import AlertCode from './Alert/Code.mdx';
 import AlertDesign from './Alert/Design.mdx';
-import SearchInputCode from './SearchInput/Code.mdx';
-import SearchInputDesign from './SearchInput/Design.mdx';
 import FormCode from './Form/Code.mdx';
 import FormDesign from './Form/Design.mdx';
+import SearchInputCode from './SearchInput/Code.mdx';
+import SearchInputDesign from './SearchInput/Design.mdx';
+import ModalCode from './Modal/Code.mdx';
+import ModalDesign from './Modal/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -167,6 +169,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '',
     designMdx: AlertDesign,
     codeMdx: AlertCode,
+  },
+  {
+    tagName: 'Modal',
+    name: '模态框',
+    description: '',
+    designMdx: ModalDesign,
+    codeMdx: ModalCode,
   },
   {
     tagName: 'Form',
