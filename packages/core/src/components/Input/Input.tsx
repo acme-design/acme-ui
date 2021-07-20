@@ -152,16 +152,23 @@ const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HT
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const internalValue = get(e, 'target.value');
-      const valueLength = isString(internalValue) ? internalValue.length : 0;
-      setCurrentValue(internalValue);
-      if (limit) {
-        setCurrentValueLen(valueLength);
-        setLimitError(valueLength > limit);
+      if (!('value' in props)) {
+        setCurrentValue(internalValue);
       }
       if (isFunction(onChange)) {
         onChange(e);
       }
     };
+
+    React.useEffect(() => {
+      const valueLength = isString(currentValue) ? currentValue.length : 0;
+      setCurrentValueLen(valueLength);
+      if (limit) {
+        setLimitError(valueLength > limit);
+      } else {
+        setLimitError(false);
+      }
+    }, [currentValue, limit]);
 
     const [isFocus, setIsFocus] = React.useState(false);
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {

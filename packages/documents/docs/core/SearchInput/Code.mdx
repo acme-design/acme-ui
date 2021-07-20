@@ -1,0 +1,24 @@
+import { Playground, Props } from '~controls';
+import { SearchInput } from '@acme-ui/core';
+
+# 基本用法
+
+<Playground>
+  {() => {
+    const onSearch = (value) => {
+      console.log('value: ', value);
+    };
+    return <SearchInput clear onSearch={onSearch} />;
+  }}
+</Playground>
+
+# 图标位置
+
+<Playground>
+  {() => {
+    const onSearch = (value) => {
+      console.log('value: ', value);
+    };
+    return <SearchInput clear iconPlacement="start" onSearch={onSearch} />;
+  }}
+</Playground>
