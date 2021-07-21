@@ -55,3 +55,5 @@ export type { SearchInputProps } from './components/SearchInput';
 export { default as Form } from './components/Form';
 export type { FormProps } from './components/Form';
 
+export { default as TagInput } from './components/TagInput';
+export type { TagInputProps } from './components/TagInput';

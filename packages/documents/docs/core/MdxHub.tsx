@@ -37,6 +37,8 @@ import SearchInputCode from './SearchInput/Code.mdx';
 import SearchInputDesign from './SearchInput/Design.mdx';
 import FormCode from './Form/Code.mdx';
 import FormDesign from './Form/Design.mdx';
+import TagInputCode from './TagInput/Code.mdx';
+import TagInputDesign from './TagInput/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -132,6 +134,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '标签用于进行标记和分类。',
     designMdx: TagDesign,
     codeMdx: TagCode,
+  },
+  {
+    tagName: 'TagInput',
+    name: '标签输入框',
+    description: '',
+    designMdx: TagInputDesign,
+    codeMdx: TagInputCode,
   },
   {
     tagName: 'Tooltip',
