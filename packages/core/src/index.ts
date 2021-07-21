@@ -57,3 +57,6 @@ export type { SearchInputProps } from './components/SearchInput';
 
 export { default as Modal } from './components/Modal';
 export type { ModalProps } from './components/Modal';
+
+export { default as Dialog } from './components/Dialog';
+export type { DialogProps } from './components/Dialog';

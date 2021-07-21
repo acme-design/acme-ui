@@ -1,0 +1,116 @@
+import { Playground, Props } from '~controls';
+import { Dialog, Button } from '@acme-ui/core';
+
+## 演示
+
+该演示使您可以预览下拉菜单的不同类型，以及不同类型的不同状态。
+
+## 基础用法
+
+<Playground>
+  {() => {
+    const [visible, setVisible] = React.useState(false);
+    const handleOpen = () => setVisible(true);
+    const handleClose = () => setVisible(false);
+    return (
+      <div>
+        <Button onClick={handleOpen}>Open Simple Dialog</Button>
+        <Dialog
+          width={600}
+          visible={visible}
+          title="标题"
+          actions={
+            <>
+              <Button mode="outlined" style={{ marginRight: 8 }} onClick={handleClose}>
+                取消
+              </Button>
+              <Button onClick={handleClose}>确定</Button>
+            </>
+          }
+          onClose={handleClose}
+        >
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+        </Dialog>
+      </div>
+    );
+  }}
+</Playground>
+
+## 关闭后节点不销毁
+
+<Playground>
+  {() => {
+    const [visible, setVisible] = React.useState(false);
+    const handleOpen = () => setVisible(true);
+    const handleClose = () => setVisible(false);
+    return (
+      <div>
+        <Button onClick={handleOpen}>Open Simple Dialog</Button>
+        <Dialog
+          width={600}
+          visible={visible}
+          keepMounted
+          title="标题"
+          actions={
+            <>
+              <Button mode="outlined" style={{ marginRight: 8 }} onClick={handleClose}>
+                取消
+              </Button>
+              <Button onClick={handleClose}>确定</Button>
+            </>
+          }
+          onClose={handleClose}
+        >
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+        </Dialog>
+      </div>
+    );
+  }}
+</Playground>
+
+## 滚动区域上下有分割线
+
+<Playground>
+  {() => {
+    const [visible, setVisible] = React.useState(false);
+    const handleOpen = () => setVisible(true);
+    const handleClose = () => setVisible(false);
+    return (
+      <div>
+        <Button onClick={handleOpen}>Open Simple Dialog</Button>
+        <Dialog
+          width={600}
+          dividers
+          visible={visible}
+          title="标题"
+          actions={
+            <>
+              <Button mode="outlined" style={{ marginRight: 8 }} onClick={handleClose}>
+                取消
+              </Button>
+              <Button onClick={handleClose}>确定</Button>
+            </>
+          }
+          onClose={handleClose}
+        >
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+          我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字我是一段摘抄的文字
+        </Dialog>
+      </div>
+    );
+  }}
+</Playground>
+
+## API
+
+<Props of={Dialog} />

@@ -39,6 +39,8 @@ import SearchInputCode from './SearchInput/Code.mdx';
 import SearchInputDesign from './SearchInput/Design.mdx';
 import ModalCode from './Modal/Code.mdx';
 import ModalDesign from './Modal/Design.mdx';
+import DialogCode from './Dialog/Code.mdx';
+import DialogDesign from './Dialog/Design.mdx';
 
 export type TMDXHub = {
   /** 标签名 */
@@ -183,6 +185,13 @@ const MdxHub: PickRequired<TMDXHub, 'path'>[] = [
     description: '',
     designMdx: FormDesign,
     codeMdx: FormCode,
+  },
+  {
+    tagName: 'Dialog',
+    name: '对话框',
+    description: '',
+    designMdx: DialogDesign,
+    codeMdx: DialogCode,
   },
 ];
 
