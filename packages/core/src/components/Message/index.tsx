@@ -1,5 +1,5 @@
 import MessageInstance, { InstanceInterface, MessageContentProps } from './Message';
-import { TMessage } from './types';
+import { MessageType, TMessage } from './types';
 
 let message: InstanceInterface;
 
@@ -19,8 +19,10 @@ const messageInstance = (props: MessageProps): void => {
 };
 
 const Message: TMessage = {
-  info: (props?: MessageProps) => messageInstance({ ...props, type: 'info' }),
-  warning: (props?: MessageProps) => messageInstance({ ...props, type: 'warning' }),
+  info: (props?: MessageProps) => messageInstance({ ...props, type: MessageType.INFO }),
+  warning: (props?: MessageProps) => messageInstance({ ...props, type: MessageType.WARNING }),
+  success: (props?: MessageProps) => messageInstance({ ...props, type: MessageType.SUCCESS }),
+  error: (props?: MessageProps) => messageInstance({ ...props, type: MessageType.ERROR }),
 };
 
 export default Message;

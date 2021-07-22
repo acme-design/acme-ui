@@ -10,4 +10,6 @@ export enum MessageType {
 export type TMessage = {
   info: (props?: MessageProps) => void;
   warning: (props?: MessageProps) => void;
+  success: (props?: MessageProps) => void;
+  error: (props?: MessageProps) => void;
 };
