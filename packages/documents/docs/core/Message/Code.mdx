@@ -1,0 +1,20 @@
+import {Playground, Props} from "../../../src/controls";
+import {Message} from "@acme-ui/core";
+import Info from './Info';
+
+## 基础用法
+简单的展示。
+
+<Playground>
+    {
+        () => {
+            return <div>
+                <button onClick={() => Message.info({content: '这是一条普通的消息提醒'})}>message info</button>
+                <button onClick={() => Message.warning({content: '这是一条警告的消息提醒'})}>message warning</button>
+            </div>
+        }
+    }
+</Playground>
+
+## API
+<Props of={Info} />
