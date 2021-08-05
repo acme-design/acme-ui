@@ -1,20 +1,130 @@
-import {Playground, Props} from "../../../src/controls";
-import {Message} from "@acme-ui/core";
-import Info from './Info';
+import { Playground, Props } from '../../../src/controls';
+import { Message, Button } from '@acme-ui/core';
 
-## 基础用法
-简单的展示。
+## 普通提示
 
 <Playground>
-    {
-        () => {
-            return <div>
-                <button onClick={() => Message.info({content: '这是一条普通的消息提醒'})}>message info</button>
-                <button onClick={() => Message.warning({content: '这是一条警告的消息提醒'})}>message warning</button>
-            </div>
+  {() => {
+    return (
+      <div>
+        <Button onClick={() => Message.open({ content: '这是一条普通的消息提示' })}>
+          显示普通提示haha
+        </Button>
+      </div>
+    );
+  }}
+</Playground>
+
+## 提示类型
+
+不同的提示状态：成功、警告、错误。
+
+<Playground>
+  {() => {
+    return (
+      <div>
+        <Button
+          mode="minimal"
+          onClick={() => Message.success({ content: '这是一条成功的消息提示' })}
+        >
+          显示成功提示
+        </Button>
+        <Button
+          mode="minimal"
+          onClick={() => Message.warning({ content: '这是一条警告的消息提示' })}
+        >
+          显示警告提示
+        </Button>
+        <Button
+          mode="minimal"
+          color="danger"
+          onClick={() => Message.error({ content: '这是一条错误的消息提示' })}
+        >
+          显示错误提示
+        </Button>
+      </div>
+    );
+  }}
+</Playground>
+
+## 加载中
+
+<Playground>
+  {() => {
+    const key = 'updatable';
+    const openMessage = () => {
+      Message.loading({ content: '加载中...', key });
+      setTimeout(() => {
+        Message.success({ content: '成功!', key, duration: 2000 });
+      }, 1000);
+    };
+    return (
+      <div>
+        <Button mode="outlined" onClick={openMessage}>
+          显示加载中...
+        </Button>
+      </div>
+    );
+  }}
+</Playground>
+
+## 自定义时长
+
+自定义时长 10s，默认时长为 3s。
+
+<Playground>
+  {() => {
+    return (
+      <Button
+        mode="outlined"
+        onClick={() =>
+          Message.success({ content: '这是一条10秒自动关闭的消息提示', duration: 10000 })
         }
-    }
+      >
+        显示一个10秒提示
+      </Button>
+    );
+  }}
+</Playground>
+
+## 可关闭
+
+可以添加关闭按钮。
+
+<Playground>
+  {() => {
+    return (
+      <div>
+        <Button
+          mode="minimal"
+          onClick={() => Message.open({ closable: true, content: '这是一条普通的消息提示' })}
+        >
+          显示消息提示
+        </Button>
+        <Button
+          mode="minimal"
+          onClick={() => Message.success({ closable: true, content: '这是一条成功的消息提示' })}
+        >
+          显示成功提示
+        </Button>
+        <Button
+          mode="minimal"
+          onClick={() => Message.warning({ closable: true, content: '这是一条警告的消息提示' })}
+        >
+          显示警告提示
+        </Button>
+        <Button
+          mode="minimal"
+          color="danger"
+          onClick={() => Message.error({ closable: true, content: '这是一条错误的消息提示' })}
+        >
+          显示错误提示
+        </Button>
+      </div>
+    );
+  }}
 </Playground>
 
 ## API
-<Props of={Info} />
+
+<!-- <Props of={Info} /> -->

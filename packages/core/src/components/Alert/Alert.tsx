@@ -4,7 +4,7 @@ import { AlertAlign, AlertType } from './types';
 import { uniteClassNames } from '../../utils/tools';
 
 import './style/Alert.less';
-import DeleteSvg from '../Icon/Delete';
+import CloseSvg from '../Icon/Close';
 import InfoIcon from '../Icon/Info';
 import SuccessIcon from '../Icon/Success';
 import WarningIcon from '../Icon/Warning';
@@ -127,7 +127,7 @@ const Alert = React.forwardRef((props: AlertProps, ref: React.ForwardedRef<HTMLD
       {action ? <div>{action}</div> : null}
       {hasClose ? (
         <div className={classes.closeWrap} onClick={handleClose}>
-          <DeleteSvg className={classes.close} />
+          <CloseSvg className={classes.close} />
         </div>
       ) : null}
     </div>

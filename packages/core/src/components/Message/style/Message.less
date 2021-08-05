@@ -1,50 +1,81 @@
 @import '../../../styles/index';
 
-@messagePrefix: ~'@{acme-prefix}-message';
+@classPrefix: ~'@{acme-prefix}-message';
 
-.@{messagePrefix} {
+.@{classPrefix} {
   position: fixed;
   top: 0;
   left: 50%;
-  z-index: 20202020;
+  z-index: 1001; // TODO: 暂定
   transform: translateX(-50%);
+  text-align: center;
 }
 
-.@{messagePrefix}-item {
-  display: flex;
-  flex-direction: row;
+.@{classPrefix}-item {
+  display: inline-flex;
   min-width: 320px;
   padding: @spacing-md;
   margin-top: @spacing-md;
-  text-align: center;
   background-color: @bg-color-white;
   box-shadow: 0 7px 14px 0 rgba(0, 0, 0, 0.1);
   border-radius: @border-radius-normal;
   transition: all ease-out 0.2s;
-  animation: inner 0.1s;
+  animation: appear 0.1s;
 }
 
-.@{messagePrefix}-content {
+.@{classPrefix}-content {
   flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  text-align: left;
+  .text-primary();
 }
 
-.@{messagePrefix}-info {
-  color: @color-primary;
+.@{classPrefix}-content-closable {
+  justify-content: flex-start;
 }
 
-.@{messagePrefix}-warning {
-  color: @color-warning;
+.@{classPrefix}-icon {
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  margin-top: @spacing-sm;
+  margin-right: @spacing-normal;
 }
 
-.@{messagePrefix}-success {
-  color: @color-success;
+.@{classPrefix}-loading {
+  animation: loadingRotate 1s linear infinite;
 }
 
-.@{messagePrefix}-error {
-  color: @color-error;
+.@{classPrefix}-close {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  margin-top: 6px;
+  margin-left: @spacing-md;
+  cursor: pointer;
 }
 
-@keyframes inner {
+@colors: {
+  @info: @color-primary;
+  @warning: @color-warning;
+  @success: @color-success;
+  @error: @color-error;
+};
+
+@type-selectors: info, warning, success, error;
+
+each(@type-selectors, {
+  .@{classPrefix}-@{value} {
+    @color: "@{value}";
+
+    .@{classPrefix}-icon {
+      color: @colors[@@color];
+    }
+  }
+});
+
+@keyframes appear {
   0% {
     margin-top: @spacing-xl;
   }
@@ -53,14 +84,17 @@
   }
 }
 
-.@{messagePrefix}-hide {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.@{messagePrefix}-close {
-  width: 10px;
-  height: 10px;
-  margin-left: @spacing-md;
-  cursor: pointer;
+@keyframes loadingRotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }

@@ -4,7 +4,7 @@ import { TagMode } from './types';
 
 import './style/tag.less';
 import { uniteClassNames } from '../../utils/tools';
-import DeleteSvg from '../Icon/Delete';
+import CloseSvg from '../Icon/Close';
 
 const classNamePrefix = 'acme-tag';
 
@@ -63,7 +63,7 @@ const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
     const closeIcon = (): React.ReactNode => {
       return (
         <span className={classes.closeIcon} onClick={onCloseClick}>
-          <DeleteSvg />
+          <CloseSvg />
         </span>
       );
     };

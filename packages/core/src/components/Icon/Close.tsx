@@ -1,14 +1,22 @@
 import * as React from 'react';
 
-export interface DeleteSvgProps {
+export interface CloseSvgProps {
   className?: string;
+  onClick?: React.MouseEventHandler<SVGSVGElement>;
 }
 
-const DeleteSvg = (props: DeleteSvgProps) => {
-  const { className } = props;
+const CloseSvg = (props: CloseSvgProps) => {
+  const { className, onClick } = props || {};
 
   return (
-    <svg fill="currentColor" width="8px" height="8px" viewBox="0 0 8 8" className={className}>
+    <svg
+      fill="currentColor"
+      width="8px"
+      height="8px"
+      viewBox="0 0 8 8"
+      className={className}
+      onClick={onClick}
+    >
       <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g transform="translate(-864.000000, -1551.000000)">
           <rect fill="none" x="552" y="1455" width="816" height="152" />
@@ -25,4 +33,4 @@ const DeleteSvg = (props: DeleteSvgProps) => {
   );
 };
 
-export default DeleteSvg;
+export default CloseSvg;

@@ -1,99 +1,151 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom';
+import get from 'lodash/get';
+import omit from 'lodash/omit';
 import isFunction from 'lodash/isFunction';
 import { uniteClassNames } from '../../utils/tools';
-
-import './style/Message.less';
-import { MessageType } from './types';
-import DeleteSvg from '../Icon/Delete';
+import {
+  MessageType,
+  MessageConfig,
+  MessageInstance,
+  MessageOptions,
+  MessageInstanceConfig,
+} from './types';
+import CloseSvg from '../Icon/Close';
+import InfoIcon from '../Icon/Info';
+import SuccessIcon from '../Icon/Success';
+import WarningIcon from '../Icon/Warning';
+import ErrorIcon from '../Icon/Error';
+import { PrimaryLoadingSvg } from '../Icon/LoadingIcon';
 import Notice from '../Notice/Notice';
-
-type TMessageType = `${MessageType}`;
-
-export interface MessageContentProps {
-  className?: string;
-  content?: React.ReactNode;
-  type: TMessageType;
-  onClose?: () => void;
-  during?: number;
-  key: string;
-}
-
-export interface MessageDomState {
-  messages: MessageContentProps[];
-}
-
-export interface MessageDomProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
-}
+import './style/Message.less';
 
 const classNamePrefix = 'acme-message';
 
 export const classes = {
   root: `${classNamePrefix}`,
   item: `${classNamePrefix}-item`,
-  appearance: (type: MessageContentProps['type']) => `${classNamePrefix}-${type}`,
+  appearance: (type: MessageConfig['type']) => `${classNamePrefix}-${type}`,
+  loading: `${classNamePrefix}-loading`,
   content: `${classNamePrefix}-content`,
-  hide: `${classNamePrefix}-hide`,
+  contentClosable: `${classNamePrefix}-content-closable`,
+  icon: `${classNamePrefix}-icon`,
   close: `${classNamePrefix}-close`,
 };
 
-class MessageDom extends React.PureComponent<MessageDomProps, MessageDomState> {
-  constructor(props: MessageDomProps) {
+const MessageIcon = {
+  [MessageType.INFO]: <InfoIcon />,
+  [MessageType.WARNING]: <WarningIcon />,
+  [MessageType.SUCCESS]: <SuccessIcon />,
+  [MessageType.ERROR]: <ErrorIcon />,
+  loading: <PrimaryLoadingSvg />,
+};
+
+export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
+  initialConfig?: MessageInstanceConfig;
+}
+
+export interface MessageState {
+  messages: MessageConfig[];
+}
+
+class Message extends React.PureComponent<MessageProps, MessageState> {
+  static newInstance: (initialConfig?: MessageProps['initialConfig']) => MessageInstance;
+
+  private generalConfig: MessageInstanceConfig = {};
+
+  constructor(props: MessageProps) {
     super(props);
+
+    const { initialConfig } = props || {};
+    if (initialConfig) {
+      this.config(initialConfig);
+    }
+
     this.state = {
       messages: [],
     };
   }
 
-  private handlerClose = (onClose?: () => void, key?: string) => {
+  public add = (config: MessageConfig) => {
+    const { messages } = this.state;
+    const { type, closable, loading, content, ...restConfig } = config || {};
+    const icon = loading ? MessageIcon.loading : MessageIcon[type];
+    const newMessage = {
+      ...this.generalConfig,
+      ...restConfig,
+      type,
+      content: (
+        <>
+          <div
+            className={uniteClassNames(classes.content, closable ? classes.contentClosable : '')}
+          >
+            {icon ? (
+              <span className={uniteClassNames(classes.icon, loading ? classes.loading : '')}>
+                {icon}
+              </span>
+            ) : null}
+            {content}
+          </div>
+          {closable ? (
+            <CloseSvg className={classes.close} onClick={() => this.handlerClose(config)} />
+          ) : null}
+        </>
+      ),
+    };
+
+    const existIdx = messages.findIndex(({ key }) => key === get(config, 'key'));
+    if (existIdx > -1) {
+      const newMessages = messages.slice();
+      newMessages[existIdx] = newMessage;
+      this.setState({
+        messages: newMessages,
+      });
+    } else {
+      this.setState({
+        messages: [...messages, newMessage],
+      });
+    }
+  };
+
+  public remove = (key: string) => {
     const { messages } = this.state;
     this.setState({
       messages: messages.filter((item) => item.key !== key),
     });
+  };
+
+  public config = (config: MessageInstanceConfig) => {
+    this.generalConfig = { ...this.generalConfig, ...config };
+  };
+
+  private handlerClose = (config: MessageConfig) => {
+    const { key, onClose } = config || {};
+    this.remove(key);
     if (isFunction(onClose)) {
       onClose();
     }
   };
 
-  public add = (props: MessageContentProps) => {
-    const { type, className, content, onClose, key } = props;
-    const { messages } = this.state;
-    const newMessage = [
-      ...messages,
-      {
-        ...props,
-        content: (
-          <div className={uniteClassNames(classes.item, classes.appearance(type), className)}>
-            <div className={classes.content}>{content}</div>
-            <span
-              className={classes.close}
-              onClick={() => {
-                this.handlerClose(onClose, key);
-              }}
-            >
-              <DeleteSvg />
-            </span>
-          </div>
-        ),
-      },
-    ];
-    this.setState({
-      messages: newMessage,
-    });
-  };
-
   public render() {
+    const { className, ...restProps } = this.props;
     const { messages } = this.state;
-    const { className, ...resetProps } = this.props;
     return (
-      <div className={uniteClassNames(classes.root, className)} {...resetProps}>
-        {messages.map((message) => (
+      <div
+        className={uniteClassNames(classes.root, className)}
+        {...omit(restProps, 'initialConfig')}
+      >
+        {messages.map((message: MessageConfig) => (
           <Notice
-            key={message.key}
-            content={message.content}
-            close={() => this.handlerClose(message.onClose, message.key)}
-            during={message.during}
+            key={get(message, 'key')}
+            className={uniteClassNames(
+              classes.item,
+              classes.appearance(get(message, 'type')),
+              get(message, 'className'),
+            )}
+            content={get(message, 'content')}
+            duration={get(message, 'duration')}
+            onClose={() => this.handlerClose(message)}
           />
         ))}
       </div>
@@ -101,27 +153,33 @@ class MessageDom extends React.PureComponent<MessageDomProps, MessageDomState> {
   }
 }
 
-function messageInstance(): InstanceInterface {
-  const div = document.createElement('div');
-  document.body.appendChild(div);
-  const ref = React.createRef<MessageDom>();
-  ReactDOM.render(<MessageDom ref={ref} />, div);
+Message.newInstance = (options?: MessageOptions) => {
+  const { getContainer, ...restOptions } = options || {};
+  const container = document.createElement('div');
+  if (getContainer) {
+    const root = getContainer();
+    if (root) root.appendChild(container);
+  } else {
+    document.body.appendChild(container);
+  }
+
+  const ref = React.createRef<Message>();
+  ReactDOM.render(<Message ref={ref} initialConfig={restOptions} />, container);
 
   return {
-    add(message: MessageContentProps) {
+    add(message: MessageConfig) {
       const { current } = ref;
       current?.add(message);
     },
+    remove(key: string) {
+      const { current } = ref;
+      current?.remove(key);
+    },
     destroy() {
-      ReactDOM.unmountComponentAtNode(div);
-      document.body.removeChild(div);
+      ReactDOM.unmountComponentAtNode(container);
+      document.body.removeChild(container);
     },
   };
-}
+};
 
-export interface InstanceInterface {
-  add: (message: Omit<MessageContentProps, 'content'>) => void;
-  destroy: () => void;
-}
-
-export default messageInstance;
+export default Message;
