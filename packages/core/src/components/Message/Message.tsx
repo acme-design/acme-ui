@@ -4,13 +4,7 @@ import get from 'lodash/get';
 import omit from 'lodash/omit';
 import isFunction from 'lodash/isFunction';
 import { uniteClassNames } from '../../utils/tools';
-import {
-  MessageType,
-  MessageConfig,
-  MessageInstance,
-  MessageOptions,
-  MessageInstanceConfig,
-} from './types';
+import { MessageType, MessageConfig, MessageInstance, MessageOptions } from './types';
 import CloseSvg from '../Icon/Close';
 import InfoIcon from '../Icon/Info';
 import SuccessIcon from '../Icon/Success';
@@ -19,6 +13,13 @@ import ErrorIcon from '../Icon/Error';
 import { PrimaryLoadingSvg } from '../Icon/LoadingIcon';
 import Notice from '../Notice/Notice';
 import './style/Message.less';
+
+// 全局默认配置
+let defaultOptions: MessageOptions = {
+  type: MessageType.INFO,
+  duration: 3000,
+  closable: false,
+};
 
 const classNamePrefix = 'acme-message';
 
@@ -41,26 +42,21 @@ const MessageIcon = {
   loading: <PrimaryLoadingSvg />,
 };
 
-export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
-  initialConfig?: MessageInstanceConfig;
-}
+export type MessageProps = React.HTMLAttributes<HTMLDivElement>;
 
 export interface MessageState {
   messages: MessageConfig[];
 }
 
 class Message extends React.PureComponent<MessageProps, MessageState> {
-  static newInstance: (initialConfig?: MessageProps['initialConfig']) => MessageInstance;
+  static newInstance: () => MessageInstance;
 
-  private generalConfig: MessageInstanceConfig = {};
+  static config = (options: MessageOptions) => {
+    defaultOptions = { ...defaultOptions, ...options };
+  };
 
   constructor(props: MessageProps) {
     super(props);
-
-    const { initialConfig } = props || {};
-    if (initialConfig) {
-      this.config(initialConfig);
-    }
 
     this.state = {
       messages: [],
@@ -69,10 +65,10 @@ class Message extends React.PureComponent<MessageProps, MessageState> {
 
   public add = (config: MessageConfig) => {
     const { messages } = this.state;
-    const { type, closable, loading, content, ...restConfig } = config || {};
+    const mergedConfig = { ...omit(defaultOptions, ['getContainer']), ...config };
+    const { type, closable, loading, content, ...restConfig } = mergedConfig || {};
     const icon = loading ? MessageIcon.loading : MessageIcon[type];
     const newMessage = {
-      ...this.generalConfig,
       ...restConfig,
       type,
       content: (
@@ -115,10 +111,6 @@ class Message extends React.PureComponent<MessageProps, MessageState> {
     });
   };
 
-  public config = (config: MessageInstanceConfig) => {
-    this.generalConfig = { ...this.generalConfig, ...config };
-  };
-
   private handlerClose = (config: MessageConfig) => {
     const { key, onClose } = config || {};
     this.remove(key);
@@ -153,8 +145,8 @@ class Message extends React.PureComponent<MessageProps, MessageState> {
   }
 }
 
-Message.newInstance = (options?: MessageOptions) => {
-  const { getContainer, ...restOptions } = options || {};
+Message.newInstance = () => {
+  const { getContainer } = defaultOptions || {};
   const container = document.createElement('div');
   if (getContainer) {
     const root = getContainer();
@@ -164,7 +156,7 @@ Message.newInstance = (options?: MessageOptions) => {
   }
 
   const ref = React.createRef<Message>();
-  ReactDOM.render(<Message ref={ref} initialConfig={restOptions} />, container);
+  ReactDOM.render(<Message ref={ref} />, container);
 
   return {
     add(message: MessageConfig) {

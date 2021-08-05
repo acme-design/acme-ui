@@ -24,16 +24,9 @@ export interface MessageConfig extends NoticeProps {
   loading?: boolean;
 }
 
-// Message默认配置
-export interface MessageInstanceConfig {
-  /**
-   * 默认自动关闭延迟时长
-   */
-  duration?: number;
-}
-
-// Message全局通用配置
-export interface MessageOptions extends MessageInstanceConfig {
+// 全局默认配置
+export interface MessageOptions
+  extends Partial<Pick<MessageConfig, 'type' | 'duration' | 'closable'>> {
   /**
    * message 挂载节点
    */

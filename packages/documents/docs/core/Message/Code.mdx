@@ -51,8 +51,8 @@ import { Message, Button } from '@acme-ui/core';
 
 <Playground>
   {() => {
-    const key = 'updatable';
-    const openMessage = () => {
+    const key = 'message-loading-to-success';
+    const open = () => {
       Message.loading({ content: '加载中...', key });
       setTimeout(() => {
         Message.success({ content: '成功!', key, duration: 2000 });
@@ -60,7 +60,7 @@ import { Message, Button } from '@acme-ui/core';
     };
     return (
       <div>
-        <Button mode="outlined" onClick={openMessage}>
+        <Button mode="outlined" onClick={open}>
           显示加载中...
         </Button>
       </div>
@@ -127,4 +127,4 @@ import { Message, Button } from '@acme-ui/core';
 
 ## API
 
-<!-- <Props of={Info} /> -->
+<!-- <Props of={Message} /> -->
